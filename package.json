@@ -3,8 +3,7 @@
     "@tailwindcss/cli": "^4.1.17",
     "tailwindcss": "^4.1.17"
   },
-  
   "scripts": {
-    "purga": "npx @tailwindcss/cli -i ./css/styles.css -o ./styles/tailwind.css --watch"
+    "purga" : "npx @tailwindcss/cli -i ./static/css/styles.css -o ./static/css/tailwind.css --watch"
   }
 }
