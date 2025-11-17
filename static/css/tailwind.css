@@ -13,11 +13,7 @@
     --color-green-500: oklch(72.3% 0.219 149.579);
     --color-slate-200: oklch(92.9% 0.013 255.508);
     --color-slate-300: oklch(86.9% 0.022 252.894);
-    --color-slate-500: oklch(55.4% 0.046 257.417);
     --color-slate-600: oklch(44.6% 0.043 257.281);
-    --color-slate-700: oklch(37.2% 0.044 257.287);
-    --color-slate-800: oklch(27.9% 0.041 260.031);
-    --color-white: #fff;
     --spacing: 0.25rem;
     --container-md: 28rem;
     --container-2xl: 42rem;
@@ -47,8 +43,6 @@
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
     --color-primary: #D00000;
-    --color-background-light: #f8f9fa;
-    --color-background-dark: #6A040F;
     --font-display: "Spline Sans", sans-serif;
     --radius-full: 9999px;
   }
