@@ -1,0 +1,8 @@
+<div class="flex items-center gap-4 rounded-lg bg-slate-200/50   bg-[#9D0208] p-3 hover:bg-slate-300/50   hover:bg-primary/30 transition-colors">
+  <img src="{{ item.cover_url }}" alt="{{ item.alt|default:item.title }}" loading="lazy" class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md flex-shrink-0 object-cover" />
+  <div class="flex-grow min-w-0">
+    <p class="      text-[#F8F9FA] text-base font-medium leading-normal truncate">{{ item.title }}</p>
+    <p class="text-slate-600   text-[#F8F9FA]/70 text-sm font-normal leading-normal">{{ item.artist }}</p>
+  </div>
+  <p class="text-amber-600   text-amber-400 text-sm font-medium leading-normal flex-shrink-0">{{ item.status|default:"Pending" }}</p>
+</div>

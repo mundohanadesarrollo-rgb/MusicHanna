@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Dashboard</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#D00000",
+            "background-light": "#f8f9fa",
+            "background-dark": "#6A040F",
+          },
+          fontFamily: {
+            "display": ["Spline Sans", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+</head>
+<body class="font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<main class="px-4 md:px-10 lg:px-20 flex flex-1 justify-center py-5 pb-32">
+<div class="layout-content-container flex flex-col w-full max-w-7xl flex-1">
+<h1 class="text-slate-800 dark:text-[#F8F9FA] tracking-light text-[32px] font-bold leading-tight px-4 text-left pb-3 pt-6">Admin Dashboard</h1>
+<div class="px-4 py-3">
+<label class="flex flex-col min-w-40 h-12 w-full max-w-2xl mx-auto">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-slate-500 dark:text-[#F8F9FA]/70 flex border-none bg-slate-200 dark:bg-[#9D0208] items-center justify-center pl-4 rounded-l-lg border-r-0">
+<span class="material-symbols-outlined text-2xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-800 dark:text-[#F8F9FA] focus:outline-0 focus:ring-0 border-none bg-slate-200 dark:bg-[#9D0208] focus:border-none h-full placeholder:text-slate-500 dark:placeholder:text-[#F8F9FA]/70 px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal" placeholder="Search for users or content" value=""/>
+</div>
+</label>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
+<div class="flex flex-col gap-8">
+<div class="flex flex-col">
+<h2 class="text-slate-800 dark:text-[#F8F9FA] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">User Management</h2>
+<div class="grid grid-cols-2 gap-4 px-4">
+<div class="flex flex-col gap-2 rounded-lg bg-slate-200/50 dark:bg-[#9D0208] p-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-600 dark:text-[#F8F9FA]/70">group</span>
+<h3 class="text-slate-700 dark:text-[#F8F9FA]/80 text-sm font-medium">Active Users</h3>
+</div>
+<p class="text-slate-800 dark:text-[#F8F9FA] text-4xl font-bold">1,204</p>
+</div>
+<div class="flex flex-col gap-2 rounded-lg bg-slate-200/50 dark:bg-[#9D0208] p-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-600 dark:text-[#F8F9FA]/70">person_add</span>
+<h3 class="text-slate-700 dark:text-[#F8F9FA]/80 text-sm font-medium">New Registrations</h3>
+</div>
+<p class="text-slate-800 dark:text-[#F8F9FA] text-4xl font-bold">32</p>
+</div>
+</div>
+</div>
+<div class="flex flex-col">
+<h2 class="text-slate-800 dark:text-[#F8F9FA] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Content Statistics</h2>
+<div class="flex flex-col gap-3 px-4">
+<div class="flex items-center gap-4 rounded-lg bg-slate-200/50 dark:bg-[#9D0208] p-3">
+<div class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md flex-shrink-0" data-alt="Album art for Bohemian Rhapsody" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAgNsMR0vB1MZAgv7lZ3cuhksKupZ6y_su_R6rPd64137U4VtkPeUvKXejpFrlQDHgbgQYtx9rwFPWfDF1FxgkDeprtzL06DAJBUJ99zP-TN1wOehxggPr4TZQk6N-Rmj3BL1QJkrie7_WpTE5YYURg0GukWDEb3scdjcPBNH95ZRT_CvCOM_Mvb3wWoCn4RWmujg033w-rvn7maJ2z50iudmgbMWRFOfIJt_cnvVyOYPvDHO1zY2bJQYxfKoZLo-SseWGWlHVDiea8");'></div>
+<div class="flex-grow min-w-0">
+<p class="text-slate-800 dark:text-[#F8F9FA] text-base font-medium leading-normal truncate">Most Played: Bohemian Rhapsody</p>
+<p class="text-slate-600 dark:text-[#F8F9FA]/70 text-sm font-normal leading-normal">Queen • 2,345 plays</p>
+</div>
+</div>
+<div class="flex items-center gap-4 rounded-lg bg-slate-200/50 dark:bg-[#9D0208] p-3">
+<div class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md flex-shrink-0" data-alt="Abstract album art for Neon Dreams" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAeV_oWvLF6mKAVM5dkxIdc1K9IRSVe4UKCe_7_Jaqazd40G6W5r5kPtD_rgcIJHbVvj8w0Jz7wBTO6czyHsPC-jyq5Y0ehr-R9ZDFKcToE3fOWhDp50QdqSgzJEmtBtRCR_8DBdkxOOh_FzwR2zwPL5A0PRj7yQe1f0NuKQxHBZK6epPh0FrSQ_keTW5Z_w006AnGqQJiKcutT6waf1G4aEkr0r8WDsBq1A_z2RJ9dUAijRzgPndmG8lNfYrS5Z7ubmMxajtze5SxX");'></div>
+<div class="flex-grow min-w-0">
+<p class="text-slate-800 dark:text-[#F8F9FA] text-base font-medium leading-normal truncate">Recent Upload: Neon Dreams</p>
+<p class="text-slate-600 dark:text-[#F8F9FA]/70 text-sm font-normal leading-normal">Synthwave Rider</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col">
+<h2 class="text-slate-800 dark:text-[#F8F9FA] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Pending Uploads for Review</h2>
+<div class="flex flex-col gap-3 px-4 py-4">
+<div class="flex items-center gap-4 rounded-lg bg-slate-200/50 dark:bg-[#9D0208] p-3 hover:bg-slate-300/50 dark:hover:bg-primary/30 transition-colors">
+<div class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md flex-shrink-0" data-alt="Abstract album art for Echoes in Silence" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCedOXHj6M9_O8tOY-id8GL2hQyv0Nkm58vNB9MzEA64FACfcqbWFeGFaQQ1R6-HytBc0O4Kr-wmTJZh4zHKxr28auq4-KgQLlHT0fdsgXN3WMh-BgmXxXJZyTsSR3wIoMjGiHAVzdlLYUhGVdbKaMTeptLTyQTvW3vKyr4HxF5bgOB0ehAVACxJob9_hx1cjh33P2d8Cx6owd-Mqe_WNSYQ9I9JHGjbwCwdOy95juAKMOIvznxPE0uyBHGFv3f3QChJxHliXGmX_7u");'></div>
+<div class="flex-grow min-w-0">
+<p class="text-slate-800 dark:text-[#F8F9FA] text-base font-medium leading-normal truncate">Echoes in Silence</p>
+<p class="text-slate-600 dark:text-[#F8F9FA]/70 text-sm font-normal leading-normal">The Void</p>
+</div>
+<div class="flex items-center gap-2 ml-auto">
+<button class="flex items-center justify-center w-8 h-8 rounded-full bg-green-500/20 text-green-500 hover:bg-green-500/30 transition-colors"><span class="material-symbols-outlined text-xl">check</span></button>
+<button class="flex items-center justify-center w-8 h-8 rounded-full bg-red-500/20 text-red-500 hover:bg-red-500/30 transition-colors"><span class="material-symbols-outlined text-xl">close</span></button>
+</div>
+</div>
+<div class="flex items-center gap-4 rounded-lg bg-slate-200/50 dark:bg-[#9D0208] p-3 hover:bg-slate-300/50 dark:hover:bg-primary/30 transition-colors">
+<div class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md flex-shrink-0" data-alt="Abstract album art for Neon Dreams" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAeV_oWvLF6mKAVM5dkxIdc1K9IRSVe4UKCe_7_Jaqazd40G6W5r5kPtD_rgcIJHbVvj8w0Jz7wBTO6czyHsPC-jyq5Y0ehr-R9ZDFKcToE3fOWhDp50QdqSgzJEmtBtRCR_8DBdkxOOh_FzwR2zwPL5A0PRj7yQe1f0NuKQxHBZK6epPh0FrSQ_keTW5Z_w006AnGqQJiKcutT6waf1G4aEkr0r8WDsBq1A_z2RJ9dUAijRzgPndmG8lNfYrS5Z7ubmMxajtze5SxX");'></div>
+<div class="flex-grow min-w-0">
+<p class="text-slate-800 dark:text-[#F8F9FA] text-base font-medium leading-normal truncate">Neon Dreams</p>
+<p class="text-slate-600 dark:text-[#F8F9FA]/70 text-sm font-normal leading-normal">Synthwave Rider</p>
+</div>
+<div class="flex items-center gap-2 ml-auto">
+<button class="flex items-center justify-center w-8 h-8 rounded-full bg-green-500/20 text-green-500 hover:bg-green-500/30 transition-colors"><span class="material-symbols-outlined text-xl">check</span></button>
+<button class="flex items-center justify-center w-8 h-8 rounded-full bg-red-500/20 text-red-500 hover:bg-red-500/30 transition-colors"><span class="material-symbols-outlined text-xl">close</span></button>
+</div>
+</div>
+<div class="flex items-center gap-4 rounded-lg bg-slate-200/50 dark:bg-[#9D0208] p-3 hover:bg-slate-300/50 dark:hover:bg-primary/30 transition-colors">
+<div class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md flex-shrink-0" data-alt="Abstract album art for Lost in Translation" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCNmkhREsDwtLGCbHBu2ahEMd3rXuh8Q9uaHW6qzHEw5d0ibtj3PYrJpdMUoAmQ_XiLZ0djRB_TezCkU-LzQfajfL3nRlkZV1rlI7bSgZjezF4jN_mNwnk7lKTxMOm8QI2arIl3XNCatbIuvhEc90BbqTzG1lSz2uetMOv_M_IXW6z4RwCqaegqQXkwDPWEN0k68O53euhbWWgDDDeRudfviGRYa8ss7iqe3DZbZ3LMYwLTy3qWVe5PQeAyr2aXapFh4iv8PDRVbnWu");'></div>
+<div class="flex-grow min-w-0">
+<p class="text-slate-800 dark:text-[#F8F9FA] text-base font-medium leading-normal truncate">Lost in Translation</p>
+<p class="text-slate-600 dark:text-[#F8F9FA]/70 text-sm font-normal leading-normal">Acoustic Journeys</p>
+</div>
+<div class="flex items-center gap-2 ml-auto">
+<button class="flex items-center justify-center w-8 h-8 rounded-full bg-green-500/20 text-green-500 hover:bg-green-500/30 transition-colors"><span class="material-symbols-outlined text-xl">check</span></button>
+<button class="flex items-center justify-center w-8 h-8 rounded-full bg-red-500/20 text-red-500 hover:bg-red-500/30 transition-colors"><span class="material-symbols-outlined text-xl">close</span></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<footer class="fixed bottom-0 left-0 right-0 h-20 bg-background-light/80 dark:bg-[#9D0208]/80 backdrop-blur-md border-t border-slate-300/50 dark:border-primary/20 p-4 z-50">
+<div class="flex items-center justify-around w-full h-full max-w-md mx-auto">
+<a class="flex flex-col items-center gap-1 text-primary dark:text-white" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-xs font-medium">Dashboard</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-600 dark:text-[#F8F9FA]/70 hover:text-primary dark:hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-xs font-medium">Users</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-600 dark:text-[#F8F9FA]/70 hover:text-primary dark:hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">upload_file</span>
+<span class="text-xs font-medium">Uploads</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-600 dark:text-[#F8F9FA]/70 hover:text-primary dark:hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">play_circle</span>
+<span class="text-xs font-medium">Player</span>
+</a>
+</div>
+</footer>
+</div>
+
+</body></html>

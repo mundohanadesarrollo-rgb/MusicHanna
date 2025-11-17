@@ -1,197 +1,37 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OrgMusic</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gradient-to-b from-red-950 to-red-900 text-white">
-    <div class="flex h-screen flex-col">
-        <!-- Header Search -->
-        <div class="border-b border-red-800 bg-red-900/50 p-4">
-            <div class="mx-auto flex max-w-7xl items-center gap-4">
-                <svg class="h-8 w-8 text-red-500" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2L6 6v12c0 3.3 2.7 6 6 6s6-2.7 6-6V6l-6-4zm0 2.5l4 3v8.5c0 2.2-1.8 4-4 4s-4-1.8-4-4V7.5l4-3z"/>
-                </svg>
-                <input type="text" placeholder="Search songs, artists, albums..." class="flex-1 rounded-lg bg-red-800/50 px-4 py-2 text-sm text-gray-200 placeholder-gray-400 focus:outline-none">
-            </div>
-        </div>
+<html  lang="es" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title%} {% endblock title %}</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300..700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
 
-        <!-- Main Container -->
-        <div class="flex flex-1 overflow-hidden">
-            <!-- Sidebar -->
-            <div class="w-64 border-r border-red-800 bg-red-900/30 p-6">
-                <!-- Logo -->
-                <div class="mb-8 flex items-center gap-2">
-                    <svg class="h-6 w-6 text-red-500" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 2L6 6v12c0 3.3 2.7 6 6 6s6-2.7 6-6V6l-6-4z"/>
-                    </svg>
-                    <span class="text-xl font-bold">OrgMusic</span>
-                </div>
+    <link rel="stylesheet" href="{% static 'css/master.css' %}" />
 
-                <!-- Navigation -->
-                <nav class="mb-8 space-y-2">
-                    <div class="flex items-center gap-3 rounded-lg px-4 py-3 text-gray-300 hover:bg-red-800/30">
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-3m0 0l7-4 7 4M5 9v10a1 1 0 001 1h12a1 1 0 001-1V9m-9 4v4m0 0v4m0-4h4"/>
-                        </svg>
-                        <span>Home</span>
-                    </div>
-                    <div class="flex items-center gap-3 rounded-lg bg-red-600/80 px-4 py-3 font-medium hover:bg-red-600">
-                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M3 13h2v8H3zM17 13h2v8h-2zM10 3h4v18h-4z"/>
-                        </svg>
-                        <span>Library</span>
-                    </div>
-                    <div class="flex items-center gap-3 rounded-lg bg-red-600/80 px-4 py-3 font-medium hover:bg-red-600">
-                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M3 13h2v8H3zM17 13h2v8h-2zM10 3h4v18h-4z"/>
-                        </svg>
-                        <span>Library</span>
-                    </div>
-                    <div class="flex items-center gap-3 rounded-lg px-4 py-3 text-gray-300 hover:bg-red-800/30">
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
-                        </svg>
-                        <span>My Playlists</span>
-                    </div>
-                </nav>
+    {% block custom_styles %} {% endblock custom_styles %}
+    <link rel="stylesheet" href="{% static 'css/tailwind.css' %}" />
+  </head>
+  <body class="font-display  text-[#F8F9FA] h-full ">
+    {%block content %} 
+    
+    
+    {% endblock content %} 
 
-                <!-- Playlists -->
-                <div>
-                    <h3 class="mb-4 text-xs font-bold uppercase tracking-wider text-gray-400">Playlists</h3>
-                    <div class="space-y-2">
-                        <div class="rounded-lg px-4 py-2 text-sm text-gray-300 hover:bg-red-800/30 cursor-pointer">Focus Work</div>
-                        <div class="rounded-lg px-4 py-2 text-sm text-gray-300 hover:bg-red-800/30 cursor-pointer">Lofi Beats</div>
-                        <div class="rounded-lg px-4 py-2 text-sm text-gray-300 hover:bg-red-800/30 cursor-pointer">Team Favorites</div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Main Content -->
-            <div class="flex-1 overflow-y-auto">
-                <div class="p-8">
-                    <!-- Header -->
-                    <div class="mb-8">
-                        <h1 class="text-4xl font-bold mb-2">Library</h1>
-                        <p class="text-gray-400">All songs available in your organization.</p>
-                    </div>
-
-                    <!-- Songs Table -->
-                    <div class="overflow-x-auto">
-                        <table class="w-full">
-                            <thead class="border-b border-red-800">
-                                <tr class="text-left text-sm font-semibold text-gray-400 uppercase tracking-wider">
-                                    <th class="px-4 py-4 w-12">#</th>
-                                    <th class="px-4 py-4">Title</th>
-                                    <th class="px-4 py-4">Artist</th>
-                                    <th class="px-4 py-4">Album</th>
-                                    <th class="px-4 py-4 text-right w-16">
-                                        <svg class="h-4 w-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                        </svg>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="border-b border-red-800/50 hover:bg-red-800/20 transition-colors cursor-pointer">
-                                    <td class="px-4 py-4 text-sm text-gray-400">1</td>
-                                    <td class="px-4 py-4 font-medium">Quantum Leap</td>
-                                    <td class="px-4 py-4 text-gray-300">Synthwave Symphony</td>
-                                    <td class="px-4 py-4 text-gray-300">Digital Dreams</td>
-                                    <td class="px-4 py-4 text-right text-sm text-gray-400">3:45</td>
-                                </tr>
-                                <tr class="border-b border-red-800/50 hover:bg-red-800/20 transition-colors cursor-pointer">
-                                    <td class="px-4 py-4 text-sm text-gray-400">2</td>
-                                    <td class="px-4 py-4 font-medium">Echoes of the Future</td>
-                                    <td class="px-4 py-4 text-gray-300">Cybernetic Soundscapes</td>
-                                    <td class="px-4 py-4 text-gray-300">Neon Nights</td>
-                                    <td class="px-4 py-4 text-right text-sm text-gray-400">4:12</td>
-                                </tr>
-                                <tr class="border-b border-red-800/50 bg-red-800/40 hover:bg-red-800/50 transition-colors cursor-pointer">
-                                    <td class="px-4 py-4 text-sm">
-                                        <svg class="h-4 w-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M8 5v14l11-7z"/>
-                                        </svg>
-                                    </td>
-                                    <td class="px-4 py-4 font-medium">Midnight Drive</td>
-                                    <td class="px-4 py-4 text-gray-300">Retro Runners</td>
-                                    <td class="px-4 py-4 text-gray-300">Gridlines</td>
-                                    <td class="px-4 py-4 text-right text-sm text-gray-400">5:03</td>
-                                </tr>
-                                <tr class="border-b border-red-800/50 hover:bg-red-800/20 transition-colors cursor-pointer">
-                                    <td class="px-4 py-4 text-sm text-gray-400">4</td>
-                                    <td class="px-4 py-4 font-medium">Starlight Runner</td>
-                                    <td class="px-4 py-4 text-gray-300">Galaxy Gliders</td>
-                                    <td class="px-4 py-4 text-gray-300">Cosmic Canvas</td>
-                                    <td class="px-4 py-4 text-right text-sm text-gray-400">2:58</td>
-                                </tr>
-                                <tr class="hover:bg-red-800/20 transition-colors cursor-pointer">
-                                    <td class="px-4 py-4 text-sm text-gray-400">5</td>
-                                    <td class="px-4 py-4 font-medium">City Lights</td>
-                                    <td class="px-4 py-4 text-gray-300">Urban Groove</td>
-                                    <td class="px-4 py-4 text-gray-300">Metropolis</td>
-                                    <td class="px-4 py-4 text-right text-sm text-gray-400">3:30</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Player -->
-        <div class="border-t border-red-800 bg-red-900/50 px-6 py-4">
-            <div class="flex items-center justify-between gap-4">
-                <!-- Song Info -->
-                <div class="flex items-center gap-4 min-w-0">
-                    <div class="h-12 w-12 flex-shrink-0 rounded bg-gradient-to-br from-yellow-300 to-orange-300"></div>
-                    <div class="min-w-0">
-                        <p class="truncate font-medium">Midnight Drive</p>
-                        <p class="truncate text-sm text-gray-400">Retro Runners</p>
-                    </div>
-                </div>
-
-                <!-- Controls -->
-                <div class="flex items-center gap-6">
-                    <button class="text-gray-400 hover:text-white transition-colors">
-                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M6 6h2v12H6zm10 0h2v12h-2zM9 5h2v14H9z"/>
-                        </svg>
-                    </button>
-                    <button class="rounded-full bg-red-600 p-3 hover:bg-red-500 transition-colors">
-                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M8 5v14l11-7z"/>
-                        </svg>
-                    </button>
-                    <button class="text-gray-400 hover:text-white transition-colors">
-                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M6 6h2v12H6zm10 0h2v12h-2zM9 5h2v14H9z"/>
-                        </svg>
-                    </button>
-                </div>
-
-                <!-- Volume & Progress -->
-                <div class="flex items-center gap-4">
-                    <div class="flex items-center gap-2 min-w-max">
-                        <span class="text-xs text-gray-400">2:15</span>
-                        <div class="h-1 w-48 bg-red-800/50 rounded">
-                            <div class="h-full w-1/3 bg-red-600 rounded"></div>
-                        </div>
-                        <span class="text-xs text-gray-400">5:03</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <svg class="h-4 w-4 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M15.5 1H8.5C7.12 1 6 2.12 6 3.5v17C6 21.88 7.12 23 8.5 23h7c1.38 0 2.5-1.12 2.5-2.5v-17C18 2.12 16.88 1 15.5 1zm-4 21c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
-                        </svg>
-                        <div class="h-1 w-24 bg-red-800/50 rounded">
-                            <div class="h-full w-1/2 bg-red-600 rounded"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</body>
+    {%block scripts%} 
+    
+    {% endblock scripts %} 
+    
+    {%block custom_scripts%} 
+    
+    {% endblock custom_scripts %}
+  </body>
 </html>

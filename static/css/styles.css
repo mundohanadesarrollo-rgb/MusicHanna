@@ -1,1 +1,24 @@
 @import "tailwindcss";
+
+@theme {
+  /* Colores personalizados */
+  --color-primary: #D00000;
+  --color-background-light: #f8f9fa;
+  --color-background-dark: #6A040F;
+  
+  /* Fuentes */
+  --font-display: "Spline Sans", sans-serif;
+  
+  /* Border radius */
+  --radius: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-full: 9999px;
+}
+
+/* Configuración de dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+}
