@@ -1,5 +1,5 @@
 {% extends "base.html" %} 
-{%load static%} 
+{%load static %} 
 
 {% block title %} Dashboard {%endblock title %} 
 
@@ -16,7 +16,7 @@
       <h1
         class="text-[#F8F9FA] tracking-light text-[32px] font-bold leading-tight px-4 text-left pb-3 pt-6"
       >
-        Admin Dashboard
+        Tablero Admin
       </h1>
       <div class="px-4 py-3">
         <label
@@ -32,7 +32,7 @@
             </div>
             <input
               class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#F8F9FA] focus:outline-0 focus:ring-0 border-none bg-[#A00000] focus:border-none h-full placeholder:text-[#F8F9FA]/70 px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
-              placeholder="Search for users or content"
+              placeholder="Buscar"
               value=""
             />
           </div>
@@ -44,7 +44,7 @@
             <h2
               class="text-[#F8F9FA] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5"
             >
-              Gestión de usuarios
+              Gestión de Sedes
             </h2>
             <div class="grid grid-cols-2 gap-4 px-4">
               <div
@@ -58,7 +58,7 @@
                   <h3
                     class="text-[#F8F9FA]/80 text-sm font-medium"
                   >
-                    Usuarios Activos
+                    Sedes Totales
                   </h3>
                 </div>
                 <p
@@ -118,6 +118,10 @@
                     Queen • 2,345 plays
                   </p>
                 </div>
+
+                <div class="text-[#61CB61] text-sm font-normal leading-normal flex-shrink-0">
+                  (Activo)</div>
+
               </div>
               
             </div>
@@ -169,83 +173,8 @@
                 </button>
               </div>
             </div>
-            <div
-              class="flex items-center gap-4 rounded-lg bg-[#9D0208] p-3 hover:bg-[#A00000] transition-colors"
-            >
-              <div
-                class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md flex-shrink-0"
-                data-alt="Abstract album art for Neon Dreams"
-                style="
-                  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAeV_oWvLF6mKAVM5dkxIdc1K9IRSVe4UKCe_7_Jaqazd40G6W5r5kPtD_rgcIJHbVvj8w0Jz7wBTO6czyHsPC-jyq5Y0ehr-R9ZDFKcToE3fOWhDp50QdqSgzJEmtBtRCR_8DBdkxOOh_FzwR2zwPL5A0PRj7yQe1f0NuKQxHBZK6epPh0FrSQ_keTW5Z_w006AnGqQJiKcutT6waf1G4aEkr0r8WDsBq1A_z2RJ9dUAijRzgPndmG8lNfYrS5Z7ubmMxajtze5SxX');
-                "
-              ></div>
-              <div class="flex-grow min-w-0">
-                <p
-                  class="text-[#F8F9FA] text-base font-medium leading-normal truncate"
-                >
-                  Neon Dreams
-                </p>
-                <p
-                  class="text-[#F8F9FA]/70 text-sm font-normal leading-normal"
-                >
-                  Synthwave Rider
-                </p>
-              </div>
-              <div class="flex items-center gap-2 ml-auto">
-                <button
-                  class="flex items-center justify-center w-8 h-8 rounded-full bg-green-500/20 text-green-500 hover:bg-green-500/30 transition-colors"
-                >
-                  <span class="material-symbols-outlined text-xl"
-                    >check</span
-                  >
-                </button>
-                <button
-                  class="flex items-center justify-center w-8 h-8 rounded-full bg-red-500/20 text-red-500 hover:bg-red-500/30 transition-colors"
-                >
-                  <span class="material-symbols-outlined text-xl"
-                    >close</span
-                  >
-                </button>
-              </div>
-            </div>
-            <div
-              class="flex items-center gap-4 rounded-lg bg-[#9D0208] p-3 hover:bg-[#A00000] transition-colors"
-            >
-              <div
-                class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md flex-shrink-0"
-                data-alt="Abstract album art for Lost in Translation"
-                style="
-                  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCNmkhREsDwtLGCbHBu2ahEMd3rXuh8Q9uaHW6qzHEw5d0ibtj3PYrJpdMUoAmQ_XiLZ0djRB_TezCkU-LzQfajfL3nRlkZV1rlI7bSgZjezF4jN_mNwnk7lKTxMOm8QI2arIl3XNCatbIuvhEc90BbqTzG1lSz2uetMOv_M_IXW6z4RwCqaegqQXkwDPWEN0k68O53euhbWWgDDDeRudfviGRYa8ss7iqe3DZbZ3LMYwLTy3qWVe5PQeAyr2aXapFh4iv8PDRVbnWu');
-                "
-              ></div>
-              <div class="flex-grow min-w-0">
-                <p
-                  class="text-[#F8F9FA] text-base font-medium leading-normal truncate"
-                >
-                  Lost in Translation
-                </p>
-                <p
-                  class="text-[#F8F9FA]/70 text-sm font-normal leading-normal"
-                >
-                  Acoustic Journeys
-                </p>
-              </div>
-              <div class="flex items-center gap-2 ml-auto">
-                <button
-                  class="flex items-center justify-center w-8 h-8 rounded-full bg-green-500/20 text-green-500 hover:bg-green-500/30 transition-colors"
-                >
-                  <span class="material-symbols-outlined text-xl"
-                    >check</span
-                  >
-                </button>
-                <button
-                  class="flex items-center justify-center w-8 h-8 rounded-full bg-red-500/20 text-red-500 hover:bg-red-500/30 transition-colors"
-                >
-                  <span class="material-symbols-outlined text-xl"
-                    >close</span
-                  >
-                </button>
-              </div>
+           
+           
             </div>
           </div>
         </div>
@@ -262,15 +191,15 @@
     </a>
     <a class="flex flex-col items-center gap-1 text-[#F8F9FA]/70 hover:text-[#F8F9FA] transition-colors" href="#">
       <span class="material-symbols-outlined text-2xl">group</span>
-      <span class="text-xs font-medium">Users</span>
+      <span class="text-xs font-medium">Sedes</span>
     </a>
     <a class="flex flex-col items-center gap-1 text-[#F8F9FA]/70 hover:text-[#F8F9FA] transition-colors" href="#">
       <span class="material-symbols-outlined text-2xl">upload_file</span>
-      <span class="text-xs font-medium">Uploads</span>
+      <span class="text-xs font-medium">Subidas</span>
     </a>
     <a class="flex flex-col items-center gap-1 text-[#F8F9FA]/70 hover:text-[#F8F9FA] transition-colors" href="#">
       <span class="material-symbols-outlined text-2xl">play_circle</span>
-      <span class="text-xs font-medium">Player</span>
+      <span class="text-xs font-medium">Reproductor</span>
     </a>
     
   </div>
