@@ -8,16 +8,23 @@ Actividad de reproducción en vivo
 
   <div class="flex flex-col gap-3 px-4">
     <div class="flex items-center gap-4 rounded-lg bg-[#9D0208] p-3">
-      <div class="w-12 h-12 …"></div>
+      <div
+        class="w-12 h-12 rounded-md bg-cover bg-center flex-shrink-0"
+        {% if actividad.image %}
+          style="background-image: url('{{ actividad.image }}');"
+        {% else %}
+          style="background-image: url('https://images.unsplash.com/photo-1487215078519-e21cc028cb29?auto=format&fit=crop&w=200&q=80');"
+        {% endif %}
+      ></div>
       <div class="flex-grow min-w-0">
-        <p class="…">
+        <p class="text-gray-200">
           <span>Sede {{ actividad.nro_sede }}</span>: {{ actividad.name }}
         </p>
-        <p class="…">
+        <p class="text-gray-400">
           {{ actividad.author }} • 2,345 plays
         </p>
       </div>
-      <div class="text-[#61CB61] ">
+      <div class="{% if actividad.status == 'inactivo' %}text-gray-400{% else %}text-[#61CB61]{% endif %}">
         ({{ actividad.status|title }})
       </div>
     </div>

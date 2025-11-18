@@ -20,12 +20,14 @@ def admin_dashboard(request):
             'name': 'Bohemian Rhapsody',
             'author': 'Queen',
             'status': 'activo',
+            'image': 'https://images.unsplash.com/photo-1485579149621-3123dd979885?auto=format&fit=crop&w=200&q=80',
         },
         {
             'nro_sede': 2,
             'name': 'Stairway to Heaven',
             'author': 'Led Zeppelin',
             'status': 'inactivo',
+            'image': 'https://images.unsplash.com/photo-1507878866276-a947ef722fee?auto=format&fit=crop&w=200&q=80',
         },
     ]
 
