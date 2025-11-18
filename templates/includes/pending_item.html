@@ -1,51 +1,37 @@
  <div class="flex flex-col">
-          <h2
-            class="text-[#F8F9FA] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5"
-          >
-            Subidas por revisión
-          </h2>
+        <h2
+          class="text-[#F8F9FA] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5"
+        >
+          Subidas recientes
+        </h2>
           <div class="flex flex-col gap-3 px-4 py-4">
+            {% for subida in subidas_revision %}
             <div
               class="flex items-center gap-4 rounded-lg bg-[#9D0208] p-3 hover:bg-[#A00000] transition-colors"
             >
               <div
-                class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md flex-shrink-0"
-                data-alt="Abstract album art for Echoes in Silence"
-                style="
-                  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCedOXHj6M9_O8tOY-id8GL2hQyv0Nkm58vNB9MzEA64FACfcqbWFeGFaQQ1R6-HytBc0O4Kr-wmTJZh4zHKxr28auq4-KgQLlHT0fdsgXN3WMh-BgmXxXJZyTsSR3wIoMjGiHAVzdlLYUhGVdbKaMTeptLTyQTvW3vKyr4HxF5bgOB0ehAVACxJob9_hx1cjh33P2d8Cx6owd-Mqe_WNSYQ9I9JHGjbwCwdOy95juAKMOIvznxPE0uyBHGFv3f3QChJxHliXGmX_7u');
-                "
+              class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md shrink-0"
+                data-alt="Portada de {{ subida.name }}"
+                style="background-image: url('{{ subida.image }}');"
               ></div>
-              <div class="flex-grow min-w-0">
+              <div class="grow min-w-0">
                 <p
                   class="text-[#F8F9FA] text-base font-medium leading-normal truncate"
                 >
-                  Echoes in Silence
+                  {{ subida.name }}
                 </p>
                 <p
-                  class="text-[#F8F9FA]/70 text-sm font-normal leading-normal"
+                  class="text-[#F8F9FA]/70 text-sm font-normal leading-normal truncate"
                 >
-                  The Void
+                  {{ subida.author }}
                 </p>
               </div>
-              <div class="flex items-center gap-2 ml-auto">
-                <button
-                  class="flex items-center justify-center w-8 h-8 rounded-full bg-green-500/20 text-green-500 hover:bg-green-500/30 transition-colors"
-                >
-                  <span class="material-symbols-outlined text-xl"
-                    >check</span
-                  >
-                </button>
-                <button
-                  class="flex items-center justify-center w-8 h-8 rounded-full bg-red-500/20 text-red-500 hover:bg-red-500/30 transition-colors"
-                >
-                  <span class="material-symbols-outlined text-xl"
-                    >close</span
-                  >
-                </button>
-              </div>
+              <p class="text-[#F8F9FA]/60 text-xs ml-auto whitespace-nowrap">
+                {{ subida.fecha_subida|default:"Fecha no disponible" }}
+              </p>
             </div>
-           
-           
-            </div>
+            {% empty %}
+            <p class="text-[#F8F9FA]/70 text-sm">No hay subidas pendientes.</p>
+            {% endfor %}
           </div>
         </div>

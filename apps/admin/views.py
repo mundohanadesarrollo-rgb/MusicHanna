@@ -8,10 +8,17 @@ def admin_dashboard(request):
             'id': 1,
             'name': 'Echoes in Silence',
             'author': 'Liam Harper',
-            'date_uploaded': '2024-06-10',
-            'image': 'https://…',
-            'status': 'Pending Review',
+            'fecha_subida': '2024-06-10',
+            'image': 'https://images.unsplash.com/photo-1487215078519-e21cc028cb29?auto=format&fit=crop&w=200&q=80',
         },
+        {
+            'id': 2,
+            'name': 'Velvet Horizons',
+            'author': 'Isabella Reyes',
+            'fecha_subida': '2024-06-11',
+            'image': 'https://images.unsplash.com/photo-1501612780327-45045538702b?auto=format&fit=crop&w=200&q=80',
+        },
+        
     ]
 
     actividad_reciente = [
@@ -31,12 +38,17 @@ def admin_dashboard(request):
         },
     ]
 
+    sedes_totales = len(actividad_reciente)
+    nuevos_registros = len(subidas_revision)
+
     return render(
         request,
         'admin/dashboard.html',
         {
             'subidas_revision': subidas_revision,
             'actividad_reciente': actividad_reciente,
+            'sedes_totales': sedes_totales,
+            'nuevos_registros': nuevos_registros,
         },
     )
 
