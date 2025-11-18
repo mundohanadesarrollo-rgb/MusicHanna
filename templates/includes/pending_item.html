@@ -1,8 +1,51 @@
-<div class="flex items-center gap-4 rounded-lg bg-slate-200/50   bg-[#9D0208] p-3 hover:bg-slate-300/50   hover:bg-primary/30 transition-colors">
-  <img src="{{ item.cover_url }}" alt="{{ item.alt|default:item.title }}" loading="lazy" class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md flex-shrink-0 object-cover" />
-  <div class="flex-grow min-w-0">
-    <p class="      text-[#F8F9FA] text-base font-medium leading-normal truncate">{{ item.title }}</p>
-    <p class="text-slate-600   text-[#F8F9FA]/70 text-sm font-normal leading-normal">{{ item.artist }}</p>
-  </div>
-  <p class="text-amber-600   text-amber-400 text-sm font-medium leading-normal flex-shrink-0">{{ item.status|default:"Pending" }}</p>
-</div>
+ <div class="flex flex-col">
+          <h2
+            class="text-[#F8F9FA] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5"
+          >
+            Subidas por revisión
+          </h2>
+          <div class="flex flex-col gap-3 px-4 py-4">
+            <div
+              class="flex items-center gap-4 rounded-lg bg-[#9D0208] p-3 hover:bg-[#A00000] transition-colors"
+            >
+              <div
+                class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md flex-shrink-0"
+                data-alt="Abstract album art for Echoes in Silence"
+                style="
+                  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCedOXHj6M9_O8tOY-id8GL2hQyv0Nkm58vNB9MzEA64FACfcqbWFeGFaQQ1R6-HytBc0O4Kr-wmTJZh4zHKxr28auq4-KgQLlHT0fdsgXN3WMh-BgmXxXJZyTsSR3wIoMjGiHAVzdlLYUhGVdbKaMTeptLTyQTvW3vKyr4HxF5bgOB0ehAVACxJob9_hx1cjh33P2d8Cx6owd-Mqe_WNSYQ9I9JHGjbwCwdOy95juAKMOIvznxPE0uyBHGFv3f3QChJxHliXGmX_7u');
+                "
+              ></div>
+              <div class="flex-grow min-w-0">
+                <p
+                  class="text-[#F8F9FA] text-base font-medium leading-normal truncate"
+                >
+                  Echoes in Silence
+                </p>
+                <p
+                  class="text-[#F8F9FA]/70 text-sm font-normal leading-normal"
+                >
+                  The Void
+                </p>
+              </div>
+              <div class="flex items-center gap-2 ml-auto">
+                <button
+                  class="flex items-center justify-center w-8 h-8 rounded-full bg-green-500/20 text-green-500 hover:bg-green-500/30 transition-colors"
+                >
+                  <span class="material-symbols-outlined text-xl"
+                    >check</span
+                  >
+                </button>
+                <button
+                  class="flex items-center justify-center w-8 h-8 rounded-full bg-red-500/20 text-red-500 hover:bg-red-500/30 transition-colors"
+                >
+                  <span class="material-symbols-outlined text-xl"
+                    >close</span
+                  >
+                </button>
+              </div>
+            </div>
+           
+           
+            </div>
+          </div>
+        </div>

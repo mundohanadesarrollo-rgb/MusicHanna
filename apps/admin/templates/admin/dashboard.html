@@ -18,170 +18,18 @@
       >
         Tablero Admin
       </h1>
-      <div class="px-4 py-3">
-        <label
-          class="flex flex-col min-w-40 h-12 w-full max-w-2xl mx-auto"
-        >
-          <div class="flex w-full flex-1 items-stretch rounded-lg h-full">
-            <div
-              class="text-[#F8F9FA]/70 flex border-none bg-[#A00000] items-center justify-center pl-4 rounded-l-lg border-r-0"
-            >
-              <span class="material-symbols-outlined text-2xl"
-                >search</span
-              >
-            </div>
-            <input
-              class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#F8F9FA] focus:outline-0 focus:ring-0 border-none bg-[#A00000] focus:border-none h-full placeholder:text-[#F8F9FA]/70 px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
-              placeholder="Buscar"
-              value=""
-            />
-          </div>
-        </label>
-      </div>
+      
+      {% include 'includes/search.html' %}
+
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
         <div class="flex flex-col gap-8">
-          <div class="flex flex-col">
-            <h2
-              class="text-[#F8F9FA] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5"
-            >
-              Gestión de Sedes
-            </h2>
-            <div class="grid grid-cols-2 gap-4 px-4">
-              <div
-                class="flex flex-col gap-2 rounded-lg bg-[#9D0208] p-4"
-              >
-                <div class="flex items-center gap-2">
-                  <span
-                    class="material-symbols-outlined text-[#F8F9FA]/70"
-                    >group</span
-                  >
-                  <h3
-                    class="text-[#F8F9FA]/80 text-sm font-medium"
-                  >
-                    Sedes Totales
-                  </h3>
-                </div>
-                <p
-                  class="text-[#F8F9FA] text-4xl font-bold"
-                >
-                  1,204
-                </p>
-              </div>
-              <div
-                class="flex flex-col gap-2 rounded-lg bg-[#9D0208] p-4"
-              >
-                <div class="flex items-center gap-2">
-                  <span
-                    class="material-symbols-outlined text-[#F8F9FA]/70"
-                    >person_add</span
-                  >
-                  <h3
-                    class="text-[#F8F9FA]/80 text-sm font-medium"
-                  >
-                    Nuevos Registros
-                  </h3>
-                </div>
-                <p
-                  class="text-[#F8F9FA] text-4xl font-bold"
-                >
-                  32
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="flex flex-col">
-            <h2
-              class="text-[#F8F9FA] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5"
-            >
-              Actividad de reproducción en vivo
-            </h2>
-            <div class="flex flex-col gap-3 px-4">
-              <div
-                class="flex items-center gap-4 rounded-lg bg-[#9D0208] p-3"
-              >
-                <div
-                  class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md flex-shrink-0"
-                  data-alt="Album art for Bohemian Rhapsody"
-                  style="
-                    background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAgNsMR0vB1MZAgv7lZ3cuhksKupZ6y_su_R6rPd64137U4VtkPeUvKXejpFrlQDHgbgQYtx9rwFPWfDF1FxgkDeprtzL06DAJBUJ99zP-TN1wOehxggPr4TZQk6N-Rmj3BL1QJkrie7_WpTE5YYURg0GukWDEb3scdjcPBNH95ZRT_CvCOM_Mvb3wWoCn4RWmujg033w-rvn7maJ2z50iudmgbMWRFOfIJt_cnvVyOYPvDHO1zY2bJQYxfKoZLo-SseWGWlHVDiea8');
-                  "
-                ></div>
-                <div class="flex-grow min-w-0">
-                  <p
-                    class="text-[#F8F9FA] text-base font-medium leading-normal truncate"
-                  >
-                    <span> Sede 1</span>: Bohemian Rhapsody
-                  </p>
-                  <p
-                    class="text-[#F8F9FA]/70 text-sm font-normal leading-normal"
-                  >
-                    Queen • 2,345 plays
-                  </p>
-                </div>
-
-                <div class="text-[#61CB61] text-sm font-normal leading-normal flex-shrink-0">
-                  (Activo)</div>
-
-              </div>
-              
-            </div>
-          </div>
+         {% include 'includes/gestion_sedes.html' %}
+          {% include 'includes/recent_activity.html' %}
         </div>
-        <div class="flex flex-col">
-          <h2
-            class="text-[#F8F9FA] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5"
-          >
-            Subidas por revisión
-          </h2>
-          <div class="flex flex-col gap-3 px-4 py-4">
-            <div
-              class="flex items-center gap-4 rounded-lg bg-[#9D0208] p-3 hover:bg-[#A00000] transition-colors"
-            >
-              <div
-                class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md flex-shrink-0"
-                data-alt="Abstract album art for Echoes in Silence"
-                style="
-                  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCedOXHj6M9_O8tOY-id8GL2hQyv0Nkm58vNB9MzEA64FACfcqbWFeGFaQQ1R6-HytBc0O4Kr-wmTJZh4zHKxr28auq4-KgQLlHT0fdsgXN3WMh-BgmXxXJZyTsSR3wIoMjGiHAVzdlLYUhGVdbKaMTeptLTyQTvW3vKyr4HxF5bgOB0ehAVACxJob9_hx1cjh33P2d8Cx6owd-Mqe_WNSYQ9I9JHGjbwCwdOy95juAKMOIvznxPE0uyBHGFv3f3QChJxHliXGmX_7u');
-                "
-              ></div>
-              <div class="flex-grow min-w-0">
-                <p
-                  class="text-[#F8F9FA] text-base font-medium leading-normal truncate"
-                >
-                  Echoes in Silence
-                </p>
-                <p
-                  class="text-[#F8F9FA]/70 text-sm font-normal leading-normal"
-                >
-                  The Void
-                </p>
-              </div>
-              <div class="flex items-center gap-2 ml-auto">
-                <button
-                  class="flex items-center justify-center w-8 h-8 rounded-full bg-green-500/20 text-green-500 hover:bg-green-500/30 transition-colors"
-                >
-                  <span class="material-symbols-outlined text-xl"
-                    >check</span
-                  >
-                </button>
-                <button
-                  class="flex items-center justify-center w-8 h-8 rounded-full bg-red-500/20 text-red-500 hover:bg-red-500/30 transition-colors"
-                >
-                  <span class="material-symbols-outlined text-xl"
-                    >close</span
-                  >
-                </button>
-              </div>
-            </div>
-           
-           
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
-</div>
+       
+        {% include 'includes/pending_item.html' %}
+
+
 
   {% include 'includes/footer.html' %}
 
