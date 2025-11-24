@@ -53,7 +53,11 @@ def admin_dashboard(request):
     )
 
 def admin_sedes(request):
-    return render(request, 'admin/admin_uploads.html')
+
+    
+
+    
+    return render(request, 'admin/admin_sedes.html')
 
 def admin_uploads(request):
     return render(request, 'admin/uploads.html')
