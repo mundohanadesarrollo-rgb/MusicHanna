@@ -60,7 +60,7 @@ def admin_sedes(request):
     return render(request, 'admin/admin_sedes.html')
 
 def admin_uploads(request):
-    return render(request, 'admin/uploads.html')
+    return render(request, 'admin/admin_uploads.html')
 
 def admin_players(request):
     return render(request, 'admin/players.html')
