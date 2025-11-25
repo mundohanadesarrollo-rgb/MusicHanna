@@ -53,11 +53,32 @@ def admin_dashboard(request):
     )
 
 def admin_sedes(request):
+    sedes = [
+        {
+            'nombre': 'Sede Principal - Centro',
+            'estado': 'Activo',
+            'badge_class': 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-200 text-green-800 dark:bg-green-900 dark:text-green-200',
+            'dot_class': 'w-2 h-2 rounded-full bg-green-500',
+            'ultima_actualizacion': '2023-10-26 10:00 AM',
+        },
 
-    
+        
 
-    
-    return render(request, 'admin/admin_sedes.html')
+    ]
+
+    subidas = {
+        'name_page': 'Gestión Sedes',
+        
+    }
+
+    return render(
+        request,
+        'admin/admin_sedes.html',
+        {
+            'subidas': subidas,
+            'sedes': sedes
+        },
+    )
 
 def admin_uploads(request):
     return render(request, 'admin/admin_uploads.html')
