@@ -1,23 +1,174 @@
+
 <!DOCTYPE html>
-<html class="dark" lang="es">
+<html class="dark" lang="en">
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Gestión de Archivos - Admin Dashboard</title>
+    <title>Music Player</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+      href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300..700&amp;display=swap"
       rel="stylesheet"
     />
     <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
       rel="stylesheet"
     />
- 
- 
+   
   </head>
-  <body
-    class="font-display bg-background-light dark:bg-background-dark text-stone-900 dark:text-stone-100"
-  >
-    
+  <body class="font-display">
+    <div
+      class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden"
+    >
+      <div class="layout-container flex h-full grow flex-col">
+        <main class="flex flex-1 justify-center py-5 pb-32">
+          <div
+            class="layout-content-container grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 w-full max-w-7xl flex-1 px-4 md:px-10 lg:px-20"
+          >
+            <div class="flex flex-col items-center text-center py-6">
+              <div
+                class="w-full max-w-sm aspect-square bg-center bg-no-repeat bg-cover rounded-xl shadow-2xl mb-6"
+                data-alt="Album art for Bohemian Rhapsody"
+                style="
+                  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDdJSrMKZ15N2XgloMIPnhWWAErOJrQsdRPNxzL1m90sH9qn1IUe2U3CJgfWDzJr_UD35cYGrP7ZTR5r9eBnQHEZenMzAngTEVoA574P1A1_PC1EbBC-0l6t68QmWDmg70THXrQqWUh83e15_x_1bo3zuS_MqemqpYzRvGuGj-afCzO0iyJsbAYjWGDxbLNhESUYcRrdvBzIuHjJUPYjlXnytX-XACBExxYO8kUSQYzS20DWPIOY2y5j01D2JtdKx7u4TLkKdwSe83z');
+                "
+              ></div>
+              <h2
+                class="text-slate-800 dark:text-[#F8F9FA] tracking-light text-[32px] font-bold leading-tight"
+              >
+                Bohemian Rhapsody
+              </h2>
+              <p
+                class="text-slate-600 dark:text-[#F8F9FA]/70 text-lg font-normal"
+              >
+                Queen
+              </p>
+              <div class="mt-4 text-slate-500 dark:text-[#F8F9FA]/60 text-sm">
+                <span>A Night at the Opera</span>
+                <span> • </span>
+                <span>1975</span>
+              </div>
+            </div>
+            <div class="flex flex-col">
+              <h1
+                class="text-slate-800 dark:text-[#F8F9FA] tracking-light text-[32px] font-bold leading-tight px-4 text-left pb-3 pt-6"
+              >
+                Up Next
+              </h1>
+              <div class="flex flex-col gap-3 px-4 py-4">
+                <div class="flex items-center gap-4 rounded-lg p-3">
+                  <div
+                    class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md flex-shrink-0"
+                    data-alt="Album art for Hotel California"
+                    style="
+                      background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC7InNhG13Exh7QdiEwqs4-MhESxgHQnHseCjIqSakz7YS6-AqmXvAikUCl5qmTncBCOR8DSczmHLeX7KlTXSIXApHObRHd2oWeybtG3eTbNx59KViycyhyuOcYq6To-bZhJLzIsNHLGm4QGd9E2WZZGHskmzz7ZHETSRMeQdhMtnd-z-sgnuYq3FAUhrC1vqWg_mMjnE-62D9ILEAEK-tRoscQviedVAYnbSaF21NaQOfCpkhjoYjrj9BuaknusFXqRePr6pa2LCjS');
+                    "
+                  ></div>
+                  <div class="flex-grow min-w-0">
+                    <p
+                      class="text-slate-800 dark:text-[#F8F9FA] text-base font-medium leading-normal truncate"
+                    >
+                      Hotel California
+                    </p>
+                    <p
+                      class="text-slate-600 dark:text-[#F8F9FA]/70 text-sm font-normal leading-normal"
+                    >
+                      Eagles
+                    </p>
+                  </div>
+                  <p
+                    class="text-slate-600 dark:text-[#F8F9FA]/70 text-sm font-medium leading-normal flex-shrink-0"
+                  >
+                    6:30
+                  </p>
+                </div>
+                <div
+                  class="flex items-center gap-4 rounded-lg bg-slate-200/50 dark:bg-[#9D0208] p-3"
+                >
+                  <div
+                    class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md flex-shrink-0"
+                    data-alt="Album art for Stairway to Heaven"
+                    style="
+                      background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCUFo-lgwbdiL7DIKFxMoKyPIWkbZ9nrkSGgLvFhbVthT--YpsXfXsTnRnnZlLzohRM29lGWaikEjNE8a7hpIEnYm3sI1aIhopxKwmIl6kWfq3DLAU4yaU0jGiHGV8iHWHHXPqjF8yBhYTwOBXBoX6ULp1vAjGBpZRM7zMG2sOiZ_9sJT_1qZkRE7o-Sv9pRnvsXlwpaOILLkdait6TbFQPekLoaJuOZeoSeseHXUHT0m_xswZgf_uIDJuIUmM5Mj1AwC7NiEVEF50p');
+                    "
+                  ></div>
+                  <div class="flex-grow min-w-0">
+                    <p
+                      class="text-slate-800 dark:text-[#F8F9FA] text-base font-medium leading-normal truncate"
+                    >
+                      Stairway to Heaven
+                    </p>
+                    <p
+                      class="text-slate-600 dark:text-[#F8F9FA]/70 text-sm font-normal leading-normal"
+                    >
+                      Led Zeppelin
+                    </p>
+                  </div>
+                  <p
+                    class="text-slate-600 dark:text-[#F8F9FA]/70 text-sm font-medium leading-normal flex-shrink-0"
+                  >
+                    8:02
+                  </p>
+                </div>
+                <div class="flex items-center gap-4 rounded-lg p-3">
+                  <div
+                    class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md flex-shrink-0"
+                    data-alt="Abstract album art for Echoes in Silence"
+                    style="
+                      background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCedOXHj6M9_O8tOY-id8GL2hQyv0Nkm58vNB9MzEA64FACfcqbWFeGFaQQ1R6-HytBc0O4Kr-wmTJZh4zHKxr28auq4-KgQLlHT0fdsgXN3WMh-BgmXxXJZyTsSR3wIoMjGiHAVzdlLYUhGVdbKaMTeptLTyQTvW3vKyr4HxF5bgOB0ehAVACxJob9_hx1cjh33P2d8Cx6owd-Mqe_WNSYQ9I9JHGjbwCwdOy95juAKMOIvznxPE0uyBHGFv3f3QChJxHliXGmX_7u');
+                    "
+                  ></div>
+                  <div class="flex-grow min-w-0">
+                    <p
+                      class="text-slate-800 dark:text-[#F8F9FA] text-base font-medium leading-normal truncate"
+                    >
+                      Echoes in Silence
+                    </p>
+                    <p
+                      class="text-slate-600 dark:text-[#F8F9FA]/70 text-sm font-normal leading-normal"
+                    >
+                      The Void
+                    </p>
+                  </div>
+                  <p
+                    class="text-slate-600 dark:text-[#F8F9FA]/70 text-sm font-medium leading-normal flex-shrink-0"
+                  >
+                    4:15
+                  </p>
+                </div>
+                <div class="flex items-center gap-4 rounded-lg p-3">
+                  <div
+                    class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md flex-shrink-0"
+                    data-alt="Abstract album art for Neon Dreams"
+                    style="
+                      background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAeV_oWvLF6mKAVM5dkxIdc1K9IRSVe4UKCe_7_Jaqazd40G6W5r5kPtD_rgcIJHbVvj8w0Jz7wBTO6czyHsPC-jyq5Y0ehr-R9ZDFKcToE3fOWhDp50QdqSgzJEmtBtRCR_8DBdkxOOh_FzwR2zwPL5A0PRj7yQe1f0NuKQxHBZK6epPh0FrSQ_keTW5Z_w006AnGqQJiKcutT6waf1G4aEkr0r8WDsBq1A_z2RJ9dUAijRzgPndmG8lNfYrS5Z7ubmMxajtze5SxX');
+                    "
+                  ></div>
+                  <div class="flex-grow min-w-0">
+                    <p
+                      class="text-slate-800 dark:text-[#F8F9FA] text-base font-medium leading-normal truncate"
+                    >
+                      Neon Dreams
+                    </p>
+                    <p
+                      class="text-slate-600 dark:text-[#F8F9FA]/70 text-sm font-normal leading-normal"
+                    >
+                      Synthwave Rider
+                    </p>
+                  </div>
+                  <p
+                    class="text-slate-600 dark:text-[#F8F9FA]/70 text-sm font-medium leading-normal flex-shrink-0"
+                  >
+                    3:50
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+      {% include 'includes/player.html' %}
+    </div>
   </body>
 </html>

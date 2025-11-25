@@ -1,0 +1,58 @@
+<footer
+  class="fixed bottom-0 left-0 right-0 h-24 bg-[rgb(106,4,15)] border-t border-[#9D0208] p-4 z-60"
+  aria-label="Player"
+>
+  <div
+    class="flex items-center justify-between w-full h-full max-w-7xl mx-auto"
+  >
+    <div class="flex items-center gap-4 w-1/4">
+      <div
+        class="w-14 h-14 bg-center bg-no-repeat aspect-square bg-cover rounded-md shrink-0"
+        data-alt="Album art for the currently playing track"
+        style="
+          background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDdJSrMKZ15N2XgloMIPnhWWAErOJrQsdRPNxzL1m90sH9qn1IUe2U3CJgfWDzJr_UD35cYGrP7ZTR5r9eBnQHEZenMzAngTEVoA574P1A1_PC1EbBC-0l6t68QmWDmg70THXrQqWUh83e15_x_1bo3zuS_MqemqpYzRvGuGj-afCzO0iyJsbAYjWGDxbLNhESUYcRrdvBzIuHjJUPYjlXnytX-XACBExxYO8kUSQYzS20DWPIOY2y5j01D2JtdKx7u4TLkKdwSe83z');
+        "
+      ></div>
+      <div>
+        <p class="text-[#F8F9FA] text-sm font-semibold leading-tight truncate">
+          Bohemian Rhapsody
+        </p>
+        <p class="text-[#F8F9FA]/70 text-xs leading-tight">Queen</p>
+      </div>
+    </div>
+
+    <div class="flex flex-col items-center gap-2 w-1/2">
+      <div class="flex items-center gap-4 text-[#F8F9FA]">
+        <button class="hover:text-[#F8F9FA]/80 transition-colors">
+          <span class="material-symbols-outlined text-3xl">skip_previous</span>
+        </button>
+        <button
+          class="w-12 h-12 flex items-center justify-center bg-[#9D0208] text-white rounded-full hover:bg-[#9D0208]/90 transition-colors shadow-lg"
+        >
+          <span class="material-symbols-outlined text-4xl">pause</span>
+        </button>
+        <button class="hover:text-[#F8F9FA]/80 transition-colors">
+          <span class="material-symbols-outlined text-3xl">skip_next</span>
+        </button>
+      </div>
+      <div class="flex items-center gap-2 w-full max-w-md">
+        <span class="text-xs text-[#F8F9FA]/70">1:48</span>
+        <div class="w-full bg-[#9D0208]/30 rounded-full h-1.5">
+          <div class="bg-[#F8F9FA] h-1.5 rounded-full" style="width: 35%"></div>
+        </div>
+        <span class="text-xs text-[#F8F9FA]/70">5:55</span>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-end gap-2 w-1/4">
+      <span class="material-symbols-outlined text-[#F8F9FA]/70">volume_up</span>
+      <input
+        class="w-24 h-1 accent-[#F8F9FA] bg-[#9D0208]/30 rounded-lg appearance-none cursor-pointer"
+        max="100"
+        min="0"
+        type="range"
+        value="75"
+      />
+    </div>
+  </div>
+</footer>

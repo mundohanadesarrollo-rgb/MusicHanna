@@ -22,3 +22,14 @@
     color-scheme: dark;
   }
 }
+
+/* Theme text utilities: use project theme colors for text in dark mode */
+.text-background-light {
+  color: var(--color-background-light);
+}
+
+@media (prefers-color-scheme: dark) {
+  .dark\:text-background-light {
+    color: var(--color-background-light);
+  }
+}

@@ -1,0 +1,153 @@
+{% extends 'base.html' %} 
+{% load static%} 
+{% block title %} Admin Players{%endblock title %} 
+
+{% block content %}
+
+<div
+  class="relative flex h-auto min-h-screen w-full flex-col bg-[rgb(106,4,15)] text-[#F8F9FA] group/design-root overflow-x-hidden"
+>
+  <div class="layout-container flex h-full grow flex-col">
+    <main class="flex flex-1 justify-center py-5 pb-48">
+      <div
+        class="layout-content-container grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 w-full max-w-7xl flex-1 px-4 md:px-10 lg:px-20"
+      >
+        <!-- Left: Album art -->
+        <div class="flex flex-col items-center text-center py-6">
+          <div
+            class="w-full max-w-sm aspect-square bg-center bg-no-repeat bg-cover rounded-xl shadow-2xl mb-6"
+            data-alt="Album art for Bohemian Rhapsody"
+            style="
+              background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDdJSrMKZ15N2XgloMIPnhWWAErOJrQsdRPNxzL1m90sH9qn1IUe2U3CJgfWDzJr_UD35cYGrP7ZTR5r9eBnQHEZenMzAngTEVoA574P1A1_PC1EbBC-0l6t68QmWDmg70THXrQqWUh83e15_x_1bo3zuS_MqemqpYzRvGuGj-afCzO0iyJsbAYjWGDxbLNhESUYcRrdvBzIuHjJUPYjlXnytX-XACBExxYO8kUSQYzS20DWPIOY2y5j01D2JtdKx7u4TLkKdwSe83z');
+            "
+          ></div>
+          <h2
+            class="tracking-light text-[32px] font-bold leading-tight text-[#F8F9FA]"
+          >
+            Bohemian Rhapsody
+          </h2>
+          <p class="text-[#F8F9FA]/80 text-lg font-normal">Queen</p>
+          <div class="mt-4 text-[#F8F9FA]/60 text-sm">
+            <span>A Night at the Opera</span><span> • </span><span>1975</span>
+          </div>
+        </div>
+
+        <!-- Right: Playlist -->
+        <div class="flex flex-col">
+          <h1
+            class="tracking-light text-[32px] font-bold leading-tight px-4 text-left pb-3 pt-6 text-[#F8F9FA]"
+          >
+            Up Next
+          </h1>
+
+          <div
+            class="flex flex-col gap-3 px-4 py-4 overflow-auto max-h-[60vh] sm:max-h-[50vh]"
+          >
+            <!-- Track 1 -->
+            <div
+              class="flex flex-col sm:flex-row sm:items-center gap-4 rounded-lg p-3 hover:bg-[#A00000]/10 transition-colors"
+            >
+              <div
+                class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md shrink-0"
+                style="
+                  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC7InNhG13Exh7QdiEwqs4-MhESxgHQnHseCjIqSakz7YS6-AqmXvAikUCl5qmTncBCOR8DSczmHLeX7KlTXSIXApHObRHd2oWeybtG3eTbNx59KViycyhyuOcYq6To-bZhJLzIsNHLGm4QGd9E2WZZGHskmzz7ZHETSRMeQdhMtnd-z-sgnuYq3FAUhrC1vqWg_mMjnE-62D9ILEAEK-tRoscQviedVAYnbSaF21NaQOfCpkhjoYjrj9BuaknusFXqRePr6pa2LCjS');
+                "
+              ></div>
+              <div class="grow min-w-0">
+                <p
+                  class="text-[#F8F9FA] text-base font-medium leading-normal truncate"
+                >
+                  Hotel California
+                </p>
+                <p class="text-[#F8F9FA]/70 text-sm">Eagles</p>
+              </div>
+              <div class="shrink-0">
+                <p class="text-[#F8F9FA]/70 text-sm font-medium">6:30</p>
+              </div>
+            </div>
+
+            <!-- Track 2 (active) -->
+            <div
+              class="flex flex-col sm:flex-row sm:items-center gap-4 rounded-lg bg-[#9D0208] p-3"
+            >
+              <div
+                class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md shrink-0"
+                style="
+                  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCUFo-lgwbdiL7DIKFxMoKyPIWkbZ9nrkSGgLvFhbVthT--YpsXfXsTnRnnZlLzohRM29lGWaikEjNE8a7hpIEnYm3sI1aIhopxKwmIl6kWfq3DLAU4yaU0jGiHGV8iHWHHXPqjF8yBhYTwOBXBoX6ULp1vAjGBpZRM7zMG2sOiZ_9sJT_1qZkRE7o-Sv9pRnvsXlwpaOILLkdait6TbFQPekLoaJuOZeoSeseHXUHT0m_xswZgf_uIDJuIUmM5Mj1AwC7NiEVEF50p');
+                "
+              ></div>
+              <div class="grow min-w-0">
+                <p
+                  class="text-[#F8F9FA] text-base font-medium leading-normal truncate"
+                >
+                  Stairway to Heaven
+                </p>
+                <p class="text-[#F8F9FA]/70 text-sm">Led Zeppelin</p>
+              </div>
+              <div class="shrink-0">
+                <p class="text-[#F8F9FA]/70 text-sm font-medium">8:02</p>
+              </div>
+            </div>
+
+            <!-- Track 3 -->
+            <div
+              class="flex flex-col sm:flex-row sm:items-center gap-4 rounded-lg p-3 hover:bg-[#A00000]/10 transition-colors"
+            >
+              <div
+                class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md shrink-0"
+                style="
+                  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCedOXHj6M9_O8tOY-id8GL2hQyv0Nkm58vNB9MzEA64FACfcqbWFeGFaQQ1R6-HytBc0O4Kr-wmTJZh4zHKxr28auq4-KgQLlHT0fdsgXN3WMh-BgmXxXJZyTsSR3wIoMjGiHAVzdlLYUhGVdbKaMTeptLTyQTvW3vKyr4HxF5bgOB0ehAVACxJob9_hx1cjh33P2d8Cx6owd-Mqe_WNSYQ9I9JHGjbwCwdOy95juAKMOIvznxPE0uyBHGFv3f3QChJxHliXGmX_7u');
+                "
+              ></div>
+              <div class="grow min-w-0">
+                <p
+                  class="text-[#F8F9FA] text-base font-medium leading-normal truncate"
+                >
+                  Echoes in Silence
+                </p>
+                <p class="text-[#F8F9FA]/70 text-sm">The Void</p>
+              </div>
+              <div class="shrink-0">
+                <p class="text-[#F8F9FA]/70 text-sm font-medium">4:15</p>
+              </div>
+            </div>
+
+            <!-- Track 4 -->
+            <div
+              class="flex flex-col sm:flex-row sm:items-center gap-4 rounded-lg p-3 hover:bg-[#A00000]/10 transition-colors"
+            >
+              <div
+                class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md shrink-0"
+                style="
+                  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAeV_oWvLF6mKAVM5dkxIdc1K9IRSVe4UKCe_7_Jaqazd40G6W5r5kPtD_rgcIJHbVvj8w0Jz7wBTO6czyHsPC-jyq5Y0ehr-R9ZDFKcToE3fOWhDp50QdqSgzJEmtBtRCR_8DBdkxOOh_FzwR2zwPL5A0PRj7yQe1f0NuKQxHBZK6epPh0FrSQ_keTW5Z_w006AnGqQJiKcutT6waf1G4aEkr0r8WDsBq1A_z2RJ9dUAijRzgPndmG8lNfYrS5Z7ubmMxajtze5SxX');
+                "
+              ></div>
+              <div class="grow min-w-0">
+                <p
+                  class="text-[#F8F9FA] text-base font-medium leading-normal truncate"
+                >
+                  Neon Dreams
+                </p>
+                <p class="text-[#F8F9FA]/70 text-sm">Synthwave Rider</p>
+              </div>
+              <div class="shrink-0">
+                <p class="text-[#F8F9FA]/70 text-sm font-medium">3:50</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+{% include 'includes/player.html' %} 
+{% include 'includes/footer.html' %}
+
+<style>
+  footer[aria-label="Player"] {
+    bottom: 5rem !important;
+  }
+</style>
+
+{%endblock %} {%block scripts%} {% endblock scripts %}

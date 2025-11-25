@@ -12,14 +12,9 @@
         Gestión de Archivos
       </h1>
     </header>
-    <div
-      class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
-    >
+    <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
       <div class="relative grow sm:max-w-xs">
-        <span
-          class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#F8F9FA]/80"
-          >search</span
-        >
+        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#F8F9FA]/80">search</span>
         <input
           class="w-full pl-10 pr-4 py-2 bg-[#A00000] border border-[#9D0208] rounded-md focus:ring-2 focus:ring-[#F8F9FA]/40 focus:border-transparent placeholder:text-[#F8F9FA]/70 text-[#F8F9FA]"
           placeholder="Buscar por título, artista..."
@@ -27,222 +22,64 @@
         />
       </div>
       <div class="flex items-center gap-4">
-        <button
-          class="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-[#801019] text-[#F8F9FA] border border-[#9D0208] rounded-md hover:bg-[#B1121C] transition-colors shadow-sm"
-        >
+        <button class="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-[#801019] text-[#F8F9FA] border border-[#9D0208] rounded-md hover:bg-[#B1121C] transition-colors shadow-sm">
           <span class="material-symbols-outlined">filter_list</span>
           Filtros
         </button>
-        <button
-          class="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-[#F48C06] text-[#2B0808] rounded-md hover:bg-[#FFB347] transition-colors shadow"
-        >
+        <button class="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-[#F48C06] text-[#2B0808] rounded-md hover:bg-[#FFB347] transition-colors shadow">
           <span class="material-symbols-outlined text-lg">upload_file</span>
           Subir Archivo
         </button>
       </div>
     </div>
-    <div
-      class="bg-[#9D0208] rounded-lg overflow-hidden shadow-md border border-[#A00000]"
-    >
+    <div class="bg-[#9D0208] rounded-lg overflow-hidden shadow-md border border-[#A00000]">
       <div class="overflow-x-auto">
         <table class="w-full text-left text-sm">
-          <thead
-            class="bg-[#A00000] text-[#F8F9FA]/80 uppercase tracking-wider text-xs"
-          >
+          <thead class="bg-[#A00000] text-[#F8F9FA]/80 uppercase tracking-wider text-xs">
             <tr>
-              <th class="px-6 py-3 font-medium text-left border border-[#801019]" scope="col">
-                Portada
-              </th>
-              <th class="px-6 py-3 font-medium text-left border border-[#801019]" scope="col">
-                Título
-              </th>
-              <th class="px-6 py-3 font-medium text-left border border-[#801019]" scope="col">
-                Artista
-              </th>
-              <th class="px-6 py-3 font-medium text-left border border-[#801019]" scope="col">
-                Álbum
-              </th>
-              <th class="px-6 py-3 font-medium text-left border border-[#801019]" scope="col">
-                Duración
-              </th>
-              <th class="px-6 py-3 font-medium text-center border border-[#801019]" scope="col">
-                Acciones
-              </th>
+              <th class="px-6 py-3 font-medium text-left border border-[#801019]" scope="col">Portada</th>
+              <th class="px-6 py-3 font-medium text-left border border-[#801019]" scope="col">Título</th>
+              <th class="px-6 py-3 font-medium text-left border border-[#801019]" scope="col">Artista</th>
+              <th class="px-6 py-3 font-medium text-left border border-[#801019]" scope="col">Álbum</th>
+              <th class="px-6 py-3 font-medium text-left border border-[#801019]" scope="col">Duración</th>
+              <th class="px-6 py-3 font-medium text-center border border-[#801019]" scope="col">Acciones</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-[#F8F9FA]/10">
+            {% for upload in uploads %}
             <tr class="hover:bg-[#A00000] transition-colors">
               <td class="px-6 py-4 border border-[#801019]">
-                <img
-                  alt="Album Art"
-                  class="h-12 w-12 rounded object-cover"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsO49gWiezMp0mvqR5bZRccWHN1dEzFu1e5aIgil9Y7daTEUot2TzgKFUryK7AEEEHhb3EkCi2g8pN8_NCdwAplG628eY9cy7ooofM-FOsn0ha5TaoUijctNpaXe6qiA8V0XsFbjbpzj6MXdgaZ6F2RI4sz6kZu792KDCe-REB3MxvJ2RSwYfOwYNh_iV53y_-cQNNBn43EQX9prlPOD4yQZ5lhZW1T9waS9OzWKvhuFIR9HCyWYce9CSpLd6RQmMPXd7iyvBMHaCa"
-                />
+                <img alt="Album Art" class="h-12 w-12 rounded object-cover" src="{{ upload.image }}" />
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA] font-medium border border-[#801019]">
-                Luces de Neón
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA]/80 border border-[#801019]">
-                Sintetizadores
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA]/80 border border-[#801019]">
-                Noches Eléctricas
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA]/80 border border-[#801019]">
-                3:45
-              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA] font-medium border border-[#801019]">{{ upload.title }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA]/80 border border-[#801019]">{{ upload.artist }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA]/80 border border-[#801019]">{{ upload.album }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA]/80 border border-[#801019]">{{ upload.duration }}</td>
               <td class="px-6 py-4 whitespace-nowrap border border-[#801019]">
                 <div class="flex items-center justify-center gap-2">
-                  <button
-                    aria-label="Editar"
-                    class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/80 hover:text-[#F8F9FA]"
-                  >
+                  <button aria-label="Editar" class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/80 hover:text-[#F8F9FA]">
                     <span class="material-symbols-outlined">edit</span>
                   </button>
-                  <button
-                    aria-label="Reproducir"
-                    class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/80 hover:text-[#F8F9FA]"
-                  >
+                  <button aria-label="Reproducir" class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/80 hover:text-[#F8F9FA]">
                     <span class="material-symbols-outlined">play_circle</span>
                   </button>
-                  <button
-                    aria-label="Despublicar"
-                    class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-green-300 hover:text-green-200"
-                  >
+                  {% if upload.published %}
+                  <button aria-label="Despublicar" class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-green-300 hover:text-green-200">
                     <span class="material-symbols-outlined">toggle_on</span>
                   </button>
-                </div>
-              </td>
-            </tr>
-            <tr class="hover:bg-[#A00000] transition-colors">
-              <td class="px-6 py-4 border border-[#801019]">
-                <img
-                  alt="Album Art"
-                  class="h-12 w-12 rounded object-cover"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBH7NU1tkhoYJ4xz7NrtUuRbKHUBBQS63g2kZETzEqFARLlhMkH2fIBYFPtgtsTO7mv7yrkpWhp9nJPqb11vpjWxYdpj6eoBtJvhqx-W-YxSs-GD-MMJzqY8YDRQ3z-7XMp1x4veMqn3mutFxsbY1f5Xm5gcn9D5rB90UcianLTowvLkmDFGeR8WvgYWci5RZitreoHyTd5RZ6SJvBPkSnEvNi0XwHKSiCe2ZpRTGa9NJbWwjRt63cdRow98VqDWLrz86pAcEzuXZaJ"
-                />
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA] font-medium border border-[#801019]">
-                Sonido del Silencio
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA]/80 border border-[#801019]">
-                Acústicos
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA]/80 border border-[#801019]">
-                Melodías
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA]/80 border border-[#801019]">
-                4:12
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap border border-[#801019]">
-                <div class="flex items-center justify-center gap-2">
-                  <button
-                    aria-label="Editar"
-                    class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/80 hover:text-[#F8F9FA]"
-                  >
-                    <span class="material-symbols-outlined">edit</span>
-                  </button>
-                  <button
-                    aria-label="Reproducir"
-                    class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/80 hover:text-[#F8F9FA]"
-                  >
-                    <span class="material-symbols-outlined">play_circle</span>
-                  </button>
-                  <button
-                    aria-label="Publicar"
-                    class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/60 hover:text-[#F8F9FA]"
-                  >
+                  {% else %}
+                  <button aria-label="Publicar" class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/60 hover:text-[#F8F9FA]">
                     <span class="material-symbols-outlined">toggle_off</span>
                   </button>
+                  {% endif %}
                 </div>
               </td>
             </tr>
-            <tr class="hover:bg-[#A00000] transition-colors">
-              <td class="px-6 py-4 border border-[#801019]">
-                <img
-                  alt="Album Art"
-                  class="h-12 w-12 rounded object-cover"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvzI1Y56K6LbojsPo72araV8XDycyXfUpM22mOPF1JNTqNeqH_w8JltyQBN-J1j-bYPesnlO0xqBn8gsXbATbcc_GKVFxBCB3fxyTlyiEHcOouMa_3y5klnUvi7vr1fIymb8sx-cbmvOJBgnjqNrYEgPLSZ540PaxRTjSlCL-Was6uxmAmwAAIYbFMs0z0WbKoEDG6T9UdDkBXQmjA-5a6LP4lxjom7AT3AkWd6qBDyCb17mUFNXwuaZ2-Umo0S-fndiSdTpzzE9Cv"
-                />
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA] font-medium border border-[#801019]">
-                Ritmo Urbano
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA]/80 border border-[#801019]">
-                DJ Electrónico
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA]/80 border border-[#801019]">
-                Beats de la Ciudad
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA]/80 border border-[#801019]">
-                5:30
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap border border-[#801019]">
-                <div class="flex items-center justify-center gap-2">
-                  <button
-                    aria-label="Editar"
-                    class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/80 hover:text-[#F8F9FA]"
-                  >
-                    <span class="material-symbols-outlined">edit</span>
-                  </button>
-                  <button
-                    aria-label="Reproducir"
-                    class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/80 hover:text-[#F8F9FA]"
-                  >
-                    <span class="material-symbols-outlined">play_circle</span>
-                  </button>
-                  <button
-                    aria-label="Despublicar"
-                    class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-green-300 hover:text-green-200"
-                  >
-                    <span class="material-symbols-outlined">toggle_on</span>
-                  </button>
-                </div>
-              </td>
+            {% empty %}
+            <tr>
+              <td colspan="6" class="p-6 text-center text-[#F8F9FA]/70">No hay archivos subidos.</td>
             </tr>
-            <tr class="hover:bg-[#A00000] transition-colors">
-              <td class="px-6 py-4 border border-[#801019]">
-                <img
-                  alt="Album Art"
-                  class="h-12 w-12 rounded object-cover"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuChm5_J0n9F06cE9p6iie59a4yFS7vzELH0ITpRpO3hwVu3a-Jo4vqsC0B1qV_6SqGlW79d1orP4wiTQWpwOeUp5T3bJ74Gc_k6xUZPzQ2U6nW5Mv2jRSTKiQoOgYa40BiaBXwzJYDuJ3dxP0U68F56X0ZiVJHxHD7JSiu3PQUTjOz4jctf-AnFYX_TviR0xdQUfCKMUL4a8Dmiq3jkADDjWwHFNu4ywanGHzjNsQ2I8C4R8iVHr6HRAIj1NLfMiWzqrTYD7ocYYzgd"
-                />
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA] font-medium border border-[#801019]">
-                Amanecer Dorado
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA]/80 border border-[#801019]">
-                Orquesta Clásica
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA]/80 border border-[#801019]">
-                Sinfonías del Sol
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA]/80 border border-[#801019]">
-                7:15
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap border border-[#801019]">
-                <div class="flex items-center justify-center gap-2">
-                  <button
-                    aria-label="Editar"
-                    class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/80 hover:text-[#F8F9FA]"
-                  >
-                    <span class="material-symbols-outlined">edit</span>
-                  </button>
-                  <button
-                    aria-label="Reproducir"
-                    class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/80 hover:text-[#F8F9FA]"
-                  >
-                    <span class="material-symbols-outlined">play_circle</span>
-                  </button>
-                  <button
-                    aria-label="Despublicar"
-                    class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-green-300 hover:text-green-200"
-                  >
-                    <span class="material-symbols-outlined">toggle_on</span>
-                  </button>
-                </div>
-              </td>
-            </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>
