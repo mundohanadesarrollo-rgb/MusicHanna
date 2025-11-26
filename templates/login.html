@@ -5,7 +5,7 @@
 
 {% block content %}
 
-<div class="font-display bg-[#3d0000]">
+<div class="font-display bg-[#6a040f]">
   <div
     class="relative flex h-auto min-h-screen w-full flex-col items-center justify-center p-4"
   >
@@ -16,7 +16,7 @@
         </div>
         
         <!-- AGREGAR FORMULARIO AQUÍ -->
-        <form method="POST" action="{% url 'user_login' %}" class="flex w-full flex-col items-stretch gap-y-4">
+        <form method="POST" class="flex w-full flex-col items-stretch gap-y-4">
           {% csrf_token %}
           
           <label class="flex flex-col w-full">
@@ -26,6 +26,7 @@
               name="username" 
               class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#F5F5F5] focus:outline-0 border border-[#543b3b] bg-[#4a1c1c] focus:border-primary focus:ring-primary/50 h-14 placeholder:text-[#b99d9d] p-[15px] text-base font-normal leading-normal transition-colors duration-300"
               placeholder="Usuario"
+              id="username"
               required
             />
           </label>
