@@ -1,8 +1,0 @@
-usuario
-
-contraseña123
-
-
-admin
-
-password123
