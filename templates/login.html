@@ -1,0 +1,66 @@
+{% extends "base.html" %} 
+{% load static %} 
+{% block title %} Iniciar Sesión {%endblock title %} 
+
+
+{% block content %}
+
+<div class="font-display bg-[#3d0000]">
+  <div
+    class="relative flex h-auto min-h-screen w-full flex-col items-center justify-center p-4"
+  >
+<!-- ... código anterior ... -->
+      <div class="flex w-full max-w-md flex-col items-center justify-center rounded-xl bg-[#2C0000] p-8 shadow-2xl">
+        <div class="mb-8 flex justify-center text-white">
+          <span class="font-logo font-bold text-2xl">Iniciar Sesión</span>
+        </div>
+        
+        <!-- AGREGAR FORMULARIO AQUÍ -->
+        <form method="POST" action="{% url 'user_login' %}" class="flex w-full flex-col items-stretch gap-y-4">
+          {% csrf_token %}
+          
+          <label class="flex flex-col w-full">
+            <p class="text-[#F5F5F5] text-base font-medium leading-normal pb-2">Usuario</p>
+            <!-- Agregar name="username" -->
+            <input
+              name="username" 
+              class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#F5F5F5] focus:outline-0 border border-[#543b3b] bg-[#4a1c1c] focus:border-primary focus:ring-primary/50 h-14 placeholder:text-[#b99d9d] p-[15px] text-base font-normal leading-normal transition-colors duration-300"
+              placeholder="Usuario"
+              required
+            />
+          </label>
+          
+          <label class="flex flex-col w-full">
+            <p class="text-[#F5F5F5] text-base font-medium leading-normal pb-2">Contraseña</p>
+            <div class="flex w-full flex-1 items-stretch">
+              <!-- Agregar name="password" -->
+              <input
+                name="password"
+                id="passwordInput"
+                class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-l-lg text-[#F5F5F5] focus:outline-0 border border-[#543b3b] bg-[#4a1c1c] focus:border-primary focus:ring-primary/50 h-14 placeholder:text-[#b99d9d] p-[15px] border-r-0 pr-2 text-base font-normal leading-normal transition-colors duration-300"
+                placeholder="Contraseña"
+                type="password"
+                required
+              />
+              <div class="text-[#b99d9d] flex border border-[#543b3b] bg-[#4a1c1c] items-center justify-center pr-[15px] rounded-r-lg border-l-0">
+                <span id="togglePassword" class="material-symbols-outlined cursor-pointer">visibility</span>
+              </div>
+            </div>
+          </label>
+          
+          <button type="submit" class="flex min-w-[84px] w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 mt-4 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-[#2C0000] transition-colors duration-300">
+            <span class="truncate">Iniciar Sesión</span>
+          </button>
+        </form>
+        <!-- FIN FORMULARIO -->
+        
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock content %} 
+{%block scripts%} 
+<script src="{% static 'js/login.js' %}"></script>
+{%endblock scripts %}

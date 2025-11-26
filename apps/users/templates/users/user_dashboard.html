@@ -1,14 +1,16 @@
-{% extends "base.html" %} {% load static %} {% block title %}Music Player
-Home{%endblock title %} {% block custom_styles %}
 
-<style>
-  /* Ensure the footer doesn't cover content */
-  body {
-    padding-bottom: 6rem; /* Height of footer (24 * 0.25rem = 6rem) */
-  }
-</style>
+{% extends "base.html" %}
+{% load static %}
 
-{% endblock custom_styles %} {% block content %}
+
+{% block title %}Music Player
+Home{% endblock title %}
+
+
+{% block custom_styles %} {% endblock custom_styles %}
+
+
+{% block content %}
 <div
   class="relative flex h-auto min-h-screen w-full flex-col bg-[rgb(106,4,15)] group/design-root overflow-x-hidden"
 >
@@ -17,284 +19,26 @@ Home{%endblock title %} {% block custom_styles %}
       <div
         class="layout-content-container flex flex-col w-full max-w-7xl flex-1"
       >
+
         <h1
           class="text-[#F8F9FA] tracking-light text-[32px] font-bold leading-tight px-4 text-left pb-3 pt-6"
         >
-          Good Evening, {{
-          request.user.first_name|default:request.user.username|default:"User"
-          }}
+          Bienvenido, {{ usuario.sede }}
         </h1>
 
-        <!-- Search Bar -->
-        <div class="px-4 py-3">
-          <label class="flex flex-col min-w-40 h-12 w-full max-w-2xl mx-auto">
-            <div class="flex w-full flex-1 items-stretch rounded-lg h-full">
-              <div
-                class="text-[#F8F9FA]/70 flex border-none bg-[#A00000] items-center justify-center pl-4 rounded-l-lg border-r-0"
-              >
-                <span class="material-symbols-outlined text-2xl">search</span>
-              </div>
-              <input
-                class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#F8F9FA] focus:outline-0 focus:ring-0 border-none bg-[#A00000] focus:border-none h-full placeholder:text-[#F8F9FA]/70 px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
-                placeholder="Search for artists, tracks, or albums"
-                value=""
-              />
-            </div>
-          </label>
-        </div>
+      
+        {% include 'includes/search.html' %}
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
-          <!-- Recently Played Section -->
-          <div class="flex flex-col">
-            <h2
-              class="text-[#F8F9FA] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5"
-            >
-              Recently Played
-            </h2>
-            <div
-              class="flex overflow-y-auto [-ms-scrollbar-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-            >
-              <div class="flex items-stretch p-4 gap-4 w-full">
-                <!-- Static Items from snippet -->
-                <div
-                  class="flex h-full flex-1 flex-col gap-3 rounded-lg min-w-40 bg-[#A00000] p-4 transition-transform hover:scale-105"
-                >
-                  <div
-                    class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg flex flex-col"
-                    data-alt="Album art for Bohemian Rhapsody"
-                    style="
-                      background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAgNsMR0vB1MZAgv7lZ3cuhksKupZ6y_su_R6rPd64137U4VtkPeUvKXejpFrlQDHgbgQYtx9rwFPWfDF1FxgkDeprtzL06DAJBUJ99zP-TN1wOehxggPr4TZQk6N-Rmj3BL1QJkrie7_WpTE5YYURg0GukWDEb3scdjcPBNH95ZRT_CvCOM_Mvb3wWoCn4RWmujg033w-rvn7maJ2z50iudmgbMWRFOfIJt_cnvVyOYPvDHO1zY2bJQYxfKoZLo-SseWGWlHVDiea8');
-                    "
-                  ></div>
-                  <div>
-                    <p
-                      class="text-[#F8F9FA] text-base font-medium leading-normal truncate"
-                    >
-                      Bohemian Rhapsody
-                    </p>
-                    <p
-                      class="text-[#F8F9FA]/70 text-sm font-normal leading-normal"
-                    >
-                      Queen
-                    </p>
-                  </div>
-                </div>
-                <div
-                  class="flex h-full flex-1 flex-col gap-3 rounded-lg min-w-40 bg-[#A00000] p-4 transition-transform hover:scale-105"
-                >
-                  <div
-                    class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg flex flex-col"
-                    data-alt="Album art for Hotel California"
-                    style="
-                      background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC7InNhG13Exh7QdiEwqs4-MhESxgHQnHseCjIqSakz7YS6-AqmXvAikUCl5qmTncBCOR8DSczmHLeX7KlTXSIXApHObRHd2oWeybtG3eTbNx59KViycyhyuOcYq6To-bZhJLzIsNHLGm4QGd9E2WZZGHskmzz7ZHETSRMeQdhMtnd-z-sgnuYq3FAUhrC1vqWg_mMjnE-62D9ILEAEK-tRoscQviedVAYnbSaF21NaQOfCpkhjoYjrj9BuaknusFXqRePr6pa2LCjS');
-                    "
-                  ></div>
-                  <div>
-                    <p
-                      class="text-[#F8F9FA] text-base font-medium leading-normal truncate"
-                    >
-                      Hotel California
-                    </p>
-                    <p
-                      class="text-[#F8F9FA]/70 text-sm font-normal leading-normal"
-                    >
-                      Eagles
-                    </p>
-                  </div>
-                </div>
-                <div
-                  class="flex h-full flex-1 flex-col gap-3 rounded-lg min-w-40 bg-[#A00000] p-4 transition-transform hover:scale-105"
-                >
-                  <div
-                    class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg flex flex-col"
-                    data-alt="Album art for Stairway to Heaven"
-                    style="
-                      background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCUFo-lgwbdiL7DIKFxMoKyPIWkbZ9nrkSGgLvFhbVthT--YpsXfXsTnRnnZlLzohRM29lGWaikEjNE8a7hpIEnYm3sI1aIhopxKwmIl6kWfq3DLAU4yaU0jGiHGV8iHWHHXPqjF8yBhYTwOBXBoX6ULp1vAjGBpZRM7zMG2sOiZ_9sJT_1qZkRE7o-Sv9pRnvsXlwpaOILLkdait6TbFQPekLoaJuOZeoSeseHXUHT0m_xswZgf_uIDJuIUmM5Mj1AwC7NiEVEF50p');
-                    "
-                  ></div>
-                  <div>
-                    <p
-                      class="text-[#F8F9FA] text-base font-medium leading-normal truncate"
-                    >
-                      Stairway to Heaven
-                    </p>
-                    <p
-                      class="text-[#F8F9FA]/70 text-sm font-normal leading-normal"
-                    >
-                      Led Zeppelin
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
 
-          <!-- Pending Uploads Section -->
-          <div class="flex flex-col">
-            <h2
-              class="text-[#F8F9FA] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5"
-            >
-              Pending Uploads
-            </h2>
-            <div class="flex flex-col gap-3 px-4 py-4">
-              <div
-                class="flex items-center gap-4 rounded-lg bg-[#A00000] p-3 hover:bg-[#A00000]/80 transition-colors"
-              >
-                <div
-                  class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md flex-shrink-0"
-                  data-alt="Abstract album art for Echoes in Silence"
-                  style="
-                    background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCedOXHj6M9_O8tOY-id8GL2hQyv0Nkm58vNB9MzEA64FACfcqbWFeGFaQQ1R6-HytBc0O4Kr-wmTJZh4zHKxr28auq4-KgQLlHT0fdsgXN3WMh-BgmXxXJZyTsSR3wIoMjGiHAVzdlLYUhGVdbKaMTeptLTyQTvW3vKyr4HxF5bgOB0ehAVACxJob9_hx1cjh33P2d8Cx6owd-Mqe_WNSYQ9I9JHGjbwCwdOy95juAKMOIvznxPE0uyBHGFv3f3QChJxHliXGmX_7u');
-                  "
-                ></div>
-                <div class="flex-grow min-w-0">
-                  <p
-                    class="text-[#F8F9FA] text-base font-medium leading-normal truncate"
-                  >
-                    Echoes in Silence
-                  </p>
-                  <p
-                    class="text-[#F8F9FA]/70 text-sm font-normal leading-normal"
-                  >
-                    The Void
-                  </p>
-                </div>
-                <p
-                  class="text-amber-400 text-sm font-medium leading-normal flex-shrink-0"
-                >
-                  Pending
-                </p>
-              </div>
-              <div
-                class="flex items-center gap-4 rounded-lg bg-[#A00000] p-3 hover:bg-[#A00000]/80 transition-colors"
-              >
-                <div
-                  class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md flex-shrink-0"
-                  data-alt="Abstract album art for Neon Dreams"
-                  style="
-                    background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAeV_oWvLF6mKAVM5dkxIdc1K9IRSVe4UKCe_7_Jaqazd40G6W5r5kPtD_rgcIJHbVvj8w0Jz7wBTO6czyHsPC-jyq5Y0ehr-R9ZDFKcToE3fOWhDp50QdqSgzJEmtBtRCR_8DBdkxOOh_FzwR2zwPL5A0PRj7yQe1f0NuKQxHBZK6epPh0FrSQ_keTW5Z_w006AnGqQJiKcutT6waf1G4aEkr0r8WDsBq1A_z2RJ9dUAijRzgPndmG8lNfYrS5Z7ubmMxajtze5SxX');
-                  "
-                ></div>
-                <div class="flex-grow min-w-0">
-                  <p
-                    class="text-[#F8F9FA] text-base font-medium leading-normal truncate"
-                  >
-                    Neon Dreams
-                  </p>
-                  <p
-                    class="text-[#F8F9FA]/70 text-sm font-normal leading-normal"
-                  >
-                    Synthwave Rider
-                  </p>
-                </div>
-                <p
-                  class="text-amber-400 text-sm font-medium leading-normal flex-shrink-0"
-                >
-                  Pending
-                </p>
-              </div>
-              <div
-                class="flex items-center gap-4 rounded-lg bg-[#A00000] p-3 hover:bg-[#A00000]/80 transition-colors"
-              >
-                <div
-                  class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md flex-shrink-0"
-                  data-alt="Abstract album art for Lost in Translation"
-                  style="
-                    background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCNmkhREsDwtLGCbHBu2ahEMd3rXuh8Q9uaHW6qzHEw5d0ibtj3PYrJpdMUoAmQ_XiLZ0djRB_TezCkU-LzQfajfL3nRlkZV1rlI7bSgZjezF4jN_mNwnk7lKTxMOm8QI2arIl3XNCatbIuvhEc90BbqTzG1lSz2uetMOv_M_IXW6z4RwCqaegqQXkwDPWEN0k68O53euhbWWgDDDeRudfviGRYa8ss7iqe3DZbZ3LMYwLTy3qWVe5PQeAyr2aXapFh4iv8PDRVbnWu');
-                  "
-                ></div>
-                <div class="flex-grow min-w-0">
-                  <p
-                    class="text-[#F8F9FA] text-base font-medium leading-normal truncate"
-                  >
-                    Lost in Translation
-                  </p>
-                  <p
-                    class="text-[#F8F9FA]/70 text-sm font-normal leading-normal"
-                  >
-                    Acoustic Journeys
-                  </p>
-                </div>
-                <p
-                  class="text-amber-400 text-sm font-medium leading-normal flex-shrink-0"
-                >
-                  Pending
-                </p>
-              </div>
-            </div>
-          </div>
+          {% include 'includes/recently_played.html' %}
         </div>
       </div>
     </main>
   </div>
 
-  <!-- Bottom Navigation Bar / Player -->
-  <footer
-    class="fixed bottom-0 left-0 right-0 h-24 bg-[#9D0208]/95 backdrop-blur-md border-t border-[#8B0000]/50 p-4 z-50"
-  >
-    <div
-      class="flex items-center justify-between w-full h-full max-w-7xl mx-auto"
-    >
-      <!-- Now Playing Info -->
-      <div class="flex items-center gap-4 w-1/4">
-        <div
-          class="w-14 h-14 bg-center bg-no-repeat aspect-square bg-cover rounded-md flex-shrink-0"
-          data-alt="Album art for the currently playing track"
-          style="
-            background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDdJSrMKZ15N2XgloMIPnhWWAErOJrQsdRPNxzL1m90sH9qn1IUe2U3CJgfWDzJr_UD35cYGrP7ZTR5r9eBnQHEZenMzAngTEVoA574P1A1_PC1EbBC-0l6t68QmWDmg70THXrQqWUh83e15_x_1bo3zuS_MqemqpYzRvGuGj-afCzO0iyJsbAYjWGDxbLNhESUYcRrdvBzIuHjJUPYjlXnytX-XACBExxYO8kUSQYzS20DWPIOY2y5j01D2JtdKx7u4TLkKdwSe83z');
-          "
-        ></div>
-        <div>
-          <p
-            class="text-[#F8F9FA] text-sm font-semibold leading-tight truncate"
-          >
-            Bohemian Rhapsody
-          </p>
-          <p class="text-[#F8F9FA]/70 text-xs leading-tight">Queen</p>
-        </div>
-      </div>
-      <!-- Player Controls & Progress -->
-      <div class="flex flex-col items-center gap-2 w-1/2">
-        <div class="flex items-center gap-4 text-[#F8F9FA]">
-          <button class="hover:text-[#D00000] transition-colors">
-            <span class="material-symbols-outlined text-3xl"
-              >skip_previous</span
-            >
-          </button>
-          <button
-            class="w-12 h-12 flex items-center justify-center bg-[#D00000] text-white rounded-full hover:bg-[#D00000]/90 transition-colors shadow-lg"
-          >
-            <span class="material-symbols-outlined text-4xl">pause</span>
-          </button>
-          <button class="hover:text-[#D00000] transition-colors">
-            <span class="material-symbols-outlined text-3xl">skip_next</span>
-          </button>
-        </div>
-        <div class="flex items-center gap-2 w-full max-w-md">
-          <span class="text-xs text-[#F8F9FA]/70">1:48</span>
-          <div class="w-full bg-[#F8F9FA]/30 rounded-full h-1.5">
-            <div
-              class="bg-[#D00000] h-1.5 rounded-full"
-              style="width: 35%"
-            ></div>
-          </div>
-          <span class="text-xs text-[#F8F9FA]/70">5:55</span>
-        </div>
-      </div>
-      <!-- Volume Control -->
-      <div class="flex items-center justify-end gap-2 w-1/4">
-        <span class="material-symbols-outlined text-[#F8F9FA]/70"
-          >volume_up</span
-        >
-        <input
-          class="w-24 h-1 accent-[#D00000] bg-[#F8F9FA]/30 rounded-lg appearance-none cursor-pointer"
-          max="100"
-          min="0"
-          type="range"
-          value="75"
-        />
-      </div>
-    </div>
-  </footer>
-</div>
+
+  {% include 'includes/player.html' %}
+
 {% endblock content %}
+</div>

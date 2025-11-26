@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html  lang="es" class="h-full">
+<html lang="es" class="h-full">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -19,19 +19,12 @@
     {% block custom_styles %} {% endblock custom_styles %}
     <link rel="stylesheet" href="{% static 'css/tailwind.css' %}" />
   </head>
-  <body class="font-display  text-[#F8F9FA] h-full ">
+  <body class="font-display text-[#F8F9FA] h-full">
     {%block content %} 
-    
-    
     {% endblock content %} 
-
-
     {%block scripts%} 
-    
     {% endblock scripts %} 
-    
     {%block custom_scripts%} 
-    
     {% endblock custom_scripts %}
   </body>
 </html>
