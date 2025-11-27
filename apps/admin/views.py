@@ -149,3 +149,7 @@ def admin_logout(request):
 
     
     return render(request, 'admin/logout.html')
+
+def recently_played_view(request):
+    sedes = Sede.objects.all()
+    return render(request, "includes/recently_played.html", {"sedes": sedes})
