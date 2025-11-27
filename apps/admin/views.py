@@ -146,4 +146,6 @@ def admin_login(request):
     return render(request, 'admin/login.html')
 
 def admin_logout(request):
+
+    
     return render(request, 'admin/logout.html')

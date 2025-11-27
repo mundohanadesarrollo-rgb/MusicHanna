@@ -20,3 +20,8 @@ def user_login(request):
             messages.error(request, "Usuario o contraseña incorrectos")
     
     return render(request, 'login/login.html')
+
+
+def user_logout(request):
+    logout(request)
+    return redirect('user_login')
