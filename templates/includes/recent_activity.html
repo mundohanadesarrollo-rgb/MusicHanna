@@ -18,13 +18,13 @@ Actividad de reproducción en vivo
       ></div>
       <div class="flex-grow min-w-0">
         <p class="text-gray-200">
-          <span>Sede {{ actividad.nro_sede }}</span>: {{ actividad.name }}
+        {{ actividad.name }}
         </p>
         <p class="text-gray-400">
           {{ actividad.author }} • 2,345 plays
         </p>
       </div>
-      <div class="{% if actividad.status == 'inactivo' %}text-gray-400{% else %}text-[#61CB61]{% endif %}">
+      <div class="{% if actividad.status == 'No Publicado' %}text-gray-400{% else %}text-[#61CB61]{% endif %}">
         ({{ actividad.status|title }})
       </div>
     </div>

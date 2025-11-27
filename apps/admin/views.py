@@ -1,42 +1,35 @@
 from django.shortcuts import render
+from apps.users.models import Sede
+from apps.admin.models import Song
 
 # Create your views here.
 
 def admin_dashboard(request):
+    # Fetch pending songs (not published) from database
+    pending_songs = Song.objects.filter(publicado=False).select_related('artista')
+
     subidas_revision = [
         {
-            'id': 1,
-            'name': 'Echoes in Silence',
-            'author': 'Liam Harper',
-            'fecha_subida': '2024-06-10',
-            'image': 'https://images.unsplash.com/photo-1487215078519-e21cc028cb29?auto=format&fit=crop&w=200&q=80',
-        },
-        {
-            'id': 2,
-            'name': 'Velvet Horizons',
-            'author': 'Isabella Reyes',
-            'fecha_subida': '2024-06-11',
-            'image': 'https://images.unsplash.com/photo-1501612780327-45045538702b?auto=format&fit=crop&w=200&q=80',
-        },
-        
+            'id': song.id,
+            'name': song.titulo,
+            'author': song.artista.nombre,
+            'fecha_subida': song.fecha_subida.strftime('%Y-%m-%d'),
+            'image': song.imagen,
+        }
+        for song in pending_songs
     ]
 
-    actividad_reciente = [
-        {
-            'nro_sede': 1,
-            'name': 'Bohemian Rhapsody',
-            'author': 'Queen',
-            'status': 'activo',
-            'image': 'https://images.unsplash.com/photo-1485579149621-3123dd979885?auto=format&fit=crop&w=200&q=80',
-        },
-        {
-            'nro_sede': 2,
-            'name': 'Stairway to Heaven',
-            'author': 'Led Zeppelin',
-            'status': 'inactivo',
-            'image': 'https://images.unsplash.com/photo-1507878866276-a947ef722fee?auto=format&fit=crop&w=200&q=80',
-        },
-    ]
+    # Fetch sedes from database
+    sedes = Sede.objects.all()
+    actividad_reciente = []
+    for sede in sedes:
+        actividad_reciente.append({
+            'nro_sede': sede.id,
+            'name': sede.nombre,
+            'author': 'MusicHanna Admin',  # Default author since Sede model doesn't have one
+            'status': sede.estado,
+            'image': 'https://images.unsplash.com/photo-1487215078519-e21cc028cb29?auto=format&fit=crop&w=200&q=80',  # Default image
+        })
 
     sedes_totales = len(actividad_reciente)
     nuevos_registros = len(subidas_revision)
@@ -150,6 +143,4 @@ def admin_logout(request):
     
     return render(request, 'admin/logout.html')
 
-def recently_played_view(request):
-    sedes = Sede.objects.all()
-    return render(request, "includes/recently_played.html", {"sedes": sedes})
+

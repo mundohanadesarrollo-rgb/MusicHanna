@@ -898,9 +898,6 @@
   .text-\[\#F8F9FA\] {
     color: #F8F9FA;
   }
-  .text-\[\#F8F9FA\]\/50 {
-    color: color-mix(in oklab, #F8F9FA 50%, transparent);
-  }
   .text-\[\#F8F9FA\]\/60 {
     color: color-mix(in oklab, #F8F9FA 60%, transparent);
   }
