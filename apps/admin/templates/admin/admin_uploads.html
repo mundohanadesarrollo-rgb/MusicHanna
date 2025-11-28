@@ -60,18 +60,14 @@
                   <button aria-label="Editar" class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/80 hover:text-[#F8F9FA]">
                     <span class="material-symbols-outlined">edit</span>
                   </button>
-                  <button aria-label="Reproducir" class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/80 hover:text-[#F8F9FA]">
-                    <span class="material-symbols-outlined">play_circle</span>
-                  </button>
-                  {% if upload.published %}
-                  <button aria-label="Despublicar" class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-green-300 hover:text-green-200">
-                    <span class="material-symbols-outlined">toggle_on</span>
-                  </button>
-                  {% else %}
-                  <button aria-label="Publicar" class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/60 hover:text-[#F8F9FA]">
-                    <span class="material-symbols-outlined">toggle_off</span>
-                  </button>
-                  {% endif %}
+                  <button
+                      aria-label="Eliminar"
+                      class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/80 hover:text-[#F8F9FA]"
+                    >
+                      <span class="material-symbols-outlined ">delete</span>
+                    </button>
+                 
+                
                 </div>
               </td>
             </tr>
