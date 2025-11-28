@@ -24,7 +24,7 @@ Actividad de reproducción en vivo
           {{ actividad.author }} • 2,345 plays
         </p>
       </div>
-      <div class="{% if actividad.status == 'No Publicado' %}text-gray-400{% else %}text-[#61CB61]{% endif %}">
+      <div class="{% if actividad.status == 'No Publicado' or actividad.status == 'inactivo' %}text-gray-400{% else %}text-[#61CB61]{% endif %}">
         ({{ actividad.status|title }})
       </div>
     </div>
