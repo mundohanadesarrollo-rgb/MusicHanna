@@ -48,26 +48,30 @@
           <tbody class="divide-y divide-[#F8F9FA]/10">
             {% for upload in uploads %}
             <tr class="hover:bg-[#A00000] transition-colors">
-              <td class="px-6 py-4 border border-[#801019]">
-                <img alt="Album Art" class="h-12 w-12 rounded object-cover" src="{{ upload.image }}" />
+              <td class="px-6 py-4 border border-[#801019] flex items-center justify-center">
+                <img alt="Album Art" class="h-12 w-12 rounded object-cover" src="{% if upload.imagen %}{{ upload.imagen.url }}{% else %}{% static 'img/default_album_art.png' %}{% endif %}" />
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA] font-medium border border-[#801019]">{{ upload.title }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA]/80 border border-[#801019]">{{ upload.artist }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA]/80 border border-[#801019]">{{ upload.album }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA]/80 border border-[#801019]">{{ upload.duration }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA] font-medium border border-[#801019]">{{ upload.titulo }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA]/80 border border-[#801019]">{{ upload.artista.nombre }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA]/80 border border-[#801019]">{{ upload.album.titulo|default:"N/A" }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-[#F8F9FA]/80 border border-[#801019]">{{ upload.duracion }}</td>
               <td class="px-6 py-4 whitespace-nowrap border border-[#801019]">
                 <div class="flex items-center justify-center gap-2">
                   <button aria-label="Editar" class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/80 hover:text-[#F8F9FA]">
                     <span class="material-symbols-outlined">edit</span>
                   </button>
-                  <button
-                      aria-label="Eliminar"
-                      class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/80 hover:text-[#F8F9FA]"
-                    >
-                      <span class="material-symbols-outlined ">delete</span>
+                  <a href="{% url 'admin_player_song' song_id=upload.id %}" aria-label="Reproducir" class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/80 hover:text-[#F8F9FA]">
+                    <span class="material-symbols-outlined">play_arrow</span>
+                  </a>
+                  <form method="post" action="{% url 'admin_delete_song' song_id=upload.id %}" onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta canción?');">
+                    {% csrf_token %}
+                    <button
+                        type="submit"
+                        aria-label="Eliminar"
+                        class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/80 hover:text-[#F8F9FA]">
+                        <span class="material-symbols-outlined">delete</span>
                     </button>
-                 
-                
+                  </form>
                 </div>
               </td>
             </tr>
@@ -84,7 +88,7 @@
 </div>
 
 {% include 'includes/footer.html' %}
-{% include 'includes/modals/upload_file.html' %}
+{% include 'admin/upload_file.html' %}
 {% endblock content %}
 
 {% block scripts %}
@@ -92,5 +96,8 @@
     document.getElementById('closeModal').onclick = function() {
       document.getElementById('uploadModal').style.display = 'none';
     };
+    {% if form.errors %}
+      document.getElementById('uploadModal').style.display = 'flex';
+    {% endif %}
   </script>
 {% endblock scripts %}

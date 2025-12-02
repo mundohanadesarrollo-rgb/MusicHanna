@@ -73,7 +73,12 @@ class Song(models.Model):
         null=True,
         verbose_name="Archivo de Audio"
     )
-    imagen = models.URLField(max_length=500, blank=True, null=True, verbose_name="URL de Imagen")
+    imagen = models.ImageField(
+        upload_to='portadas/',
+        blank=True,
+        null=True,
+        verbose_name="Imagen de Portada"
+    )
     fecha_subida = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Subida")
     publicado = models.BooleanField(default=False, verbose_name="Publicado")
     reproducciones = models.IntegerField(default=0, verbose_name="Reproducciones")

@@ -12,23 +12,25 @@
       <div
         class="layout-content-container grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 w-full max-w-7xl flex-1 px-4 md:px-10 lg:px-20"
       >
+        {% if current_song %}
         <!-- Left: Album art -->
         <div class="flex flex-col items-center text-center py-6">
           <div
+            id="current-song-image"
             class="w-full max-w-sm aspect-square bg-center bg-no-repeat bg-cover rounded-xl shadow-2xl mb-6"
-            data-alt="Album art for Bohemian Rhapsody"
-            style="
-              background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDdJSrMKZ15N2XgloMIPnhWWAErOJrQsdRPNxzL1m90sH9qn1IUe2U3CJgfWDzJr_UD35cYGrP7ZTR5r9eBnQHEZenMzAngTEVoA574P1A1_PC1EbBC-0l6t68QmWDmg70THXrQqWUh83e15_x_1bo3zuS_MqemqpYzRvGuGj-afCzO0iyJsbAYjWGDxbLNhESUYcRrdvBzIuHjJUPYjlXnytX-XACBExxYO8kUSQYzS20DWPIOY2y5j01D2JtdKx7u4TLkKdwSe83z');
-            "
+            style="background-image: url('{% if current_song.imagen %}{{ current_song.imagen.url }}{% else %}{% static 'img/default_album_art.png' %}{% endif %}')"
           ></div>
-          <h2
+          <h2 id="current-song-title"
             class="tracking-light text-[32px] font-bold leading-tight text-[#F8F9FA]"
           >
-            Bohemian Rhapsody
+            {{ current_song.titulo }}
           </h2>
-          <p class="text-[#F8F9FA]/80 text-lg font-normal">Queen</p>
-          <div class="mt-4 text-[#F8F9FA]/60 text-sm">
-            <span>A Night at the Opera</span><span> • </span><span>1975</span>
+          <p id="current-song-artist" class="text-[#F8F9FA]/80 text-lg font-normal">{{ current_song.artista.nombre }}</p>
+          <div id="current-song-album" class="mt-4 text-[#F8F9FA]/60 text-sm">
+            {% if current_song.album %}
+            <span>{{ current_song.album.titulo }}</span>
+            {% if current_song.album.fecha_lanzamiento %}<span> • </span><span>{{ current_song.album.fecha_lanzamiento.year }}</span>{% endif %}
+            {% endif %}
           </div>
         </div>
 
@@ -37,111 +39,39 @@
           <h1
             class="tracking-light text-[32px] font-bold leading-tight px-4 text-left pb-3 pt-6 text-[#F8F9FA]"
           >
-            Up Next
+            Siguiente
           </h1>
 
           <div
             class="flex flex-col gap-3 px-4 py-4 overflow-auto max-h-[60vh] sm:max-h-[50vh]"
           >
-            <!-- Track 1 -->
-            <div
-              class="flex flex-col sm:flex-row sm:items-center gap-4 rounded-lg p-3 hover:bg-[#A00000]/10 transition-colors"
-            >
-              <div
-                class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md shrink-0"
-                style="
-                  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC7InNhG13Exh7QdiEwqs4-MhESxgHQnHseCjIqSakz7YS6-AqmXvAikUCl5qmTncBCOR8DSczmHLeX7KlTXSIXApHObRHd2oWeybtG3eTbNx59KViycyhyuOcYq6To-bZhJLzIsNHLGm4QGd9E2WZZGHskmzz7ZHETSRMeQdhMtnd-z-sgnuYq3FAUhrC1vqWg_mMjnE-62D9ILEAEK-tRoscQviedVAYnbSaF21NaQOfCpkhjoYjrj9BuaknusFXqRePr6pa2LCjS');
-                "
-              ></div>
-              <div class="grow min-w-0">
-                <p
-                  class="text-[#F8F9FA] text-base font-medium leading-normal truncate"
-                >
-                  Hotel California
-                </p>
-                <p class="text-[#F8F9FA]/70 text-sm">Eagles</p>
-              </div>
-              <div class="shrink-0">
-                <p class="text-[#F8F9FA]/70 text-sm font-medium">6:30</p>
-              </div>
+            {% for song in playlist %}
+            <div class="playlist-item flex flex-col sm:flex-row sm:items-center gap-4 rounded-lg p-3 hover:bg-[#A00000]/10 transition-colors cursor-pointer" data-song-id="{{ song.id }}">
+                <div class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md shrink-0" style="background-image: url('{% if song.imagen %}{{ song.imagen.url }}{% else %}{% static 'img/default_album_art.png' %}{% endif %}')"></div>
+                <div class="grow min-w-0">
+                    <p class="text-[#F8F9FA] text-base font-medium leading-normal truncate">{{ song.titulo }}</p>
+                    <p class="text-[#F8F9FA]/70 text-sm">{{ song.artista.nombre }}</p>
+                </div>
+                <div class="shrink-0">
+                    <p class="text-[#F8F9FA]/70 text-sm font-medium">{{ song.duracion }}</p>
+                </div>
             </div>
-
-            <!-- Track 2 (active) -->
-            <div
-              class="flex flex-col sm:flex-row sm:items-center gap-4 rounded-lg bg-[#9D0208] p-3"
-            >
-              <div
-                class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md shrink-0"
-                style="
-                  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCUFo-lgwbdiL7DIKFxMoKyPIWkbZ9nrkSGgLvFhbVthT--YpsXfXsTnRnnZlLzohRM29lGWaikEjNE8a7hpIEnYm3sI1aIhopxKwmIl6kWfq3DLAU4yaU0jGiHGV8iHWHHXPqjF8yBhYTwOBXBoX6ULp1vAjGBpZRM7zMG2sOiZ_9sJT_1qZkRE7o-Sv9pRnvsXlwpaOILLkdait6TbFQPekLoaJuOZeoSeseHXUHT0m_xswZgf_uIDJuIUmM5Mj1AwC7NiEVEF50p');
-                "
-              ></div>
-              <div class="grow min-w-0">
-                <p
-                  class="text-[#F8F9FA] text-base font-medium leading-normal truncate"
-                >
-                  Stairway to Heaven
-                </p>
-                <p class="text-[#F8F9FA]/70 text-sm">Led Zeppelin</p>
-              </div>
-              <div class="shrink-0">
-                <p class="text-[#F8F9FA]/70 text-sm font-medium">8:02</p>
-              </div>
-            </div>
-
-            <!-- Track 3 -->
-            <div
-              class="flex flex-col sm:flex-row sm:items-center gap-4 rounded-lg p-3 hover:bg-[#A00000]/10 transition-colors"
-            >
-              <div
-                class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md shrink-0"
-                style="
-                  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCedOXHj6M9_O8tOY-id8GL2hQyv0Nkm58vNB9MzEA64FACfcqbWFeGFaQQ1R6-HytBc0O4Kr-wmTJZh4zHKxr28auq4-KgQLlHT0fdsgXN3WMh-BgmXxXJZyTsSR3wIoMjGiHAVzdlLYUhGVdbKaMTeptLTyQTvW3vKyr4HxF5bgOB0ehAVACxJob9_hx1cjh33P2d8Cx6owd-Mqe_WNSYQ9I9JHGjbwCwdOy95juAKMOIvznxPE0uyBHGFv3f3QChJxHliXGmX_7u');
-                "
-              ></div>
-              <div class="grow min-w-0">
-                <p
-                  class="text-[#F8F9FA] text-base font-medium leading-normal truncate"
-                >
-                  Echoes in Silence
-                </p>
-                <p class="text-[#F8F9FA]/70 text-sm">The Void</p>
-              </div>
-              <div class="shrink-0">
-                <p class="text-[#F8F9FA]/70 text-sm font-medium">4:15</p>
-              </div>
-            </div>
-
-            <!-- Track 4 -->
-            <div
-              class="flex flex-col sm:flex-row sm:items-center gap-4 rounded-lg p-3 hover:bg-[#A00000]/10 transition-colors"
-            >
-              <div
-                class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md shrink-0"
-                style="
-                  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAeV_oWvLF6mKAVM5dkxIdc1K9IRSVe4UKCe_7_Jaqazd40G6W5r5kPtD_rgcIJHbVvj8w0Jz7wBTO6czyHsPC-jyq5Y0ehr-R9ZDFKcToE3fOWhDp50QdqSgzJEmtBtRCR_8DBdkxOOh_FzwR2zwPL5A0PRj7yQe1f0NuKQxHBZK6epPh0FrSQ_keTW5Z_w006AnGqQJiKcutT6waf1G4aEkr0r8WDsBq1A_z2RJ9dUAijRzgPndmG8lNfYrS5Z7ubmMxajtze5SxX');
-                "
-              ></div>
-              <div class="grow min-w-0">
-                <p
-                  class="text-[#F8F9FA] text-base font-medium leading-normal truncate"
-                >
-                  Neon Dreams
-                </p>
-                <p class="text-[#F8F9FA]/70 text-sm">Synthwave Rider</p>
-              </div>
-              <div class="shrink-0">
-                <p class="text-[#F8F9FA]/70 text-sm font-medium">3:50</p>
-              </div>
-            </div>
+            {% endfor %}
           </div>
         </div>
+        {% else %}
+        <div class="col-span-2 flex items-center justify-center text-center py-20">
+            <p class="text-xl text-[#F8F9FA]/70">No hay canciones para mostrar en el reproductor.</p>
+        </div>
+        {% endif %}
       </div>
     </main>
   </div>
 </div>
 
-{% include 'includes/player.html' %} 
+{% if current_song %}
+    {% include 'includes/player.html' %} 
+{% endif %}
 {% include 'includes/footer.html' %}
 
 <style>
@@ -150,4 +80,133 @@
   }
 </style>
 
-{%endblock %} {%block scripts%} {% endblock scripts %}
+{%endblock %} 
+
+{%block scripts%} 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const songsData = {{ all_songs_json|safe }};
+        let currentSongIndex = 0;
+        const audioPlayer = document.getElementById('audio-player');
+        
+        if (!audioPlayer || songsData.length === 0) {
+            console.log("Player o canciones no encontradas. Saliendo.");
+            return;
+        }
+
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const playIcon = document.getElementById('play-icon');
+        const pauseIcon = document.getElementById('pause-icon');
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const progressBarContainer = document.getElementById('progress-bar-container');
+        const progressBarFill = progressBarContainer.querySelector('#progress-bar-fill');
+        const currentTimeEl = document.getElementById('current-time');
+        const durationEl = document.getElementById('duration');
+        const volumeBar = document.getElementById('volume-bar');
+
+        // Elementos de la UI que se actualizan
+        const currentSongImage = document.getElementById('current-song-image');
+        const currentSongTitle = document.getElementById('current-song-title');
+        const currentSongArtist = document.getElementById('current-song-artist');
+        const currentSongAlbum = document.getElementById('current-song-album');
+        const playerImage = document.getElementById('player-image');
+        const playerTitle = document.getElementById('player-title');
+        const playerArtist = document.getElementById('player-artist');
+
+        function loadSong(songIndex) {
+            const song = songsData[songIndex];
+            const imageUrl = song.imagen ? song.imagen : "{% static 'img/default_album_art.png' %}";
+            audioPlayer.src = song.audio;
+            
+            // Actualizar UI principal
+            currentSongImage.style.backgroundImage = `url('${imageUrl}')`;
+            currentSongTitle.textContent = song.titulo;
+            currentSongArtist.textContent = song.artista;
+            // (Opcional) Actualizar album info si es necesario
+
+            // Actualizar UI del reproductor inferior
+            playerImage.src = imageUrl;
+            playerTitle.textContent = song.titulo;
+            playerArtist.textContent = song.artista;
+
+            currentSongIndex = songIndex;
+        }
+
+        function playSong() {
+            audioPlayer.play();
+            playIcon.style.display = 'none';
+            pauseIcon.style.display = 'block';
+        }
+
+        function pauseSong() {
+            audioPlayer.pause();
+            playIcon.style.display = 'block';
+            pauseIcon.style.display = 'none';
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        // --- Event Listeners ---
+        playPauseBtn.addEventListener('click', () => (audioPlayer.paused ? playSong() : pauseSong()));
+        nextBtn.addEventListener('click', () => {
+            currentSongIndex = (currentSongIndex + 1) % songsData.length;
+            loadSong(currentSongIndex);
+            playSong();
+        });
+        prevBtn.addEventListener('click', () => {
+            currentSongIndex = (currentSongIndex - 1 + songsData.length) % songsData.length;
+            loadSong(currentSongIndex);
+            playSong();
+        });
+
+        audioPlayer.addEventListener('timeupdate', () => {
+            const { currentTime, duration } = audioPlayer;
+            if (duration) {
+                const progressPercent = (currentTime / duration) * 100;
+                progressBarFill.style.width = `${progressPercent}%`;
+            }
+            currentTimeEl.textContent = formatTime(currentTime);
+            if (duration) durationEl.textContent = formatTime(duration);
+        });
+
+        // --- Hacer la barra de progreso interactiva ---
+        progressBarContainer.addEventListener('click', (e) => {
+            const width = progressBarContainer.clientWidth;
+            const clickX = e.offsetX;
+            const duration = audioPlayer.duration;
+            audioPlayer.currentTime = (clickX / width) * duration;
+        });
+
+        // --- Control de Volumen ---
+        volumeBar.addEventListener('input', (e) => {
+            audioPlayer.volume = e.target.value / 100;
+        });
+
+        // --- Reproducción automática de la siguiente canción ---
+        audioPlayer.addEventListener('ended', () => {
+            nextBtn.click(); // Simula un clic en el botón "siguiente"
+        });
+
+        // --- Clic en la lista de reproducción ---
+        document.querySelectorAll('.playlist-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const songId = this.dataset.songId;
+                const songIndex = songsData.findIndex(song => song.id == songId);
+
+                if (songIndex !== -1) {
+                    loadSong(songIndex);
+                    playSong();
+                }
+            });
+        });
+
+        // Cargar la primera canción al iniciar
+        loadSong(currentSongIndex);
+    });
+</script>
+{% endblock scripts %}
