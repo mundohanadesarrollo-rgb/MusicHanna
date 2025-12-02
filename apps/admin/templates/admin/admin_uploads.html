@@ -26,7 +26,7 @@
           <span class="material-symbols-outlined">filter_list</span>
           Filtros
         </button>
-        <button class="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-[#F48C06] text-[#2B0808] rounded-md hover:bg-[#FFB347] transition-colors shadow">
+        <button class="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-[#F48C06] text-[#2B0808] rounded-md hover:bg-[#FFB347] transition-colors shadow" onclick="document.getElementById('uploadModal').style.display='flex'">
           <span class="material-symbols-outlined text-lg">upload_file</span>
           Subir Archivo
         </button>
@@ -84,8 +84,13 @@
 </div>
 
 {% include 'includes/footer.html' %}
+{% include 'includes/modals/upload_file.html' %}
 {% endblock content %}
 
 {% block scripts %}
-
+  <script>
+    document.getElementById('closeModal').onclick = function() {
+      document.getElementById('uploadModal').style.display = 'none';
+    };
+  </script>
 {% endblock scripts %}

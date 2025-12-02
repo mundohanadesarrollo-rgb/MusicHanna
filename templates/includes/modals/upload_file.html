@@ -1,6 +1,7 @@
 <div
   class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50"
   id="uploadModal"
+  style="display: none"
 >
   <div
     class="bg-[#991b1b] dark:bg-[#991b1b] rounded-lg shadow-2xl w-full max-w-xl text-white transform transition-all"
@@ -9,8 +10,11 @@
       class="p-6 border-b border-[#7f1d1d] dark:border-[#7f1d1d] flex justify-between items-center"
     >
       <h2 class="text-xl font-bold">Subir Canción</h2>
-      <button id="closeModal" class="text-gray-300 hover:text-white transition-colors">
-        <span class="material-icons-outlined">close</span>
+      <button
+        id="closeModal"
+        class="text-gray-300 hover:text-white transition-colors"
+      >
+        <span class="material-symbols-outlined"> close </span>
       </button>
     </div>
     <div class="p-6 border-b border-[#7f1d1d] dark:border-[#7f1d1d]">
@@ -39,9 +43,7 @@
         class="border-2 border-dashed border-gray-500 rounded-lg p-10 text-center cursor-pointer hover:border-gray-400 transition-colors bg-black/20"
       >
         <div class="flex flex-col items-center text-gray-300">
-          <span class="material-icons-outlined text-5xl mb-2"
-            >cloud_upload</span
-          >
+          <span class="material-symbols-outlined"> audio_file </span>
           <p class="font-semibold">Arrastra y suelta tu canción aquí</p>
           <p class="text-sm text-gray-400">o haz click para buscar</p>
           <p class="text-xs text-gray-500 mt-4">MP3, WAV, FLAC hasta 100MB</p>
@@ -53,16 +55,17 @@
           class="flex items-center justify-between bg-[#7f1d1d] dark:bg-[#7f1d1d] p-4 rounded-lg"
         >
           <div class="flex items-center gap-4">
-            <span class="material-icons-outlined text-2xl text-primary"
-              >audio_file</span
-            >
+          
+            <span class="material-symbols-outlined text-2xl text-primary">
+              audio_file
+            </span>
             <div>
               <p class="font-semibold text-white">Luces de Neón</p>
               <p class="text-sm text-gray-400">MP3</p>
             </div>
           </div>
           <button class="text-gray-400 hover:text-white">
-            <span class="material-icons-outlined text-xl">delete</span>
+            <span class="material-symbols-outlined"> delete </span>
           </button>
         </div>
       </div>
