@@ -12,7 +12,7 @@
         id="player-image"
         class="w-14 h-14 bg-center bg-no-repeat aspect-square bg-cover rounded-md shrink-0 object-cover"
         alt="Album art for the currently playing track"
-        src="{% if current_song.imagen %}{{ current_song.imagen.url }}{% else %}{% static 'images/default_album_art.png' %}{% endif %}"
+        src="{% if current_song.imagen %}{{ current_song.imagen.url }}{% else %}{% static 'img/default_album_art.png' %}{% endif %}"
       />
       <div>
         <p id="player-title" class="text-[#F8F9FA] text-sm font-semibold leading-tight truncate">

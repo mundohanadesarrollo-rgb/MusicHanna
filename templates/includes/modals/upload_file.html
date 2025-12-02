@@ -1,88 +1,73 @@
+{% load static %}
 <div
   class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50"
   id="uploadModal"
   style="display: none"
 >
-  <div
-    class="bg-[#991b1b] dark:bg-[#991b1b] rounded-lg shadow-2xl w-full max-w-xl text-white transform transition-all"
-  >
-    <div
-      class="p-6 border-b border-[#7f1d1d] dark:border-[#7f1d1d] flex justify-between items-center"
-    >
-      <h2 class="text-xl font-bold">Subir Canción</h2>
-      <button
-        id="closeModal"
-        class="text-gray-300 hover:text-white transition-colors"
-      >
-        <span class="material-symbols-outlined"> close </span>
+  <form method="post" enctype="multipart/form-data" action="{% url 'admin_uploads' %}" class="bg-[#991b1b] rounded-lg shadow-2xl w-full max-w-xl text-white transform transition-all">
+    {% csrf_token %}
+    <div class="p-6 border-b border-[#7f1d1d] flex justify-between items-center">
+      <h2 class="text-xl font-bold">Subir Nueva Canción</h2>
+      <button type="button" id="closeModal" class="text-gray-300 hover:text-white transition-colors">
+        <span class="material-symbols-outlined">close</span>
       </button>
     </div>
-    <div class="p-6 border-b border-[#7f1d1d] dark:border-[#7f1d1d]">
-      <div class="flex items-center">
-        <div class="flex items-center text-primary relative">
-          <div
-            class="rounded-full h-8 w-8 flex items-center justify-center bg-primary text-black font-bold"
-          >
-            1
-          </div>
-          <div class="ml-2 font-semibold">Subir</div>
+    <div class="p-8 space-y-6">
+      {% if form.non_field_errors %}
+        <div class="bg-red-500/20 border border-red-500 text-red-300 px-4 py-3 rounded-lg">
+          {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+          {% endfor %}
         </div>
-        <div class="flex-auto border-t-2 border-primary mx-4"></div>
-        <div class="flex items-center text-gray-400 relative">
-          <div
-            class="rounded-full h-8 w-8 flex items-center justify-center border-2 border-gray-400"
-          >
-            2
-          </div>
-          <div class="ml-2">Confirmar</div>
-        </div>
+      {% endif %}
+
+      <div>
+        <label for="{{ form.titulo.id_for_label }}" class="block text-sm font-medium text-[#F8F9FA]/80 mb-2">Título</label>
+        {{ form.titulo }}
+        {% if form.titulo.errors %}<div class="text-red-400 text-xs mt-1">{{ form.titulo.errors.0 }}</div>{% endif %}
       </div>
+
+      <div>
+        <label for="{{ form.artista.id_for_label }}" class="block text-sm font-medium text-[#F8F9FA]/80 mb-2">Artista</label>
+        {{ form.artista }}
+        {% if form.artista.errors %}<div class="text-red-400 text-xs mt-1">{{ form.artista.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-[#F8F9FA]/80 mb-2">Archivo de Audio</label>
+        <div id="file-drop-area" class="border-2 border-dashed border-gray-500 rounded-lg p-8 text-center cursor-pointer hover:border-gray-400 transition-colors bg-black/20">
+          <div class="flex flex-col items-center text-gray-300">
+            <span class="material-symbols-outlined text-4xl">audio_file</span>
+            <p class="font-semibold mt-2">Arrastra y suelta tu canción aquí</p>
+            <p class="text-sm text-gray-400">o haz click para buscar</p>
+            <p class="text-xs text-gray-500 mt-4">MP3, WAV, FLAC</p>
+          </div>
+          {{ form.audio_file }}
+        </div>
+        <div id="file-info" class="mt-4" style="display: none;">
+            <p class="text-sm text-gray-300">Archivo seleccionado: <span id="file-name" class="font-semibold"></span></p>
+        </div>
+        {% if form.audio_file.errors %}<div class="text-red-400 text-xs mt-1">{{ form.audio_file.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div>
+        <label for="{{ form.imagen.id_for_label }}" class="block text-sm font-medium text-[#F8F9FA]/80 mb-2">Imagen de Portada (Opcional)</label>
+        {{ form.imagen }}
+        <p class="text-xs text-gray-400 mt-1">Si no se selecciona ninguna, se usará una imagen por defecto.</p>
+        {% if form.imagen.errors %}<div class="text-red-400 text-xs mt-1">{{ form.imagen.errors.0 }}</div>{% endif %}
+      </div>
+
+      <!-- Campo oculto para la imagen por defecto -->
+      <input type="hidden" name="default_image_path" value="{% static 'img/default_album_art.png' %}">
+
     </div>
-    <div class="p-8">
-      <div
-        class="border-2 border-dashed border-gray-500 rounded-lg p-10 text-center cursor-pointer hover:border-gray-400 transition-colors bg-black/20"
-      >
-        <div class="flex flex-col items-center text-gray-300">
-          <span class="material-symbols-outlined"> audio_file </span>
-          <p class="font-semibold">Arrastra y suelta tu canción aquí</p>
-          <p class="text-sm text-gray-400">o haz click para buscar</p>
-          <p class="text-xs text-gray-500 mt-4">MP3, WAV, FLAC hasta 100MB</p>
-        </div>
-        <input class="hidden" type="file" />
-      </div>
-      <div class="mt-6">
-        <div
-          class="flex items-center justify-between bg-[#7f1d1d] dark:bg-[#7f1d1d] p-4 rounded-lg"
-        >
-          <div class="flex items-center gap-4">
-          
-            <span class="material-symbols-outlined text-2xl text-primary">
-              audio_file
-            </span>
-            <div>
-              <p class="font-semibold text-white">Luces de Neón</p>
-              <p class="text-sm text-gray-400">MP3</p>
-            </div>
-          </div>
-          <button class="text-gray-400 hover:text-white">
-            <span class="material-symbols-outlined"> delete </span>
-          </button>
-        </div>
-      </div>
-    </div>
-    <div
-      class="p-6 bg-[#7f1d1d] dark:bg-[#7f1d1d] rounded-b-lg flex justify-end gap-4"
-    >
-      <button
-        class="px-6 py-2 rounded-lg text-white bg-transparent border border-gray-500 hover:bg-gray-600/20 transition-colors"
-      >
+    <div class="p-6 bg-[#7f1d1d] rounded-b-lg flex justify-end gap-4">
+      <button type="button" id="cancelUpload" class="px-6 py-2 rounded-lg text-white bg-transparent border border-gray-500 hover:bg-gray-600/20 transition-colors">
         Cancelar
       </button>
-      <button
-        class="px-6 py-2 rounded-lg bg-primary text-black font-semibold hover:bg-opacity-90 transition-colors"
-      >
+      <button type="submit" class="px-6 py-2 rounded-lg bg-[#F48C06] text-[#2B0808] font-semibold hover:bg-[#FFB347] transition-colors">
         Subir Canción
       </button>
     </div>
-  </div>
+  </form>
 </div>

@@ -93,9 +93,32 @@
 
 {% block scripts %}
   <script>
-    document.getElementById('closeModal').onclick = function() {
-      document.getElementById('uploadModal').style.display = 'none';
-    };
+    document.addEventListener('DOMContentLoaded', function() {
+      const uploadModal = document.getElementById('uploadModal');
+      const closeModalBtn = document.getElementById('closeModal');
+      const fileInput = document.getElementById('id_audio_file');
+      const imageInput = document.getElementById('id_imagen');
+      const fileDropArea = document.getElementById('file-drop-area');
+      const fileInfo = document.getElementById('file-info');
+      const fileName = document.getElementById('file-name');
+
+      if (closeModalBtn) {
+        closeModalBtn.onclick = function() {
+          uploadModal.style.display = 'none';
+        };
+      }
+
+      if (fileDropArea) {
+        fileDropArea.addEventListener('click', () => fileInput.click());
+      }
+
+      if (fileInput) {
+        fileInput.addEventListener('change', function() {
+          fileName.textContent = this.files.length > 0 ? this.files[0].name : 'Ningún archivo seleccionado';
+          fileInfo.style.display = this.files.length > 0 ? 'flex' : 'none';
+        });
+      }
+    });
     {% if form.errors %}
       document.getElementById('uploadModal').style.display = 'flex';
     {% endif %}

@@ -15,11 +15,12 @@
         {% if current_song %}
         <!-- Left: Album art -->
         <div class="flex flex-col items-center text-center py-6">
-          <div
+          <img
             id="current-song-image"
-            class="w-full max-w-sm aspect-square bg-center bg-no-repeat bg-cover rounded-xl shadow-2xl mb-6"
-            style="background-image: url('{% if current_song.imagen %}{{ current_song.imagen.url }}{% else %}{% static 'img/default_album_art.png' %}{% endif %}')"
-          ></div>
+            class="w-full max-w-sm aspect-square object-cover rounded-xl shadow-2xl mb-6"
+            src="{% if current_song.imagen %}{{ current_song.imagen.url }}{% else %}{% static 'img/default_album_art.png' %}{% endif %}"
+            alt="Portada del álbum de la canción actual"
+          />
           <h2 id="current-song-title"
             class="tracking-light text-[32px] font-bold leading-tight text-[#F8F9FA]"
           >
@@ -85,9 +86,19 @@
 {%block scripts%} 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const defaultImageUrl = "{% static 'img/default_album_art.png' %}";
         const songsData = {{ all_songs_json|safe }};
-        let currentSongIndex = 0;
+        const currentSongId = {{ current_song.id|default:"null" }};
         const audioPlayer = document.getElementById('audio-player');
+
+        // Encuentra el índice de la canción actual para evitar el parpadeo de la imagen.
+        let currentSongIndex = 0;
+        if (currentSongId !== null) {
+            const initialIndex = songsData.findIndex(song => song.id == currentSongId);
+            if (initialIndex !== -1) {
+                currentSongIndex = initialIndex;
+            }
+        }
         
         if (!audioPlayer || songsData.length === 0) {
             console.log("Player o canciones no encontradas. Saliendo.");
@@ -116,19 +127,19 @@
 
         function loadSong(songIndex) {
             const song = songsData[songIndex];
-            const imageUrl = song.imagen ? song.imagen : "{% static 'img/default_album_art.png' %}";
+            const imageUrl = song.imagen ? song.imagen : defaultImageUrl;
             audioPlayer.src = song.audio;
             
             // Actualizar UI principal
-            currentSongImage.style.backgroundImage = `url('${imageUrl}')`;
+            currentSongImage.src = imageUrl;
             currentSongTitle.textContent = song.titulo;
-            currentSongArtist.textContent = song.artista;
+            currentSongArtist.textContent = song.artista.nombre;
             // (Opcional) Actualizar album info si es necesario
 
             // Actualizar UI del reproductor inferior
             playerImage.src = imageUrl;
             playerTitle.textContent = song.titulo;
-            playerArtist.textContent = song.artista;
+            playerArtist.textContent = song.artista.nombre;
 
             currentSongIndex = songIndex;
         }
@@ -205,8 +216,15 @@
             });
         });
 
-        // Cargar la primera canción al iniciar
-        loadSong(currentSongIndex);
+   
+        if (songsData.length > 0) {
+            const initialSong = songsData[currentSongIndex];
+            audioPlayer.src = initialSong.audio;
+            audioPlayer.addEventListener('loadedmetadata', () => {
+                durationEl.textContent = formatTime(audioPlayer.duration);
+            });
+        }
+
     });
 </script>
 {% endblock scripts %}
