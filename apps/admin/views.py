@@ -22,7 +22,7 @@ def admin_dashboard(request):
             'name': song.titulo,
             'author': song.artista.nombre,
             'fecha_subida': song.fecha_subida.strftime('%Y-%m-%d'),
-            'image': song.imagen.url if song.imagen else static('images/default_album_art.png'),
+            'image': song.imagen.url if song.imagen else static('img/default_album_art.png'),
         }
         for song in pending_songs
     ]
@@ -54,22 +54,32 @@ def admin_dashboard(request):
     )
 
 def admin_sedes(request):
-    sedes = [
-        {
-            'nombre': 'Sede Principal - Centro',
-            'estado': 'Activo',
-            'badge_class': 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-200 text-green-800 dark:bg-green-900 dark:text-green-200',
-            'dot_class': 'w-2 h-2 rounded-full bg-green-500',
-            'ultima_actualizacion': '2023-10-26 10:00 AM',
-        },
+    # Obtener sedes reales desde la base de datos y mapear al formato que usa la plantilla
+    sedes_qs = Sede.objects.all()
+    sedes = []
+    for s in sedes_qs:
+        estado_display = 'Activo' if s.estado == 'activo' else 'Inactivo'
+        if s.estado == 'activo':
+            badge_class = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-200 text-green-800 dark:bg-green-900 dark:text-green-200'
+            dot_class = 'w-2 h-2 rounded-full bg-green-500'
+        else:
+            badge_class = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-200 text-red-800 dark:bg-red-900 dark:text-red-200'
+            dot_class = 'w-2 h-2 rounded-full bg-red-500'
 
-        
-
-    ]
+        sedes.append({
+            'id': s.id,
+            'nombre': s.nombre,
+            'estado': estado_display,
+            'estado_raw': s.estado,
+            'badge_class': badge_class,
+            'dot_class': dot_class,
+            'ultima_actualizacion': s.ultima_actualizacion.strftime('%Y-%m-%d %I:%M %p') if s.ultima_actualizacion else '',
+            'direccion': s.direccion or '',
+            'ciudad': s.ciudad or '',
+        })
 
     subidas = {
         'name_page': 'Gestión Sedes',
-        
     }
 
     return render(
@@ -80,6 +90,45 @@ def admin_sedes(request):
             'sedes': sedes
         },
     )
+
+
+def admin_edit_sede(request, sede_id=None):
+    if sede_id:
+        sede = get_object_or_404(Sede, id=sede_id)
+    else:
+        sede = None
+
+    from .forms import SedeForm
+
+    if request.method == 'POST':
+        form = SedeForm(request.POST, instance=sede)
+        if form.is_valid():
+            form.save()
+            # Si la petición es AJAX, devolver JSON para que el modal pueda manejarlo
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                from django.http import JsonResponse
+                return JsonResponse({'success': True})
+            messages.success(request, 'Sede guardada correctamente.')
+            return redirect('admin_sedes')
+        else:
+            # Si es petición AJAX, devolver los errores en JSON
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                from django.http import JsonResponse
+                errors = {k: [str(e) for e in v] for k, v in form.errors.items()}
+                return JsonResponse({'success': False, 'errors': errors}, status=400)
+            messages.error(request, 'Corrige los errores en el formulario.')
+    else:
+        form = SedeForm(instance=sede)
+
+    return render(request, 'admin/edit_sede.html', {'form': form, 'sede': sede})
+
+
+def admin_delete_sede(request, sede_id):
+    if request.method == 'POST':
+        sede = get_object_or_404(Sede, id=sede_id)
+        sede.delete()
+        messages.success(request, 'Sede eliminada correctamente.')
+    return redirect('admin_sedes')
 
 def admin_uploads(request):
     if request.method == 'POST':
@@ -151,6 +200,12 @@ def admin_players(request, song_id=None):
         # Si no se proporciona ID o no se encuentra, usa la más reciente
         current_song = all_songs.first()
 
+    # Si la canción seleccionada no tiene archivo de audio, buscar la primera que sí lo tenga
+    if not getattr(current_song, 'archivo_audio', None):
+        song_with_audio = all_songs.filter(archivo_audio__isnull=False).exclude(id=current_song.id).first()
+        if song_with_audio:
+            current_song = song_with_audio
+
     # La lista de reproducción son todas las canciones excepto la actual
     playlist = all_songs.exclude(id=current_song.id)
     
@@ -164,7 +219,7 @@ def admin_players(request, song_id=None):
                       'all_songs_json': [
                           {
                               'id': s.id, 'titulo': s.titulo, 'artista': s.artista.nombre, 
-                              'imagen': s.imagen.url if s.imagen else static('images/default_album_art.png'), 
+                              'imagen': s.imagen.url if s.imagen else static('img/default_album_art.png'), 
                               'audio': s.archivo_audio.url if s.archivo_audio else ''
                           }
                           for s in songs_for_js

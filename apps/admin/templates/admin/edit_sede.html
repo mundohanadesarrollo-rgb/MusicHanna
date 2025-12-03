@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Editar Sede {% endblock title %}
+
+{% block content %}
+  <div class="p-6">
+    <h1 class="text-2xl font-bold mb-4">{% if sede %}Editar Sede{% else %}Crear Sede{% endif %}</h1>
+    <form method="post">
+      {% csrf_token %}
+      <div class="space-y-4 max-w-lg">
+        {{ form.non_field_errors }}
+        <div>
+          <label class="block text-sm font-medium mb-1">Nombre</label>
+          {{ form.nombre }}
+          {{ form.nombre.errors }}
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Estado</label>
+          {{ form.estado }}
+          {{ form.estado.errors }}
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Dirección</label>
+          {{ form.direccion }}
+          {{ form.direccion.errors }}
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Ciudad</label>
+          {{ form.ciudad }}
+          {{ form.ciudad.errors }}
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">País</label>
+          {{ form.pais }}
++          {{ form.pais.errors }}
+        </div>
+        <div class="pt-4">
+          <button type="submit" class="px-4 py-2 bg-[#F48C06] text-[#2B0808] rounded-md">Guardar</button>
+          <a href="{% url 'admin_sedes' %}" class="ml-2 px-4 py-2 bg-[#801019] text-[#F8F9FA] rounded-md">Cancelar</a>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock content %}

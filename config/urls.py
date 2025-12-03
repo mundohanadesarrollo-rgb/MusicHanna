@@ -27,3 +27,8 @@ urlpatterns = [
 ]
 
 
+if settings.DEBUG:
+    # Servir archivos media en desarrollo (archivos subidos por usuarios)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+

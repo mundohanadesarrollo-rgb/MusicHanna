@@ -5,14 +5,9 @@
            {{subidas.name_page}}
         </h1>
       </header>
-      <div
-        class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
-      >
+      <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div class="relative grow sm:max-w-xs">
-          <span
-            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#F8F9FA]/80"
-            >search</span
-          >
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#F8F9FA]/80">search</span>
           <input
             class="w-full pl-10 pr-4 py-2 bg-[#A00000] border border-[#9D0208] rounded-md focus:ring-2 focus:ring-[#F8F9FA]/40 focus:border-transparent placeholder:text-[#F8F9FA]/70 text-[#F8F9FA]"
             placeholder="Buscar sede..."
@@ -23,10 +18,12 @@
           <button
             class="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-[#801019] text-[#F8F9FA] border border-[#9D0208] rounded-md hover:bg-[#B1121C] transition-colors shadow-sm"
           >
-            <span class="material-symbols-outlined ">filter_list</span>
+            <span class="material-symbols-outlined">filter_list</span>
             Filtro
           </button>
           <button
+            id="add-sede-btn"
+            data-action-add="{% url 'admin_add_sede' %}"
             class="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-[#F48C06] text-[#2B0808] rounded-md hover:bg-[#FFB347] transition-colors shadow"
           >
             <span class="material-symbols-outlined text-lg">add</span>
@@ -81,18 +78,31 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap border border-[#801019]">
                   <div class="flex items-center justify-center gap-2">
-                    <button
-                      aria-label="Editar"
-                      class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/80 hover:text-[#F8F9FA]"
-                    >
-                    <span class="material-symbols-outlined ">edit</span>
-                    </button>
-                    <button
-                      aria-label="Eliminar"
-                      class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/80 hover:text-[#F8F9FA]"
-                    >
-                      <span class="material-symbols-outlined ">delete</span>
-                    </button>
+                      <button
+                        type="button"
+                        aria-label="Editar"
+                        class="open-edit-modal p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/80 hover:text-[#F8F9FA]"
+                        data-action-url="{% url 'admin_edit_sede' sede_id=sede.id %}"
+                        data-id="{{ sede.id }}"
+                        data-nombre="{{ sede.nombre|escape }}"
+                        data-estado="{{ sede.estado_raw }}"
+                        data-direccion="{{ sede.direccion|default_if_none:''|escape }}"
+                        data-ciudad="{{ sede.ciudad|default_if_none:''|escape }}"
+                        
+                      >
+                        <span class="material-symbols-outlined ">edit</span>
+                      </button>
+                    <form method="post" action="{% url 'admin_delete_sede' sede_id=sede.id %}" style="display:inline">
+                      {% csrf_token %}
+                      <button
+                        type="submit"
+                        aria-label="Eliminar"
+                        class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/80 hover:text-[#F8F9FA]"
+                        onclick="return confirm('¿Eliminar esta sede?');"
+                      >
+                        <span class="material-symbols-outlined ">delete</span>
+                      </button>
+                    </form>
                   </div>
                 </td>
               </tr>
@@ -103,3 +113,154 @@
       </div>
     </main>
   </div>
+  <!-- Edit/Create Sede Modal -->
+  <div id="sede-modal" class="hidden fixed inset-0 z-50 bg-transparent backdrop-blur-sm">
+    <div class="rounded-lg w-full max-w-2xl p-6 bg-[#1F1B1B] ">
+      <div class="flex items-center justify-between mb-4">
+        <h2 id="sede-modal-title" class="text-xl font-semibold text-[#F8F9FA]">Editar Sede</h2>
+        <button id="sede-modal-close" class="text-[#F8F9FA]">✕</button>
+      </div>
+      <form id="sede-modal-form" method="post" class="space-y-4">
+        {% csrf_token %}
+        <div>
+          <label class="block text-sm text-[#F8F9FA]">Nombre</label>
+          <input id="sede-nombre" name="nombre" class="w-full mt-1 p-2 rounded bg-[#A00000] text-[#F8F9FA] border border-[#801019]" />
+          <p id="error-nombre" class="text-red-400 text-sm mt-1"></p>
+        </div>
+        <div>
+          <label class="block text-sm text-[#F8F9FA]">Estado</label>
+          <select id="sede-estado" name="estado" class="w-full mt-1 p-2 rounded bg-[#A00000] text-[#F8F9FA] border border-[#801019]">
+            <option value="activo">Activo</option>
+            <option value="inactivo">Inactivo</option>
+          </select>
+          <p id="error-estado" class="text-red-400 text-sm mt-1"></p>
+        </div>
+        <div>
+          <label class="block text-sm text-[#F8F9FA]">Dirección</label>
+          <input id="sede-direccion" name="direccion" class="w-full mt-1 p-2 rounded bg-[#A00000] text-[#F8F9FA] border border-[#801019]" />
+          <p id="error-direccion" class="text-red-400 text-sm mt-1"></p>
+        </div>
+          <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm text-[#F8F9FA]">Ciudad</label>
+            <input id="sede-ciudad" name="ciudad" class="w-full mt-1 p-2 rounded bg-[#A00000] text-[#F8F9FA] border border-[#801019]" />
+            <p id="error-ciudad" class="text-red-400 text-sm mt-1"></p>
+          </div>
+          </div>
+        </div>
+        <div class="pt-4 flex items-center gap-2">
+          <button type="submit" class="px-4 py-2 bg-[#F48C06] text-[#2B0808] rounded">Guardar</button>
+          <button type="button" id="sede-modal-cancel" class="px-4 py-2 bg-[#801019] text-[#F8F9FA] rounded">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const modal = document.getElementById('sede-modal');
+      const modalTitle = document.getElementById('sede-modal-title');
+      const form = document.getElementById('sede-modal-form');
+      const inputNombre = document.getElementById('sede-nombre');
+      const inputEstado = document.getElementById('sede-estado');
+      const inputDireccion = document.getElementById('sede-direccion');
+      const inputCiudad = document.getElementById('sede-ciudad');
+      
+
+      function openModal(data) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex', 'items-center', 'justify-center');
+        if (data) {
+          modalTitle.textContent = 'Editar Sede';
+          inputNombre.value = data.nombre || '';
+          inputEstado.value = data.estado_raw || 'activo';
+          inputDireccion.value = data.direccion || '';
+          inputCiudad.value = data.ciudad || '';
+          
+          form.action = data.actionUrl;
+        } else {
+          modalTitle.textContent = 'Crear Sede';
+          inputNombre.value = '';
+          inputEstado.value = 'activo';
+          inputDireccion.value = '';
+          inputCiudad.value = '';
+          
+          form.action = document.getElementById('add-sede-btn').dataset.actionAdd;
+        }
+      }
+
+      function closeModal() {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex', 'items-center', 'justify-center');
+      }
+
+      document.querySelectorAll('.open-edit-modal').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          const data = {
+            actionUrl: btn.getAttribute('data-action-url'),
+            id: btn.getAttribute('data-id'),
+            nombre: btn.getAttribute('data-nombre'),
+            estado_raw: btn.getAttribute('data-estado'),
+            direccion: btn.getAttribute('data-direccion'),
+            ciudad: btn.getAttribute('data-ciudad'),
+            
+          };
+          // Normalize keys used by openModal
+          data.estado_raw = data.estado_raw || 'activo';
+          openModal(data);
+        });
+      });
+
+      const addBtn = document.getElementById('add-sede-btn');
+      if (addBtn) {
+        addBtn.addEventListener('click', function () {
+          openModal(null);
+        });
+      }
+
+      // Submit handler: send via fetch with X-Requested-With header to get JSON responses
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        // clear previous errors
+        ['nombre','estado','direccion','ciudad'].forEach(function (k) {
+          const el = document.getElementById('error-' + k);
+          if (el) el.textContent = '';
+        });
+
+        const action = form.action;
+        const formData = new FormData(form);
+
+        fetch(action, {
+          method: 'POST',
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          body: formData
+        }).then(function (resp) {
+          if (resp.ok) return resp.json();
+          return resp.json().then(function (data) { throw data; });
+        }).then(function (data) {
+          if (data.success) {
+            // success: reload to reflect changes
+            window.location.reload();
+          }
+        }).catch(function (err) {
+          if (err && err.errors) {
+            Object.keys(err.errors).forEach(function (field) {
+              const el = document.getElementById('error-' + field);
+              if (el) el.textContent = err.errors[field].join(' ');
+            });
+          } else {
+            alert('Ocurrió un error inesperado.');
+          }
+        });
+      });
+
+      document.getElementById('sede-modal-close').addEventListener('click', closeModal);
+      document.getElementById('sede-modal-cancel').addEventListener('click', closeModal);
+      // Close modal when clicking outside the dialog
+      modal.addEventListener('click', function (e) {
+        if (e.target === modal) closeModal();
+      });
+    });
+  </script>

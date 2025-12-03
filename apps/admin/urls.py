@@ -8,6 +8,9 @@ urlpatterns = [
     path('players/', views.admin_players, name='admin_players'),
     path('players/<int:song_id>/', views.admin_players, name='admin_player_song'),
     path('uploads/delete/<int:song_id>/', views.admin_delete_song, name='admin_delete_song'),
+    path('sedes/edit/<int:sede_id>/', views.admin_edit_sede, name='admin_edit_sede'),
+    path('sedes/add/', views.admin_edit_sede, name='admin_add_sede'),
+    path('sedes/delete/<int:sede_id>/', views.admin_delete_sede, name='admin_delete_sede'),
 
     path('logout/', views.admin_logout, name='admin_logout'),
 
