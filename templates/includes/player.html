@@ -6,7 +6,7 @@
   <div
     class="flex items-center justify-between w-full h-full max-w-7xl mx-auto"
   >
-    <audio id="audio-player" class="hidden"></audio>
+    <audio id="audio-player" class="hidden" src="{{ current_song.archivo_audio.url }}"></audio>
     <div class="flex items-center gap-4 w-1/4">
       <img
         id="player-image"
@@ -60,3 +60,81 @@
     </div>
   </div>
 </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const audioPlayer = document.getElementById('audio-player');
+    const playPauseBtn = document.getElementById('play-pause-btn');
+    const playIcon = document.getElementById('play-icon');
+    const pauseIcon = document.getElementById('pause-icon');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const progressBarContainer = document.getElementById('progress-bar-container');
+    const progressBarFill = document.getElementById('progress-bar-fill');
+    const currentTimeEl = document.getElementById('current-time');
+    const durationEl = document.getElementById('duration');
+    const volumeBar = document.getElementById('volume-bar');
+
+    // --- Play/Pause ---
+    playPauseBtn.addEventListener('click', () => {
+        if (audioPlayer.paused) {
+            audioPlayer.play();
+        } else {
+            audioPlayer.pause();
+        }
+    });
+
+    audioPlayer.addEventListener('play', () => {
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'inline';
+    });
+
+    audioPlayer.addEventListener('pause', () => {
+        playIcon.style.display = 'inline';
+        pauseIcon.style.display = 'none';
+    });
+
+    // --- Time formatting ---
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+
+    // --- Progress Bar & Time Update ---
+    audioPlayer.addEventListener('loadedmetadata', () => {
+        durationEl.textContent = formatTime(audioPlayer.duration);
+    });
+
+    audioPlayer.addEventListener('timeupdate', () => {
+        const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+        progressBarFill.style.width = `${progress}%`;
+        currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
+    });
+
+    progressBarContainer.addEventListener('click', (e) => {
+        const width = progressBarContainer.clientWidth;
+        const clickX = e.offsetX;
+        const duration = audioPlayer.duration;
+        audioPlayer.currentTime = (clickX / width) * duration;
+    });
+
+    // --- Volume Control ---
+    volumeBar.addEventListener('input', (e) => {
+        audioPlayer.volume = e.target.value / 100;
+    });
+
+    // --- Next/Prev Buttons (Placeholder functionality) ---
+    // These buttons currently don't do anything as we don't have the full playlist context.
+    // You would need more JavaScript to handle changing songs.
+    prevBtn.addEventListener('click', () => {
+        console.log('Previous button clicked');
+        // Para la funcionalidad "anterior", necesitarás una URL y una vista en Django.
+    });
+
+    nextBtn.addEventListener('click', () => {
+        console.log('Next button clicked');
+        // Para la funcionalidad "siguiente", necesitarás una URL y una vista en Django.
+    });
+});
+</script>
