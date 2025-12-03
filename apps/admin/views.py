@@ -2,10 +2,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.templatetags.static import static
 from django.contrib import messages
 from apps.users.models import Sede
-from apps.admin.models import Song, Artist, Album
+from apps.admin.models import Song, Artist, Album, Play
+from django.contrib.auth.models import User
+from apps.users.models import UserProfile
+from django.utils import timezone
 from .forms import SongForm
 from mutagen.mp3 import MP3
 import datetime
+import os
+import json
 
 # Create your views here.
 
@@ -57,6 +62,7 @@ def admin_sedes(request):
     # Obtener sedes reales desde la base de datos y mapear al formato que usa la plantilla
     sedes_qs = Sede.objects.all()
     sedes = []
+    now = timezone.now()
     for s in sedes_qs:
         estado_display = 'Activo' if s.estado == 'activo' else 'Inactivo'
         if s.estado == 'activo':
@@ -66,10 +72,25 @@ def admin_sedes(request):
             badge_class = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-200 text-red-800 dark:bg-red-900 dark:text-red-200'
             dot_class = 'w-2 h-2 rounded-full bg-red-500'
 
+        # determine if sede is currently playing: last Play within 5 minutes
+        latest_play = Play.objects.filter(sede=s).order_by('-fecha_hora').first()
+        is_active = False
+        if latest_play:
+            delta = now - latest_play.fecha_hora
+            if delta.total_seconds() <= 300:  # 5 minutes threshold
+                is_active = True
+
+        # assigned user (direct field on Sede)
+        usuario_username = s.usuario.username if getattr(s, 'usuario', None) else ''
+        usuario_id = s.usuario.id if getattr(s, 'usuario', None) else None
+
         sedes.append({
             'id': s.id,
             'nombre': s.nombre,
-            'estado': estado_display,
+            'estado': 'Activo' if is_active else estado_display,
+            'is_active': is_active,
+            'usuario': usuario_username,
+            'usuario_id': usuario_id,
             'estado_raw': s.estado,
             'badge_class': badge_class,
             'dot_class': dot_class,
@@ -77,6 +98,7 @@ def admin_sedes(request):
             'direccion': s.direccion or '',
             'ciudad': s.ciudad or '',
         })
+
 
     subidas = {
         'name_page': 'Gestión Sedes',
@@ -87,7 +109,8 @@ def admin_sedes(request):
         'admin/admin_sedes.html',
         {
             'subidas': subidas,
-            'sedes': sedes
+            'sedes': sedes,
+            'users': User.objects.all(),
         },
     )
 
@@ -103,7 +126,43 @@ def admin_edit_sede(request, sede_id=None):
     if request.method == 'POST':
         form = SedeForm(request.POST, instance=sede)
         if form.is_valid():
-            form.save()
+            # Prepare instance but don't commit yet because we may need to create a User
+            instance = form.save(commit=False)
+
+            new_username = form.cleaned_data.get('new_username')
+            new_password = form.cleaned_data.get('new_password')
+
+            if new_username:
+                # create the new user and assign
+                if User.objects.filter(username=new_username).exists():
+                    form.add_error('new_username', 'El nombre de usuario ya existe.')
+                    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                        from django.http import JsonResponse
+                        errors = {k: [str(e) for e in v] for k, v in form.errors.items()}
+                        return JsonResponse({'success': False, 'errors': errors}, status=400)
+                    messages.error(request, 'El nombre de usuario ya existe.')
+                else:
+                    user = User.objects.create_user(username=new_username, password=new_password)
+                    user.is_staff = False
+                    user.is_superuser = False
+                    user.save()
+                    instance.usuario = user
+            else:
+                # Assign user to sede if provided (direct relation)
+                usuario = form.cleaned_data.get('usuario') if hasattr(form, 'cleaned_data') else None
+                if usuario:
+                    instance.usuario = usuario
+
+            instance.save()
+
+            # Ensure a UserProfile exists and is linked to this sede for the user
+            try:
+                assigned_user = instance.usuario
+                if assigned_user:
+                    UserProfile.objects.update_or_create(user=assigned_user, defaults={'sede': instance})
+            except Exception:
+                # be liberal — profile isn't critical, ignore errors here
+                pass
             # Si la petición es AJAX, devolver JSON para que el modal pueda manejarlo
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                 from django.http import JsonResponse
@@ -208,23 +267,46 @@ def admin_players(request, song_id=None):
 
     # La lista de reproducción son todas las canciones excepto la actual
     playlist = all_songs.exclude(id=current_song.id)
-    
+
     # Reordenamos la lista completa para que la canción actual esté al principio para el JS
     songs_for_js = sorted(all_songs, key=lambda x: x.id != current_song.id)
 
-    return render(request, 'admin/admin_players.html', 
-                  {
-                      'current_song': current_song,
-                      'playlist': playlist,
-                      'all_songs_json': [
-                          {
-                              'id': s.id, 'titulo': s.titulo, 'artista': s.artista.nombre, 
-                              'imagen': s.imagen.url if s.imagen else static('img/default_album_art.png'), 
-                              'audio': s.archivo_audio.url if s.archivo_audio else ''
-                          }
-                          for s in songs_for_js
-                      ]
-                  })
+    # Filtrar canciones que realmente tienen archivo de audio disponible en disco/storage
+    valid_songs_for_js = []
+    for s in songs_for_js:
+        try:
+            has_audio = bool(s.archivo_audio and (hasattr(s.archivo_audio, 'path') and s.archivo_audio.storage.exists(s.archivo_audio.name)))
+        except Exception:
+            # fallback to checking filesystem path
+            try:
+                has_audio = bool(s.archivo_audio and s.archivo_audio.path and os.path.exists(s.archivo_audio.path))
+            except Exception:
+                has_audio = False
+        if has_audio:
+            valid_songs_for_js.append(s)
+
+    # If current_song is not in valid_songs_for_js, try to pick the first valid song
+    if current_song and current_song not in valid_songs_for_js:
+        current_song = valid_songs_for_js[0] if valid_songs_for_js else None
+
+    songs_for_js = valid_songs_for_js
+
+    songs_list = [
+        {
+            'id': s.id,
+            'titulo': s.titulo,
+            'artista': s.artista.nombre,
+            'imagen': s.imagen.url if s.imagen else static('img/default_album_art.png'),
+            'audio': s.archivo_audio.url if s.archivo_audio else ''
+        }
+        for s in songs_for_js
+    ]
+
+    return render(request, 'admin/admin_players.html', {
+        'current_song': current_song,
+        'playlist': playlist,
+        'songs_json': json.dumps(songs_list)
+    })
 
 def admin_delete_song(request, song_id):
     # Solo permitir peticiones POST por seguridad

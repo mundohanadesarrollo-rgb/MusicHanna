@@ -30,11 +30,7 @@
           {{ form.ciudad }}
           {{ form.ciudad.errors }}
         </div>
-        <div>
-          <label class="block text-sm font-medium mb-1">País</label>
-          {{ form.pais }}
-+          {{ form.pais.errors }}
-        </div>
+        
         <div class="pt-4">
           <button type="submit" class="px-4 py-2 bg-[#F48C06] text-[#2B0808] rounded-md">Guardar</button>
           <a href="{% url 'admin_sedes' %}" class="ml-2 px-4 py-2 bg-[#801019] text-[#F8F9FA] rounded-md">Cancelar</a>

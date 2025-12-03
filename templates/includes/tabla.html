@@ -43,6 +43,7 @@
                 <th class="px-6 py-3 font-medium text-left border border-[#801019]" scope="col">
                   Nombre de Sede
                 </th>
+                 <th class="px-6 py-3 font-medium text-left border border-[#801019]" scope="col">Usuario</th>
                 <th class="px-6 py-3 font-medium text-left border border-[#801019]" scope="col">Estado</th>
                 <th class="px-6 py-3 font-medium text-left border border-[#801019]" scope="col">
                   Última Actualización
@@ -62,6 +63,9 @@
                   class="px-6 py-4 whitespace-nowrap text-[#F8F9FA] font-medium border border-[#801019]"
                 >
                  {{ sede.nombre }}
+                    <td class="px-6 py-4 whitespace-nowrap border border-[#801019]">
+                     {{ sede.usuario|default:'-' }}
+                    </td>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap border border-[#801019]">
                   <span
@@ -82,12 +86,15 @@
                         type="button"
                         aria-label="Editar"
                         class="open-edit-modal p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/80 hover:text-[#F8F9FA]"
-                        data-action-url="{% url 'admin_edit_sede' sede_id=sede.id %}"
-                        data-id="{{ sede.id }}"
-                        data-nombre="{{ sede.nombre|escape }}"
-                        data-estado="{{ sede.estado_raw }}"
-                        data-direccion="{{ sede.direccion|default_if_none:''|escape }}"
-                        data-ciudad="{{ sede.ciudad|default_if_none:''|escape }}"
+                          data-action-url="{% url 'admin_edit_sede' sede_id=sede.id %}"
+                          data-id="{{ sede.id }}"
+                          data-nombre="{{ sede.nombre|escape }}"
+                          data-estado="{{ sede.estado_raw }}"
+                          data-direccion="{{ sede.direccion|default_if_none:''|escape }}"
+                          data-ciudad="{{ sede.ciudad|default_if_none:''|escape }}"
+                          data-usuario-id="{{ sede.usuario_id }}"
+                          data-usuario="{{ sede.usuario|default:''|escape }}"
+                          data-nivel="{{ sede.nivel|default:'usuario' }}"
                         
                       >
                         <span class="material-symbols-outlined ">edit</span>
@@ -115,42 +122,63 @@
   </div>
   <!-- Edit/Create Sede Modal -->
   <div id="sede-modal" class="hidden fixed inset-0 z-50 bg-transparent backdrop-blur-sm">
-    <div class="rounded-lg w-full max-w-2xl p-6 bg-[#1F1B1B] ">
-      <div class="flex items-center justify-between mb-4">
-        <h2 id="sede-modal-title" class="text-xl font-semibold text-[#F8F9FA]">Editar Sede</h2>
-        <button id="sede-modal-close" class="text-[#F8F9FA]">✕</button>
+    <div class="rounded-lg w-full max-w-2xl p-6 bg-[#1F1B1B] shadow-lg">
+      <div class="relative mb-4">
+        <h2 id="sede-modal-title" class="text-2xl font-semibold text-[#F8F9FA]">Editar Sede</h2>
+        <button id="sede-modal-close" class="absolute right-0 top-0 text-[#F8F9FA] px-2 py-1 hover:opacity-80">✕</button>
       </div>
-      <form id="sede-modal-form" method="post" class="space-y-4">
+      <form id="sede-modal-form" method="post" class="space-y-6">
         {% csrf_token %}
-        <div>
-          <label class="block text-sm text-[#F8F9FA]">Nombre</label>
-          <input id="sede-nombre" name="nombre" class="w-full mt-1 p-2 rounded bg-[#A00000] text-[#F8F9FA] border border-[#801019]" />
-          <p id="error-nombre" class="text-red-400 text-sm mt-1"></p>
-        </div>
-        <div>
-          <label class="block text-sm text-[#F8F9FA]">Estado</label>
-          <select id="sede-estado" name="estado" class="w-full mt-1 p-2 rounded bg-[#A00000] text-[#F8F9FA] border border-[#801019]">
-            <option value="activo">Activo</option>
-            <option value="inactivo">Inactivo</option>
-          </select>
-          <p id="error-estado" class="text-red-400 text-sm mt-1"></p>
-        </div>
-        <div>
-          <label class="block text-sm text-[#F8F9FA]">Dirección</label>
-          <input id="sede-direccion" name="direccion" class="w-full mt-1 p-2 rounded bg-[#A00000] text-[#F8F9FA] border border-[#801019]" />
-          <p id="error-direccion" class="text-red-400 text-sm mt-1"></p>
-        </div>
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm text-[#F8F9FA]">Ciudad</label>
-            <input id="sede-ciudad" name="ciudad" class="w-full mt-1 p-2 rounded bg-[#A00000] text-[#F8F9FA] border border-[#801019]" />
-            <p id="error-ciudad" class="text-red-400 text-sm mt-1"></p>
+            <label for="sede-nombre" class="block text-sm font-medium text-[#F8F9FA]">Nombre</label>
+            <input id="sede-nombre" name="nombre" placeholder="Nombre de la sede" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019] placeholder:text-[#F8F9FA]/60 focus:outline-none focus:ring-2 focus:ring-[#F48C06]" />
+            <p id="error-nombre" class="text-red-400 text-sm mt-1 italic"></p>
           </div>
+
+          <div>
+            <label for="sede-estado" class="block text-sm font-medium text-[#F8F9FA]">Estado</label>
+            <select id="sede-estado" name="estado" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019] focus:outline-none focus:ring-2 focus:ring-[#F48C06]">
+              <option value="activo">Activo</option>
+              <option value="inactivo">Inactivo</option>
+            </select>
+            <p id="error-estado" class="text-red-400 text-sm mt-1 italic"></p>
+          </div>
+
+          <div>
+            <label for="sede-nivel" class="block text-sm font-medium text-[#F8F9FA]">Nivel de Usuario</label>
+            <select id="sede-nivel" name="nivel" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019] placeholder:text-[#F8F9FA]/60 focus:outline-none focus:ring-2 focus:ring-[#F48C06]">
+              <option value="usuario">Usuario</option>
+              <option value="admin">Admin</option>
+            </select>
+            <p id="error-nivel" class="text-red-400 text-sm mt-1 italic"></p>
+          </div>
+
+          <div>
+            <label for="sede-usuario-name" class="block text-sm font-medium text-[#F8F9FA]">Nombre de usuario</label>
+            <input id="sede-usuario-name" name="usuario_display" placeholder="Nombre de usuario" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019] placeholder:text-[#F8F9FA]/60 focus:outline-none focus:ring-2 focus:ring-[#F48C06]" />
+            <input type="hidden" id="sede-usuario-id" name="usuario" value="" />
+            <p id="error-usuario" class="text-red-400 text-sm mt-1 italic"></p>
+          </div>
+
+          <!-- Removed create-user block as requested -->
+
+          <div>
+            <label for="sede-direccion" class="block text-sm font-medium text-[#F8F9FA]">Dirección</label>
+            <input id="sede-direccion" name="direccion" placeholder="Dirección (opcional)" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019] placeholder:text-[#F8F9FA]/60 focus:outline-none focus:ring-2 focus:ring-[#F48C06]" />
+            <p id="error-direccion" class="text-red-400 text-sm mt-1 italic"></p>
+          </div>
+
+          <div>
+            <label for="sede-ciudad" class="block text-sm font-medium text-[#F8F9FA]">Ciudad</label>
+            <input id="sede-ciudad" name="ciudad" placeholder="Ciudad" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019] placeholder:text-[#F8F9FA]/60 focus:outline-none focus:ring-2 focus:ring-[#F48C06]" />
+            <p id="error-ciudad" class="text-red-400 text-sm mt-1 italic"></p>
           </div>
         </div>
-        <div class="pt-4 flex items-center gap-2">
-          <button type="submit" class="px-4 py-2 bg-[#F48C06] text-[#2B0808] rounded">Guardar</button>
-          <button type="button" id="sede-modal-cancel" class="px-4 py-2 bg-[#801019] text-[#F8F9FA] rounded">Cancelar</button>
+
+        <div class="pt-4 flex items-center justify-end gap-2">
+          <button type="button" id="sede-modal-cancel" class="px-4 py-2 bg-[#6B1014] text-[#F8F9FA] rounded-md hover:opacity-90">Cancelar</button>
+          <button type="submit" class="px-4 py-2 bg-[#F48C06] text-[#2B0808] rounded-md font-medium hover:brightness-105">Guardar</button>
         </div>
       </form>
     </div>
@@ -165,6 +193,25 @@
       const inputEstado = document.getElementById('sede-estado');
       const inputDireccion = document.getElementById('sede-direccion');
       const inputCiudad = document.getElementById('sede-ciudad');
+      const selectNivel = document.getElementById('sede-nivel');
+      const inputUsuarioName = document.getElementById('sede-usuario-name');
+      const inputUsuarioId = document.getElementById('sede-usuario-id');
+
+      // if the user edits the username text, clear the hidden usuario id so backend knows
+      if (inputUsuarioName) {
+        inputUsuarioName.addEventListener('input', function () {
+          const original = this.dataset.original || '';
+          if (inputUsuarioId) {
+            if (this.value !== original) {
+              // user changed the displayed name -> clear id to indicate a username change
+              inputUsuarioId.value = '';
+            } else {
+              // restored to original name -> restore original id if available
+              inputUsuarioId.value = inputUsuarioId.dataset.original || '';
+            }
+          }
+        });
+      }
       
 
       function openModal(data) {
@@ -176,7 +223,31 @@
           inputEstado.value = data.estado_raw || 'activo';
           inputDireccion.value = data.direccion || '';
           inputCiudad.value = data.ciudad || '';
-          
+          // set nivel select if provided (data.nivel) or try to infer
+          if (selectNivel) {
+            if (data.nivel) {
+              selectNivel.value = data.nivel;
+            } else if (data.usuario && (data.usuario === 'admin' || data.usuario === 'usuario')) {
+              // if backend passed a role string in `data-usuario`, use it
+              selectNivel.value = data.usuario;
+            } else {
+              // default to regular user
+              selectNivel.value = 'usuario';
+            }
+          }
+
+          // set usuario display + hidden id if provided and store originals
+          if (inputUsuarioName) {
+            inputUsuarioName.value = data.usuario || '';
+            inputUsuarioName.dataset.original = data.usuario || '';
+          }
+          if (inputUsuarioId) {
+            inputUsuarioId.value = data.usuario_id || '';
+            inputUsuarioId.dataset.original = data.usuario_id || '';
+          }
+
+          // create-user inputs removed from template
+
           form.action = data.actionUrl;
         } else {
           modalTitle.textContent = 'Crear Sede';
@@ -184,7 +255,17 @@
           inputEstado.value = 'activo';
           inputDireccion.value = '';
           inputCiudad.value = '';
-          
+          if (selectNivel) selectNivel.value = 'usuario';
+          if (inputUsuarioName) {
+            inputUsuarioName.value = '';
+            inputUsuarioName.dataset.original = '';
+          }
+          if (inputUsuarioId) {
+            inputUsuarioId.value = '';
+            inputUsuarioId.dataset.original = '';
+          }
+          // create-user inputs removed from template
+
           form.action = document.getElementById('add-sede-btn').dataset.actionAdd;
         }
       }
@@ -203,7 +284,9 @@
             estado_raw: btn.getAttribute('data-estado'),
             direccion: btn.getAttribute('data-direccion'),
             ciudad: btn.getAttribute('data-ciudad'),
-            
+            usuario_id: btn.getAttribute('data-usuario-id'),
+            usuario: btn.getAttribute('data-usuario'),
+            nivel: btn.getAttribute('data-nivel'),
           };
           // Normalize keys used by openModal
           data.estado_raw = data.estado_raw || 'activo';
@@ -222,7 +305,7 @@
       form.addEventListener('submit', function (e) {
         e.preventDefault();
         // clear previous errors
-        ['nombre','estado','direccion','ciudad'].forEach(function (k) {
+        ['nombre','estado','direccion','ciudad','nivel','usuario'].forEach(function (k) {
           const el = document.getElementById('error-' + k);
           if (el) el.textContent = '';
         });

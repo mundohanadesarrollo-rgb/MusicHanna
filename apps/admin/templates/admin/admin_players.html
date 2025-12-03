@@ -87,7 +87,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const defaultImageUrl = "{% static 'img/default_album_art.png' %}";
-        const songsData = {{ all_songs_json|safe }};
+        const songsData = {{ songs_json|safe }};
         const currentSongId = {{ current_song.id|default:"null" }};
         const audioPlayer = document.getElementById('audio-player');
 
@@ -128,7 +128,8 @@
         function loadSong(songIndex) {
             const song = songsData[songIndex];
             const imageUrl = song.imagen ? song.imagen : defaultImageUrl;
-            audioPlayer.src = song.audio;
+          audioPlayer.src = song.audio;
+          try { audioPlayer.load(); } catch (e) { console.warn('audio.load() failed', e); }
             
             // Actualizar UI principal
             currentSongImage.src = imageUrl;
@@ -144,18 +145,6 @@
             currentSongIndex = songIndex;
         }
 
-        function playSong() {
-            audioPlayer.play();
-            playIcon.style.display = 'none';
-            pauseIcon.style.display = 'block';
-        }
-
-        function pauseSong() {
-            audioPlayer.pause();
-            playIcon.style.display = 'block';
-            pauseIcon.style.display = 'none';
-        }
-
         function formatTime(seconds) {
             const minutes = Math.floor(seconds / 60);
             const secs = Math.floor(seconds % 60);
@@ -163,17 +152,21 @@
         }
 
         // --- Event Listeners ---
-        playPauseBtn.addEventListener('click', () => (audioPlayer.paused ? playSong() : pauseSong()));
+        // The main play/pause logic is now in player.html
+        // playPauseBtn.addEventListener('click', () => (audioPlayer.paused ? playSong() : pauseSong()));
+
         nextBtn.addEventListener('click', () => {
             currentSongIndex = (currentSongIndex + 1) % songsData.length;
             loadSong(currentSongIndex);
-            playSong();
+            audioPlayer.play().catch(e => console.error("Error playing next song:", e));
         });
+
         prevBtn.addEventListener('click', () => {
             currentSongIndex = (currentSongIndex - 1 + songsData.length) % songsData.length;
             loadSong(currentSongIndex);
-            playSong();
+            audioPlayer.play().catch(e => console.error("Error playing previous song:", e));
         });
+
 
         audioPlayer.addEventListener('timeupdate', () => {
             const { currentTime, duration } = audioPlayer;
@@ -211,18 +204,19 @@
 
                 if (songIndex !== -1) {
                     loadSong(songIndex);
-                    playSong();
+                    audioPlayer.play().catch(e => console.error("Error playing selected song:", e));
                 }
             });
         });
 
    
         if (songsData.length > 0) {
-            const initialSong = songsData[currentSongIndex];
-            audioPlayer.src = initialSong.audio;
-            audioPlayer.addEventListener('loadedmetadata', () => {
-                durationEl.textContent = formatTime(audioPlayer.duration);
-            });
+          const initialSong = songsData[currentSongIndex];
+          audioPlayer.src = initialSong.audio;
+          try { audioPlayer.load(); } catch (e) { console.warn('audio.load() failed', e); }
+          audioPlayer.addEventListener('loadedmetadata', () => {
+            durationEl.textContent = formatTime(audioPlayer.duration);
+          });
         }
 
     });

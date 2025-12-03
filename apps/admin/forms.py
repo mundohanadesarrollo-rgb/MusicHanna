@@ -1,6 +1,8 @@
 from django import forms
 from .models import Song
 from apps.users.models import Sede
+from django.contrib.auth.models import User
+from apps.users.models import UserProfile
 
 class SongForm(forms.ModelForm):
     artist_name = forms.CharField(max_length=200, label="Artista")
@@ -13,6 +15,29 @@ class SongForm(forms.ModelForm):
 
 
 class SedeForm(forms.ModelForm):
+    # Optional fields to create a new User when creating a Sede
+    new_username = forms.CharField(required=False, max_length=150, label='Nuevo usuario',
+                                   help_text='Usuario a crear y asociar a esta sede')
+    new_password = forms.CharField(required=False, widget=forms.PasswordInput, label='Contraseña')
+    new_password_confirm = forms.CharField(required=False, widget=forms.PasswordInput, label='Confirmar contraseña')
+
     class Meta:
         model = Sede
-        fields = ['nombre', 'estado', 'direccion', 'ciudad', 'pais']
+        fields = ['nombre', 'estado', 'direccion', 'ciudad', 'usuario']
+        labels = {
+            'usuario': 'Usuario asignado',
+        }
+
+    def clean(self):
+        cleaned = super().clean()
+        username = cleaned.get('new_username')
+        pwd = cleaned.get('new_password')
+        pwd2 = cleaned.get('new_password_confirm')
+
+        if username:
+            # if creating a user, password is required and must match
+            if not pwd:
+                self.add_error('new_password', 'La contraseña es requerida cuando se crea un usuario.')
+            if pwd and pwd2 and pwd != pwd2:
+                self.add_error('new_password_confirm', 'Las contraseñas no coinciden.')
+        return cleaned

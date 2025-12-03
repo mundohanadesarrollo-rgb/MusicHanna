@@ -238,6 +238,9 @@
   .inset-0 {
     inset: calc(var(--spacing) * 0);
   }
+  .top-0 {
+    top: calc(var(--spacing) * 0);
+  }
   .top-1\/2 {
     top: calc(1/2 * 100%);
   }
@@ -667,6 +670,9 @@
   .bg-\[\#4a1c1c\] {
     background-color: #4a1c1c;
   }
+  .bg-\[\#6B1014\] {
+    background-color: #6B1014;
+  }
   .bg-\[\#6a040f\] {
     background-color: #6a040f;
   }
@@ -793,6 +799,9 @@
   .p-\[15px\] {
     padding: 15px;
   }
+  .px-2 {
+    padding-inline: calc(var(--spacing) * 2);
+  }
   .px-2\.5 {
     padding-inline: calc(var(--spacing) * 2.5);
   }
@@ -807,6 +816,9 @@
   }
   .py-0\.5 {
     padding-block: calc(var(--spacing) * 0.5);
+  }
+  .py-1 {
+    padding-block: calc(var(--spacing) * 1);
   }
   .py-2 {
     padding-block: calc(var(--spacing) * 2);
@@ -1021,6 +1033,9 @@
   .uppercase {
     text-transform: uppercase;
   }
+  .italic {
+    font-style: italic;
+  }
   .placeholder-gray-300 {
     &::placeholder {
       color: var(--color-gray-300);
@@ -1139,6 +1154,11 @@
   .file\:text-\[\#2B0808\] {
     &::file-selector-button {
       color: #2B0808;
+    }
+  }
+  .placeholder\:text-\[\#F8F9FA\]\/60 {
+    &::placeholder {
+      color: color-mix(in oklab, #F8F9FA 60%, transparent);
     }
   }
   .placeholder\:text-\[\#F8F9FA\]\/70 {
@@ -1264,6 +1284,21 @@
       }
     }
   }
+  .hover\:opacity-90 {
+    &:hover {
+      @media (hover: hover) {
+        opacity: 90%;
+      }
+    }
+  }
+  .hover\:brightness-105 {
+    &:hover {
+      @media (hover: hover) {
+        --tw-brightness: brightness(105%);
+        filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+      }
+    }
+  }
   .hover\:file\:bg-\[\#FFB347\] {
     &:hover {
       @media (hover: hover) {
@@ -1304,6 +1339,11 @@
   .focus\:ring-\[\#F8F9FA\]\/40 {
     &:focus {
       --tw-ring-color: color-mix(in oklab, #F8F9FA 40%, transparent);
+    }
+  }
+  .focus\:ring-\[\#F48C06\] {
+    &:focus {
+      --tw-ring-color: #F48C06;
     }
   }
   .focus\:ring-primary {
@@ -1350,6 +1390,11 @@
   .sm\:max-w-xs {
     @media (width >= 40rem) {
       max-width: var(--container-xs);
+    }
+  }
+  .sm\:grid-cols-2 {
+    @media (width >= 40rem) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
   .sm\:flex-row {
@@ -1673,6 +1718,59 @@
   inherits: false;
   initial-value: 1;
 }
+@property --tw-blur {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-brightness {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-contrast {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-grayscale {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-hue-rotate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-invert {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-opacity {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-saturate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-sepia {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-drop-shadow-size {
+  syntax: "*";
+  inherits: false;
+}
 @property --tw-outline-style {
   syntax: "*";
   inherits: false;
@@ -1722,6 +1820,19 @@
       --tw-scale-x: 1;
       --tw-scale-y: 1;
       --tw-scale-z: 1;
+      --tw-blur: initial;
+      --tw-brightness: initial;
+      --tw-contrast: initial;
+      --tw-grayscale: initial;
+      --tw-hue-rotate: initial;
+      --tw-invert: initial;
+      --tw-opacity: initial;
+      --tw-saturate: initial;
+      --tw-sepia: initial;
+      --tw-drop-shadow: initial;
+      --tw-drop-shadow-color: initial;
+      --tw-drop-shadow-alpha: 100%;
+      --tw-drop-shadow-size: initial;
       --tw-outline-style: solid;
     }
   }

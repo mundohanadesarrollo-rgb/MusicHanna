@@ -23,7 +23,11 @@ Home{% endblock title %}
         <h1
           class="text-[#F8F9FA] tracking-light text-[32px] font-bold leading-tight px-4 text-left pb-3 pt-6"
         >
-          Bienvenido, {{ usuario.sede }}
+          {% if sede_name %}
+            Bienvenido, {{ sede_name }}
+          {% else %}
+            Bienvenido
+          {% endif %}
         </h1>
 
       

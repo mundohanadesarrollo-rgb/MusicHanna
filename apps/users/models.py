@@ -23,6 +23,14 @@ class Sede(models.Model):
     pais = models.CharField(max_length=100, default="Colombia", verbose_name="País")
     ultima_actualizacion = models.DateTimeField(auto_now=True, verbose_name="Última Actualización")
     fecha_creacion = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Creación")
+    usuario = models.OneToOneField(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='sede',
+        verbose_name='Usuario asignado'
+    )
 
     class Meta:
         verbose_name = "Sede"
