@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.templatetags.static import static
 from django.contrib import messages
+import logging
 from apps.users.models import Sede
 from apps.admin.models import Song, Artist, Album, Play
 from django.contrib.auth.models import User
@@ -125,12 +126,28 @@ def admin_edit_sede(request, sede_id=None):
 
     if request.method == 'POST':
         form = SedeForm(request.POST, instance=sede)
+        # Debug: print POST keys
+        try:
+            print('DEBUG admin_edit_sede POST keys:', list(request.POST.keys()))
+        except Exception:
+            pass
         if form.is_valid():
+            # Debug: print cleaned_data
+            try:
+                print('DEBUG SedeForm.cleaned_data:', form.cleaned_data)
+            except Exception:
+                pass
             # Prepare instance but don't commit yet because we may need to create a User
             instance = form.save(commit=False)
 
             new_username = form.cleaned_data.get('new_username')
             new_password = form.cleaned_data.get('new_password')
+
+            # Debug: log cleaned_data for diagnosis
+            try:
+                logging.getLogger(__name__).debug('SedeForm.cleaned_data: %s', form.cleaned_data)
+            except Exception:
+                pass
 
             if new_username:
                 # create the new user and assign
@@ -152,8 +169,22 @@ def admin_edit_sede(request, sede_id=None):
                 usuario = form.cleaned_data.get('usuario') if hasattr(form, 'cleaned_data') else None
                 if usuario:
                     instance.usuario = usuario
+                else:
+                    # Log that no usuario was provided in cleaned_data
+                    logging.getLogger(__name__).debug('No usuario provided in form.cleaned_data')
 
             instance.save()
+            # Debug: print assigned user after save
+            try:
+                assigned_username = instance.usuario.username if getattr(instance, 'usuario', None) else None
+                print('DEBUG assigned_username after save:', assigned_username)
+            except Exception:
+                assigned_username = None
+            # Provide clearer feedback about assigned user
+            if assigned_username:
+                messages.success(request, f'Sede guardada correctamente. Usuario asignado: {assigned_username}')
+            else:
+                messages.success(request, 'Sede guardada correctamente. (Sin usuario asignado)')
 
             # Ensure a UserProfile exists and is linked to this sede for the user
             try:

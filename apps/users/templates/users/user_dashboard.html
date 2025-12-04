@@ -33,9 +33,35 @@ Home{% endblock title %}
       
         {% include 'includes/search.html' %}
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
+        <!-- Sección 'Reproducidas Recientemente' eliminada por petición -->
 
-          {% include 'includes/recently_played.html' %}
+        {# Sección de canciones: render canciones desde la base de datos para que el player las reconozca #}
+        <div class="mt-6 px-4">
+          <h2 class="text-[#F8F9FA] text-[22px] font-bold leading-tight px-0 pb-3 pt-2">Canciones</h2>
+          <div class="flex overflow-x-auto p-2 gap-4">
+            <div id="songs-list" class="flex items-stretch gap-4">
+              {% if playlist_songs %}
+                {% for song in playlist_songs %}
+                  <div
+                    class="song-item flex flex-col gap-3 rounded-lg min-w-40 bg-[#A00000] p-3 transition-transform hover:scale-105 cursor-pointer"
+                    data-audio-url="{% if song.archivo_audio %}{{ song.archivo_audio.url }}{% endif %}"
+                    data-image-url="{% if song.imagen %}{{ song.imagen.url }}{% else %}{% static 'img/default_album_art.png' %}{% endif %}"
+                    data-title="{{ song.titulo|escape }}"
+                    data-artist="{{ song.artista.nombre|escape }}"
+                    data-id="{{ song.id }}"
+                  >
+                    <div class="w-28 h-28 bg-center bg-no-repeat bg-cover rounded-md" style="background-image: url('{% if song.imagen %}{{ song.imagen.url }}{% else %}{% static 'img/default_album_art.png' %}{% endif %}');"></div>
+                    <div>
+                      <p class="text-[#F8F9FA] text-sm font-medium leading-tight truncate">{{ song.titulo }}</p>
+                      <p class="text-[#F8F9FA]/70 text-xs">{{ song.artista.nombre }}</p>
+                    </div>
+                  </div>
+                {% endfor %}
+              {% else %}
+                <div class="text-[#F8F9FA]/80 p-2">No hay canciones disponibles.</div>
+              {% endif %}
+            </div>
+          </div>
         </div>
       </div>
     </main>

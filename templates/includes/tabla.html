@@ -161,7 +161,27 @@
             <p id="error-usuario" class="text-red-400 text-sm mt-1 italic"></p>
           </div>
 
-          <!-- Removed create-user block as requested -->
+          <!-- Create-user block: allow creating a new user (username + password) when creating a sede -->
+          <div id="create-user-block" class="col-span-1 sm:col-span-2">
+            <p class="text-sm text-gray-300">(Opcional) Crear nuevo usuario y asignarlo a esta sede:</p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2 max-w-lg">
+              <div>
+                <label for="new_username" class="block text-sm font-medium mb-1">Nombre de usuario (nuevo)</label>
+                <input id="new_username" name="new_username" placeholder="Nuevo usuario" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019]" />
+                <p id="error-new_username" class="text-red-400 text-sm mt-1 italic"></p>
+              </div>
+              <div>
+                <label for="new_password" class="block text-sm font-medium mb-1">Contraseña</label>
+                <input id="new_password" name="new_password" type="password" placeholder="Contraseña" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019]" />
+                <p id="error-new_password" class="text-red-400 text-sm mt-1 italic"></p>
+              </div>
+              <div>
+                <label for="new_password_confirm" class="block text-sm font-medium mb-1">Confirmar contraseña</label>
+                <input id="new_password_confirm" name="new_password_confirm" type="password" placeholder="Confirmar contraseña" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019]" />
+                <p id="error-new_password_confirm" class="text-red-400 text-sm mt-1 italic"></p>
+              </div>
+            </div>
+          </div>
 
           <div>
             <label for="sede-direccion" class="block text-sm font-medium text-[#F8F9FA]">Dirección</label>
@@ -217,7 +237,7 @@
       function openModal(data) {
         modal.classList.remove('hidden');
         modal.classList.add('flex', 'items-center', 'justify-center');
-        if (data) {
+          if (data) {
           modalTitle.textContent = 'Editar Sede';
           inputNombre.value = data.nombre || '';
           inputEstado.value = data.estado_raw || 'activo';
@@ -249,6 +269,9 @@
           // create-user inputs removed from template
 
           form.action = data.actionUrl;
+          // hide create-user inputs when editing existing sede
+          const createBlock = document.getElementById('create-user-block');
+          if (createBlock) createBlock.style.display = 'none';
         } else {
           modalTitle.textContent = 'Crear Sede';
           inputNombre.value = '';
@@ -264,7 +287,9 @@
             inputUsuarioId.value = '';
             inputUsuarioId.dataset.original = '';
           }
-          // create-user inputs removed from template
+          // show create-user inputs when creating a new sede
+          const createBlock = document.getElementById('create-user-block');
+          if (createBlock) createBlock.style.display = '';
 
           form.action = document.getElementById('add-sede-btn').dataset.actionAdd;
         }
@@ -305,7 +330,7 @@
       form.addEventListener('submit', function (e) {
         e.preventDefault();
         // clear previous errors
-        ['nombre','estado','direccion','ciudad','nivel','usuario'].forEach(function (k) {
+        ['nombre','estado','direccion','ciudad','nivel','usuario','new_username','new_password','new_password_confirm'].forEach(function (k) {
           const el = document.getElementById('error-' + k);
           if (el) el.textContent = '';
         });
