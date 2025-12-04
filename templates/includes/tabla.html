@@ -146,44 +146,6 @@
           </div>
 
           <div>
-            <label for="sede-nivel" class="block text-sm font-medium text-[#F8F9FA]">Nivel de Usuario</label>
-            <select id="sede-nivel" name="nivel" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019] placeholder:text-[#F8F9FA]/60 focus:outline-none focus:ring-2 focus:ring-[#F48C06]">
-              <option value="usuario">Usuario</option>
-              <option value="admin">Admin</option>
-            </select>
-            <p id="error-nivel" class="text-red-400 text-sm mt-1 italic"></p>
-          </div>
-
-          <div>
-            <label for="sede-usuario-name" class="block text-sm font-medium text-[#F8F9FA]">Nombre de usuario</label>
-            <input id="sede-usuario-name" name="usuario_display" placeholder="Nombre de usuario" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019] placeholder:text-[#F8F9FA]/60 focus:outline-none focus:ring-2 focus:ring-[#F48C06]" />
-            <input type="hidden" id="sede-usuario-id" name="usuario" value="" />
-            <p id="error-usuario" class="text-red-400 text-sm mt-1 italic"></p>
-          </div>
-
-          <!-- Create-user block: allow creating a new user (username + password) when creating a sede -->
-          <div id="create-user-block" class="col-span-1 sm:col-span-2">
-            <p class="text-sm text-gray-300">(Opcional) Crear nuevo usuario y asignarlo a esta sede:</p>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2 max-w-lg">
-              <div>
-                <label for="new_username" class="block text-sm font-medium mb-1">Nombre de usuario (nuevo)</label>
-                <input id="new_username" name="new_username" placeholder="Nuevo usuario" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019]" />
-                <p id="error-new_username" class="text-red-400 text-sm mt-1 italic"></p>
-              </div>
-              <div>
-                <label for="new_password" class="block text-sm font-medium mb-1">Contraseña</label>
-                <input id="new_password" name="new_password" type="password" placeholder="Contraseña" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019]" />
-                <p id="error-new_password" class="text-red-400 text-sm mt-1 italic"></p>
-              </div>
-              <div>
-                <label for="new_password_confirm" class="block text-sm font-medium mb-1">Confirmar contraseña</label>
-                <input id="new_password_confirm" name="new_password_confirm" type="password" placeholder="Confirmar contraseña" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019]" />
-                <p id="error-new_password_confirm" class="text-red-400 text-sm mt-1 italic"></p>
-              </div>
-            </div>
-          </div>
-
-          <div>
             <label for="sede-direccion" class="block text-sm font-medium text-[#F8F9FA]">Dirección</label>
             <input id="sede-direccion" name="direccion" placeholder="Dirección (opcional)" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019] placeholder:text-[#F8F9FA]/60 focus:outline-none focus:ring-2 focus:ring-[#F48C06]" />
             <p id="error-direccion" class="text-red-400 text-sm mt-1 italic"></p>
@@ -193,6 +155,39 @@
             <label for="sede-ciudad" class="block text-sm font-medium text-[#F8F9FA]">Ciudad</label>
             <input id="sede-ciudad" name="ciudad" placeholder="Ciudad" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019] placeholder:text-[#F8F9FA]/60 focus:outline-none focus:ring-2 focus:ring-[#F48C06]" />
             <p id="error-ciudad" class="text-red-400 text-sm mt-1 italic"></p>
+          </div>
+
+          <div class="col-span-1 sm:col-span-2">
+            <label for="sede-nivel" class="block text-sm font-medium text-[#F8F9FA]">Nivel de Usuario</label>
+            <select id="sede-nivel" name="nivel" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019] placeholder:text-[#F8F9FA]/60 focus:outline-none focus:ring-2 focus:ring-[#F48C06]">
+              <option value="usuario">Usuario</option>
+              <option value="admin">Admin</option>
+            </select>
+            <p id="error-nivel" class="text-red-400 text-sm mt-1 italic"></p>
+          </div>
+          
+         
+
+          <!-- Bloque para crear un nuevo usuario, visible solo al añadir una nueva sede -->
+          <div id="create-user-block" class="col-span-1 sm:col-span-2 hidden">
+            <p class="text-sm text-gray-300">Crear un nuevo usuario para esta sede:</p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-2">
+              <div>
+                <label for="new_username" class="block text-sm font-medium mb-1">Nuevo nombre de usuario</label>
+                <input id="new_username" name="new_username" placeholder="usuario.nuevo" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019]" />
+                <p id="error-new_username" class="text-red-400 text-sm mt-1 italic"></p>
+              </div>
+              <div>
+                <label for="new_password" class="block text-sm font-medium mb-1">Contraseña</p>
+                <input id="new_password" name="new_password" type="password" placeholder="••••••••" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019]" />
+                <p id="error-new_password" class="text-red-400 text-sm mt-1 italic"></p>
+              </div>
+              <div>
+                <label for="new_password_confirm" class="block text-sm font-medium mb-1">Confirmar contraseña</p>
+                <input id="new_password_confirm" name="new_password_confirm" type="password" placeholder="••••••••" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019]" />
+                <p id="error-new_password_confirm" class="text-red-400 text-sm mt-1 italic"></p>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -266,12 +261,11 @@
             inputUsuarioId.dataset.original = data.usuario_id || '';
           }
 
-          // create-user inputs removed from template
+          // Ocultar el bloque de creación de usuario al editar
+          const createBlock = document.getElementById('create-user-block');
+          if (createBlock) createBlock.classList.add('hidden');
 
           form.action = data.actionUrl;
-          // hide create-user inputs when editing existing sede
-          const createBlock = document.getElementById('create-user-block');
-          if (createBlock) createBlock.style.display = 'none';
         } else {
           modalTitle.textContent = 'Crear Sede';
           inputNombre.value = '';
@@ -287,9 +281,10 @@
             inputUsuarioId.value = '';
             inputUsuarioId.dataset.original = '';
           }
-          // show create-user inputs when creating a new sede
+          
+          // Mostrar el bloque de creación de usuario al añadir una nueva sede
           const createBlock = document.getElementById('create-user-block');
-          if (createBlock) createBlock.style.display = '';
+          if (createBlock) createBlock.classList.remove('hidden');
 
           form.action = document.getElementById('add-sede-btn').dataset.actionAdd;
         }

@@ -31,12 +31,12 @@
           {{ form.ciudad.errors }}
         </div>
         <div>
-          <label class="block text-sm font-medium mb-1">Usuario asignado (opcional)</label>
-          {{ form.usuario }}
+          <label class="block text-sm font-medium mb-1">Asignar Usuario (buscar por nombre)</label>
+          {{ form.usuario_display }}
           {{ form.usuario.errors }}
         </div>
-        <div class="pt-2">
-          <p class="text-sm text-gray-300">O crea un nuevo usuario para asignar a esta sede:</p>
+        <div class="pt-2 {% if sede %}hidden{% endif %}">
+          <p class="text-sm text-gray-300">O crea un nuevo usuario para esta sede (solo al crear una sede nueva):</p>
           <div class="grid grid-cols-1 gap-2 mt-2 max-w-lg">
             <div>
               <label class="block text-sm font-medium mb-1">Nombre de usuario (nuevo)</label>
