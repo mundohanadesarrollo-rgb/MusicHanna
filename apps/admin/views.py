@@ -27,7 +27,7 @@ def admin_dashboard(request):
             'id': song.id,
             'name': song.titulo,
             'author': song.artista.nombre,
-            'fecha_subida': song.fecha_subida.strftime('%Y-%m-%d'),
+            'fecha_subida': song.fecha_subida.strftime('%Y-%m-%d %I:%M %p'),
             'image': song.imagen.url if song.imagen else static('img/default_album_art.png'),
         }
         for song in pending_songs
@@ -96,6 +96,7 @@ def admin_sedes(request):
             'badge_class': badge_class,
             'dot_class': dot_class,
             'ultima_actualizacion': s.ultima_actualizacion.strftime('%Y-%m-%d %I:%M %p') if s.ultima_actualizacion else '',
+            'fecha_creacion': s.fecha_creacion.strftime('%Y-%m-%d %I:%M %p') if s.fecha_creacion else '',
             'direccion': s.direccion or '',
             'ciudad': s.ciudad or '',
         })
