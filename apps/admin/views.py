@@ -127,6 +127,7 @@ def admin_edit_sede(request, sede_id=None):
 
     if request.method == 'POST':
         form = SedeForm(request.POST, instance=sede)
+        
         # Debug: print POST keys
         try:
             print('DEBUG admin_edit_sede POST keys:', list(request.POST.keys()))
@@ -150,29 +151,52 @@ def admin_edit_sede(request, sede_id=None):
             except Exception:
                 pass
 
-            if new_username:
-                # create the new user and assign
+            # Lógica de usuario unificada
+            usuario_display = form.cleaned_data.get('usuario_display')
+            usuario_id = request.POST.get('usuario') # ID del usuario del campo oculto
+
+            if new_username: # 1. Prioridad: Crear un nuevo usuario (solo al añadir sede)
                 if User.objects.filter(username=new_username).exists():
                     form.add_error('new_username', 'El nombre de usuario ya existe.')
-                    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                        from django.http import JsonResponse
-                        errors = {k: [str(e) for e in v] for k, v in form.errors.items()}
-                        return JsonResponse({'success': False, 'errors': errors}, status=400)
-                    messages.error(request, 'El nombre de usuario ya existe.')
                 else:
                     user = User.objects.create_user(username=new_username, password=new_password)
                     user.is_staff = False
                     user.is_superuser = False
                     user.save()
                     instance.usuario = user
+            
+            elif not usuario_id and usuario_display and sede and sede.usuario:
+                # 2. Editando el nombre de un usuario existente
+                # El ID del usuario no se envió, pero hay texto y una sede con usuario original
+                original_username = sede.usuario.username
+                if usuario_display != original_username:
+                    # El nombre ha cambiado, intentamos actualizarlo
+                    if User.objects.filter(username=usuario_display).exclude(pk=sede.usuario.pk).exists():
+                        form.add_error('usuario_display', f'El nombre de usuario "{usuario_display}" ya existe.')
+                    else:
+                        sede.usuario.username = usuario_display
+                        sede.usuario.save(update_fields=['username'])
+                        instance.usuario = sede.usuario # Re-asignar por si acaso
+                else:
+                    # El nombre no cambió, mantenemos el usuario original
+                    instance.usuario = sede.usuario
             else:
-                # Assign user to sede if provided (direct relation)
+                # 3. Asignar un usuario existente (buscado) o desasignar
                 usuario = form.cleaned_data.get('usuario') if hasattr(form, 'cleaned_data') else None
                 if usuario:
-                    instance.usuario = usuario
+                    instance.usuario = usuario # Asignar el usuario seleccionado
                 else:
                     # Log that no usuario was provided in cleaned_data
                     logging.getLogger(__name__).debug('No usuario provided in form.cleaned_data')
+                    # Si el campo de texto está vacío, se desasigna el usuario
+                    if sede and not usuario_display:
+                        instance.usuario = None
+
+            if form.errors:
+                 if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                    from django.http import JsonResponse
+                    errors = {k: [str(e) for e in v] for k, v in form.errors.items()}
+                    return JsonResponse({'success': False, 'errors': errors}, status=400)
 
             instance.save()
             # Debug: print assigned user after save
@@ -209,7 +233,10 @@ def admin_edit_sede(request, sede_id=None):
                 return JsonResponse({'success': False, 'errors': errors}, status=400)
             messages.error(request, 'Corrige los errores en el formulario.')
     else:
-        form = SedeForm(instance=sede)
+        initial_data = {}
+        if sede and sede.usuario:
+            pass # El precargado se hace en el JS del modal
+        form = SedeForm(instance=sede, initial=initial_data)
 
     return render(request, 'admin/edit_sede.html', {'form': form, 'sede': sede})
 
