@@ -35,27 +35,13 @@
           {{ form.usuario_display }}
           {{ form.usuario.errors }}
         </div>
-        <div class="pt-2 {% if sede %}hidden{% endif %}">
-          <p class="text-sm text-gray-300">O crea un nuevo usuario para esta sede (solo al crear una sede nueva):</p>
-          <div class="grid grid-cols-1 gap-2 mt-2 max-w-lg">
-            <div>
-              <label class="block text-sm font-medium mb-1">Nombre de usuario (nuevo)</label>
-              {{ form.new_username }}
-              {{ form.new_username.errors }}
-            </div>
-            <div>
-              <label class="block text-sm font-medium mb-1">Contraseña</label>
-              {{ form.new_password }}
-              {{ form.new_password.errors }}
-            </div>
-            <div>
-              <label class="block text-sm font-medium mb-1">Confirmar contraseña</label>
-              {{ form.new_password_confirm }}
-              {{ form.new_password_confirm.errors }}
-            </div>
-          </div>
+        <div class="pt-2">
+          <!-- La lógica para crear/editar usuarios ahora está en el modal de tabla.html -->
+          <!-- Este es un fallback en caso de que la página se cargue directamente -->
+          {{ form.new_username.label_tag }}
+          {{ form.new_username }}
+          {{ form.new_username.errors }}
         </div>
-        
         <div class="pt-4">
           <button type="submit" class="px-4 py-2 bg-[#F48C06] text-[#2B0808] rounded-md">Guardar</button>
           <a href="{% url 'admin_sedes' %}" class="ml-2 px-4 py-2 bg-[#801019] text-[#F8F9FA] rounded-md">Cancelar</a>
