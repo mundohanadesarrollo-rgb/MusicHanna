@@ -45,6 +45,7 @@ class SedeForm(forms.ModelForm):
                 self.add_error('new_password', 'La contraseña es requerida cuando se crea un usuario.')
             if pwd and pwd2 and pwd != pwd2:
                 self.add_error('new_password_confirm', 'Las contraseñas no coinciden.')
+<<<<<<< HEAD
         
         # If not creating a new user, try to resolve `usuario_display` to a User instance
         usuario_display = cleaned.get('usuario_display')
@@ -52,14 +53,24 @@ class SedeForm(forms.ModelForm):
         # Avoid resolving usuario when a new user will be created.
         # Also, don't do anything if a user is already resolved from the hidden 'usuario' input.
         if not username and usuario_display and not cleaned.get('usuario'):
+=======
+        # If not creating a new user, try to resolve `usuario_display` to a User instance
+        usuario_display = cleaned.get('usuario_display')
+        # Avoid resolving usuario when new user will be created
+        if not username and usuario_display:
+>>>>>>> 75fd0c1661466ad1aec684e75c64885446e2fe09
             try:
                 user = User.objects.get(username=usuario_display)
                 cleaned['usuario'] = user
             except User.DoesNotExist:
+<<<<<<< HEAD
                 # Don't raise an error here.
                 # This could be a username change for an existing user associated with the Sede.
                 # The view contains the logic to handle this specific case.
                 pass
+=======
+                self.add_error('usuario_display', 'Usuario no encontrado.')
+>>>>>>> 75fd0c1661466ad1aec684e75c64885446e2fe09
 
         return cleaned
 

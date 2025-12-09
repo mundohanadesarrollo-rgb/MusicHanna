@@ -167,21 +167,6 @@ def admin_edit_sede(request, sede_id=None):
                     user.is_superuser = False
                     user.save()
                     instance.usuario = user
-            
-            elif not usuario_id and usuario_display and sede and original_usuario:
-                # 2. Editando el nombre de un usuario existente
-                original_username = original_usuario.username
-                if usuario_display != original_username:
-                    # El nombre ha cambiado, intentamos actualizarlo
-                    if User.objects.filter(username=usuario_display).exclude(pk=original_usuario.pk).exists():
-                        form.add_error('usuario_display', f'El nombre de usuario "{usuario_display}" ya existe.')
-                    else:
-                        original_usuario.username = usuario_display
-                        original_usuario.save(update_fields=['username'])
-                        instance.usuario = original_usuario # Re-asignar por si acaso
-                else:
-                    # El nombre no cambió, mantenemos el usuario original
-                    instance.usuario = original_usuario
             else:
                 # 3. Asignar un usuario existente (buscado) o desasignar
                 usuario = form.cleaned_data.get('usuario') if hasattr(form, 'cleaned_data') else None
