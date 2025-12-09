@@ -120,8 +120,10 @@ def admin_sedes(request):
 def admin_edit_sede(request, sede_id=None):
     if sede_id:
         sede = get_object_or_404(Sede, id=sede_id)
+        original_usuario = sede.usuario
     else:
         sede = None
+        original_usuario = None
 
     from .forms import SedeForm
 
@@ -133,6 +135,7 @@ def admin_edit_sede(request, sede_id=None):
             print('DEBUG admin_edit_sede POST keys:', list(request.POST.keys()))
         except Exception:
             pass
+
         if form.is_valid():
             # Debug: print cleaned_data
             try:
