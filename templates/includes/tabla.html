@@ -166,7 +166,9 @@
             <p id="error-nivel" class="text-red-400 text-sm mt-1 italic"></p>
           </div>
           
-         
+          <!-- Bloque para asignar un usuario existente -->
+          
+
 
           <!-- Bloque para crear un nuevo usuario, visible solo al añadir una nueva sede -->
           <div id="create-user-block" class="col-span-1 sm:col-span-2 hidden">
@@ -210,7 +212,8 @@
       const inputCiudad = document.getElementById('sede-ciudad');
       const selectNivel = document.getElementById('sede-nivel');
       const inputUsuarioName = document.getElementById('sede-usuario-name');
-      const inputUsuarioId = document.getElementById('sede-usuario-id');
+      const inputUsuarioId = document.getElementById('sede-usuario-id'); // Este es el campo oculto 'usuario'
+      
 
       // if the user edits the username text, clear the hidden usuario id so backend knows
       if (inputUsuarioName) {
@@ -231,6 +234,8 @@
 
       function openModal(data) {
         modal.classList.remove('hidden');
+        const createBlock = document.getElementById('create-user-block');
+
         modal.classList.add('flex', 'items-center', 'justify-center');
           if (data) {
           modalTitle.textContent = 'Editar Sede';
@@ -257,13 +262,13 @@
             inputUsuarioName.dataset.original = data.usuario || '';
           }
           if (inputUsuarioId) {
+            // El valor del campo oculto 'usuario' es el ID
             inputUsuarioId.value = data.usuario_id || '';
             inputUsuarioId.dataset.original = data.usuario_id || '';
           }
 
-          // Ocultar el bloque de creación de usuario al editar
-          const createBlock = document.getElementById('create-user-block');
-          if (createBlock) createBlock.classList.add('hidden');
+          // Al editar, siempre ocultamos el bloque de creación de nuevo usuario.
+          if (createBlock) createBlock.classList.add('hidden'); 
 
           form.action = data.actionUrl;
         } else {
@@ -283,7 +288,6 @@
           }
           
           // Mostrar el bloque de creación de usuario al añadir una nueva sede
-          const createBlock = document.getElementById('create-user-block');
           if (createBlock) createBlock.classList.remove('hidden');
 
           form.action = document.getElementById('add-sede-btn').dataset.actionAdd;

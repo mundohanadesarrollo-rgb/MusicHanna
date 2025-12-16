@@ -11,6 +11,7 @@ urlpatterns = [
     path('sedes/edit/<int:sede_id>/', views.admin_edit_sede, name='admin_edit_sede'),
     path('sedes/add/', views.admin_edit_sede, name='admin_add_sede'),
     path('sedes/delete/<int:sede_id>/', views.admin_delete_sede, name='admin_delete_sede'),
+    path('update_sede_status/', views.update_sede_status, name='update_sede_status'),
 
     path('logout/', views.admin_logout, name='admin_logout'),
 
