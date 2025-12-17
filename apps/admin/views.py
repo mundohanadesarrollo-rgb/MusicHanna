@@ -107,7 +107,8 @@ def admin_sedes(request):
             badge_class = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-200 text-red-800 dark:bg-red-900 dark:text-red-200'
             dot_class = 'w-2 h-2 rounded-full bg-red-500'
 
-        # assigned user (direct field on Sede)
+        # assigned user (direct field on Sede)n
+        
         usuario_username = s.usuario.username if getattr(s, 'usuario', None) else ''
         usuario_id = s.usuario.id if getattr(s, 'usuario', None) else None
 

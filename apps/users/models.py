@@ -15,7 +15,7 @@ class Sede(models.Model):
             ('activo', 'Activo'),
             ('inactivo', 'Inactivo'),
         ],
-        default='activo',
+        default='inactivo',
         verbose_name="Estado"
     )
     direccion = models.CharField(max_length=300, blank=True, null=True, verbose_name="Dirección")
