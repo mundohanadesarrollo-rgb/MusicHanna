@@ -69,10 +69,11 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap border border-[#801019]">
                   <span
+                    id="sede-badge-{{ sede.id }}"
                     class="{{ sede.badge_class }}"
                   >
-                    <span class="{{ sede.dot_class }}"></span>
-                    {{ sede.estado }}
+                    <span id="sede-dot-{{ sede.id }}" class="{{ sede.dot_class }}"></span>
+                    <span id="sede-text-{{ sede.id }}">{{ sede.estado }}</span>
                   </span>
                 </td>
                 <td
@@ -370,4 +371,43 @@
         if (e.target === modal) closeModal();
       });
     });
+  </script>
+  <script>
+    // Poll for Sede status updates every 3 seconds
+    setInterval(function() {
+      fetch('{% url "get_sedes_status" %}?t=' + new Date().getTime())
+        .then(response => response.json())
+        .then(data => {
+          if (data.sedes) {
+            data.sedes.forEach(sede => {
+              const badge = document.getElementById('sede-badge-' + sede.id);
+              const dot = document.getElementById('sede-dot-' + sede.id);
+              const text = document.getElementById('sede-text-' + sede.id);
+
+              if (badge && dot && text) {
+                // Update text content
+                text.textContent = sede.estado; // 'Activo' or 'Inactivo'
+
+                // Apply classes
+                badge.className = sede.badge_class;
+                dot.className = sede.dot_class;
+
+                // FALLBACK: Apply direct styles for reliability if Tailwind classes are purged
+                if (sede.estado === 'Activo') {
+                    // Green style
+                    badge.style.backgroundColor = 'rgba(187, 247, 208, 1)'; // bg-green-200
+                    badge.style.color = 'rgba(22, 101, 52, 1)'; // text-green-800
+                    dot.style.backgroundColor = 'rgba(34, 197, 94, 1)'; // bg-green-500
+                } else {
+                    // Red style
+                    badge.style.backgroundColor = 'rgba(254, 202, 202, 1)'; // bg-red-200
+                    badge.style.color = 'rgba(153, 27, 27, 1)'; // text-red-800
+                    dot.style.backgroundColor = 'rgba(239, 68, 68, 1)'; // bg-red-500
+                }
+              }
+            });
+          }
+        })
+        .catch(err => console.error('Error fetching sede statuses:', err));
+    }, 3000);
   </script>

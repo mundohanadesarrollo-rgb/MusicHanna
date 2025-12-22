@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
 from apps.admin.models import Song, Play
 def user_logout(request):
     logout(request)
     return redirect('user_login')
 
+@login_required
 def user_dashboard(request):
     """Renderiza el dashboard del usuario e incluye el nombre de la sede.
 
@@ -29,6 +31,12 @@ def user_dashboard(request):
         if sede:
             # `sede` puede ser una instancia del modelo o un valor; obtener nombre seguro
             sede_name = getattr(sede, 'nombre', None) or str(sede)
+            
+            # Resetear estado a 'inactivo' al entrar al dashboard
+            # El estado cambiará a 'activo' solo cuando el JS detecte 'play'
+            if hasattr(sede, 'estado') and sede.estado != 'inactivo':
+                sede.estado = 'inactivo'
+                sede.save(update_fields=['estado'])
 
     # Obtener canciones reproducidas recientemente (únicas, en orden descendente por fecha)
     recent_songs = []
@@ -56,6 +64,7 @@ def user_dashboard(request):
         playlist_songs = []
 
     context = {
+        'sede': sede,
         'sede_name': sede_name,
         'recent_songs': recent_songs,
         'playlist_songs': playlist_songs,

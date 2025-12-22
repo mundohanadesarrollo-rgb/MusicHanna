@@ -2,13 +2,24 @@
 <footer
   class="fixed bottom-0 left-0 right-0 h-24 bg-[rgb(106,4,15)] border-t border-[#9D0208] p-4 z-60"
   aria-label="Player"
-  {% if sede %}data-sede-id="{{ sede.id }}"{% endif %}
+  {%
+  if
+  sede
+  %}data-sede-id="{{ sede.id }}"
+  {%
+  endif
+  %}
 >
   <div
     class="flex items-center justify-between w-full h-full max-w-7xl mx-auto"
   >
     {% if current_song and current_song.archivo_audio %}
-    <audio id="audio-player" src="{{ current_song.archivo_audio.url }}" preload="auto" data-current-id="{{ current_song.id }}"></audio>
+    <audio
+      id="audio-player"
+      src="{{ current_song.archivo_audio.url }}"
+      preload="auto"
+      data-current-id="{{ current_song.id }}"
+    ></audio>
     {% else %}
     <audio id="audio-player" preload="auto"></audio>
     {% endif %}
@@ -20,10 +31,15 @@
         src="{% if current_song.imagen %}{{ current_song.imagen.url }}{% else %}{% static 'img/default_album_art.png' %}{% endif %}"
       />
       <div>
-        <p id="player-title" class="text-[#F8F9FA] text-sm font-semibold leading-tight truncate">
+        <p
+          id="player-title"
+          class="text-[#F8F9FA] text-sm font-semibold leading-tight truncate"
+        >
           {{ current_song.titulo }}
         </p>
-        <p id="player-artist" class="text-[#F8F9FA]/70 text-xs leading-tight">{{ current_song.artista.nombre }}</p>
+        <p id="player-artist" class="text-[#F8F9FA]/70 text-xs leading-tight">
+          {{ current_song.artista.nombre }}
+        </p>
       </div>
     </div>
 
@@ -36,8 +52,15 @@
           id="play-pause-btn"
           class="w-12 h-12 flex items-center justify-center bg-[#9D0208] text-white rounded-full hover:bg-[#9D0208]/90 transition-colors shadow-lg"
         >
-          <span id="play-icon" class="material-symbols-outlined text-4xl">play_arrow</span>
-          <span id="pause-icon" class="material-symbols-outlined text-4xl" style="display: none;">pause</span>
+          <span id="play-icon" class="material-symbols-outlined text-4xl"
+            >play_arrow</span
+          >
+          <span
+            id="pause-icon"
+            class="material-symbols-outlined text-4xl"
+            style="display: none"
+            >pause</span
+          >
         </button>
         <button id="next-btn" class="hover:text-[#F8F9FA]/80 transition-colors">
           <span class="material-symbols-outlined text-3xl">skip_next</span>
@@ -45,8 +68,15 @@
       </div>
       <div class="flex items-center gap-2 w-full max-w-md">
         <span id="current-time" class="text-xs text-[#F8F9FA]/70">0:00</span>
-        <div id="progress-bar-container" class="w-full bg-[#9D0208]/30 rounded-full h-1.5 cursor-pointer">
-          <div id="progress-bar-fill" class="bg-[#F8F9FA] h-1.5 rounded-full" style="width: 0%"></div>
+        <div
+          id="progress-bar-container"
+          class="w-full bg-[#9D0208]/30 rounded-full h-1.5 cursor-pointer"
+        >
+          <div
+            id="progress-bar-fill"
+            class="bg-[#F8F9FA] h-1.5 rounded-full"
+            style="width: 0%"
+          ></div>
         </div>
         <span id="duration" class="text-xs text-[#F8F9FA]/70">0:00</span>
       </div>
@@ -69,221 +99,270 @@
   /* Visual indicator for the currently playing song card */
   .song-active {
     transform: scale(1.03);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.35), 0 0 0 3px rgba(248,249,250,0.06);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35),
+      0 0 0 3px rgba(248, 249, 250, 0.06);
   }
-  .song-item { transition: transform .12s ease, box-shadow .12s ease; }
+  .song-item {
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-  console.log('Player script loaded.'); // DEBUG
-  const audioPlayer = document.getElementById('audio-player');
-  const playPauseBtn = document.getElementById('play-pause-btn');
-  const playIcon = document.getElementById('play-icon');
-  const pauseIcon = document.getElementById('pause-icon');
-  const prevBtn = document.getElementById('prev-btn');
-  const nextBtn = document.getElementById('next-btn');
-  const progressBarContainer = document.getElementById('progress-bar-container');
-  const progressBarFill = document.getElementById('progress-bar-fill');
-  const currentTimeEl = document.getElementById('current-time');
-  const durationEl = document.getElementById('duration');
-  const volumeBar = document.getElementById('volume-bar');
-  const playerFooter = document.querySelector('footer[aria-label="Player"]');
-  const sedeId = playerFooter.dataset.sedeId;
-  console.log('Sede ID found:', sedeId); // DEBUG
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("Player script loaded."); // DEBUG
+    const audioPlayer = document.getElementById("audio-player");
+    const playPauseBtn = document.getElementById("play-pause-btn");
+    const playIcon = document.getElementById("play-icon");
+    const pauseIcon = document.getElementById("pause-icon");
+    const prevBtn = document.getElementById("prev-btn");
+    const nextBtn = document.getElementById("next-btn");
+    const progressBarContainer = document.getElementById(
+      "progress-bar-container"
+    );
+    const progressBarFill = document.getElementById("progress-bar-fill");
+    const currentTimeEl = document.getElementById("current-time");
+    const durationEl = document.getElementById("duration");
+    const volumeBar = document.getElementById("volume-bar");
+    const playerFooter = document.querySelector('footer[aria-label="Player"]');
+    const sedeId = playerFooter.dataset.sedeId;
+    console.log("Sede ID found:", sedeId); // DEBUG
 
-  // --- Sede Status Update ---
-  const updateSedeStatus = (status) => {
-    if (!sedeId) {
-      console.warn("Player: No se encontró data-sede-id. No se puede actualizar el estado de la sede.");
-      return;
+    // --- Sede Status Update ---
+    // FORCE INITIAL STATUS to Inactive to ensure clean slate
+    if (sedeId && audioPlayer.paused) {
+      setTimeout(() => {
+        // Check again if still paused before forcing inactive
+        if (audioPlayer.paused) {
+          fetch("/admin/update_sede_status/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ sede_id: sedeId, status: "inactivo" }),
+          }).catch((e) =>
+            console.error("Error setting initial inactive status", e)
+          );
+        }
+      }, 800);
     }
 
-    console.log(`Attempting to update status to: ${status} for sede ID: ${sedeId}`); // DEBUG
-
-    fetch('/admin/update_sede_status/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        sede_id: sedeId,
-        status: status,
-      }),
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Response data:', data); // DEBUG
-      if (data.status === 'success') {
-        console.log(`Sede ${sedeId} status updated to ${status}.`);
-      } else {
-        console.error(`Error updating sede status: ${data.message}`);
+    const updateSedeStatus = (status) => {
+      if (!sedeId) {
+        console.warn(
+          "Player: No se encontró data-sede-id. No se puede actualizar el estado de la sede."
+        );
+        return;
       }
-    })
-    .catch(error => {
-      console.error('Network error updating sede status:', error);
-    });
-  };
 
-  // Playlist state
-  let playlist = [];
-  let currentIndex = -1;
+      console.log(
+        `Attempting to update status to: ${status} for sede ID: ${sedeId}`
+      ); // DEBUG
 
-  // --- Play/Pause ---
-  playPauseBtn.addEventListener('click', () => {
-    if (audioPlayer.paused) {
-      audioPlayer.play().catch(e => console.error("Error al reproducir:", e));
-    } else {
-      audioPlayer.pause();
-    }
-  });
+      fetch("/admin/update_sede_status/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          sede_id: sedeId,
+          status: status,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Response data:", data); // DEBUG
+          if (data.status === "success") {
+            console.log(`Sede ${sedeId} status updated to ${status}.`);
+          } else {
+            console.error(`Error updating sede status: ${data.message}`);
+          }
+        })
+        .catch((error) => {
+          console.error("Network error updating sede status:", error);
+        });
+    };
 
-  audioPlayer.addEventListener('play', () => {
-    playIcon.style.display = 'none';
-    pauseIcon.style.display = 'inline';
-    updateSedeStatus('activo');
-  });
+    // Playlist state
+    let playlist = [];
+    let currentIndex = -1;
 
-  audioPlayer.addEventListener('pause', () => {
-    playIcon.style.display = 'inline';
-    pauseIcon.style.display = 'none';
-    updateSedeStatus('inactivo');
-  });
-
-  // --- Time formatting & Update ---
-  function formatTime(seconds) {
-    const minutes = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
-  }
-
-  audioPlayer.addEventListener('loadedmetadata', () => {
-    if (audioPlayer.duration && !isNaN(audioPlayer.duration)) {
-      durationEl.textContent = formatTime(audioPlayer.duration);
-    }
-  });
-
-  audioPlayer.addEventListener('timeupdate', () => {
-    if (audioPlayer.duration) {
-      const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
-      progressBarFill.style.width = `${progress}%`;
-      currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
-    }
-  });
-
-  progressBarContainer.addEventListener('click', (e) => {
-    const width = progressBarContainer.clientWidth;
-    const clickX = e.offsetX;
-    const duration = audioPlayer.duration || 0;
-    if (duration) audioPlayer.currentTime = (clickX / width) * duration;
-  });
-
-  // --- Volume Control ---
-  audioPlayer.volume = volumeBar.value / 100; // Set initial volume
-  volumeBar.addEventListener('input', (e) => {
-    audioPlayer.volume = e.target.value / 100;
-  });
-
-  // Build playlist from DOM order of .song-item elements
-  function buildPlaylistFromDOM() {
-    const nodes = document.querySelectorAll('.song-item');
-    playlist = Array.from(nodes).map(n => ({
-      audio: n.dataset.audioUrl || '',
-      image: n.dataset.imageUrl || '',
-      title: n.dataset.title || '',
-      artist: n.dataset.artist || '',
-      id: n.dataset.id || ''
-    }));
-  }
-
-  // Update active class on song items
-  function updateActiveClass() {
-    const nodes = document.querySelectorAll('.song-item');
-    nodes.forEach((n, i) => {
-      if (i === currentIndex) {
-        n.classList.add('song-active');
+    // --- Play/Pause ---
+    playPauseBtn.addEventListener("click", () => {
+      if (audioPlayer.paused) {
+        audioPlayer
+          .play()
+          .catch((e) => console.error("Error al reproducir:", e));
       } else {
-        n.classList.remove('song-active');
+        audioPlayer.pause();
       }
     });
-  }
 
-  // Load and play a song from playlist by index
-  function loadAndPlay(index) {
-    if (!playlist.length) return;
-    if (index < 0 || index >= playlist.length) return;
-    const item = playlist[index];
-    if (!item.audio) return;
-    currentIndex = index;
-    if (audioPlayer.src !== item.audio) audioPlayer.src = item.audio;
-    const playerImage = document.getElementById('player-image');
-    const playerTitle = document.getElementById('player-title');
-    const playerArtist = document.getElementById('player-artist');
-    if (playerImage && item.image) playerImage.src = item.image;
-    if (playerTitle) playerTitle.textContent = item.title || '';
-    if (playerArtist) playerArtist.textContent = item.artist || '';
-    audioPlayer.play().catch(e => console.error('Error al reproducir:', e));
-    // Update UI active state
-    updateActiveClass();
-  }
+    audioPlayer.addEventListener("play", () => {
+      playIcon.style.display = "none";
+      pauseIcon.style.display = "inline";
+      updateSedeStatus("activo");
+    });
 
-  // Attach click handlers to song items
-  function attachSongItemHandlers() {
-    const nodes = document.querySelectorAll('.song-item');
-    nodes.forEach((n, idx) => {
-      n.addEventListener('click', () => {
-        buildPlaylistFromDOM();
-        loadAndPlay(idx);
+    audioPlayer.addEventListener("pause", () => {
+      playIcon.style.display = "inline";
+      pauseIcon.style.display = "none";
+      updateSedeStatus("inactivo");
+    });
+
+    // Ensure status is updated to inactive when the user closes the page
+    window.addEventListener("beforeunload", () => {
+      if (sedeId && !audioPlayer.paused) {
+        const data = { sede_id: sedeId, status: "inactivo" };
+        const blob = new Blob([JSON.stringify(data)], {
+          type: "application/json",
+        });
+        navigator.sendBeacon("/admin/update_sede_status/", blob);
+      }
+    });
+
+    // --- Time formatting & Update ---
+    function formatTime(seconds) {
+      const minutes = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+    }
+
+    audioPlayer.addEventListener("loadedmetadata", () => {
+      if (audioPlayer.duration && !isNaN(audioPlayer.duration)) {
+        durationEl.textContent = formatTime(audioPlayer.duration);
+      }
+    });
+
+    audioPlayer.addEventListener("timeupdate", () => {
+      if (audioPlayer.duration) {
+        const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+        progressBarFill.style.width = `${progress}%`;
+        currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
+      }
+    });
+
+    progressBarContainer.addEventListener("click", (e) => {
+      const width = progressBarContainer.clientWidth;
+      const clickX = e.offsetX;
+      const duration = audioPlayer.duration || 0;
+      if (duration) audioPlayer.currentTime = (clickX / width) * duration;
+    });
+
+    // --- Volume Control ---
+    audioPlayer.volume = volumeBar.value / 100; // Set initial volume
+    volumeBar.addEventListener("input", (e) => {
+      audioPlayer.volume = e.target.value / 100;
+    });
+
+    // Build playlist from DOM order of .song-item elements
+    function buildPlaylistFromDOM() {
+      const nodes = document.querySelectorAll(".song-item");
+      playlist = Array.from(nodes).map((n) => ({
+        audio: n.dataset.audioUrl || "",
+        image: n.dataset.imageUrl || "",
+        title: n.dataset.title || "",
+        artist: n.dataset.artist || "",
+        id: n.dataset.id || "",
+      }));
+    }
+
+    // Update active class on song items
+    function updateActiveClass() {
+      const nodes = document.querySelectorAll(".song-item");
+      nodes.forEach((n, i) => {
+        if (i === currentIndex) {
+          n.classList.add("song-active");
+        } else {
+          n.classList.remove("song-active");
+        }
       });
-    });
-  }
+    }
 
-  function playPrev() {
-    if (!playlist.length) return;
-    const nextIndex = currentIndex > 0 ? currentIndex - 1 : playlist.length - 1;
-    loadAndPlay(nextIndex);
-  }
-
-  function playNext() {
-    if (!playlist.length) return;
-    const nextIndex = (currentIndex + 1) % playlist.length;
-    loadAndPlay(nextIndex);
-  }
-
-  prevBtn.addEventListener('click', (e) => { e.preventDefault(); playPrev(); });
-  nextBtn.addEventListener('click', (e) => { e.preventDefault(); playNext(); });
-
-  audioPlayer.addEventListener('ended', () => { playNext(); });
-
-  // Initialize playlist & handlers
-  buildPlaylistFromDOM();
-  attachSongItemHandlers();
-
-  // Try to sync with server-provided current song id when available
-  const serverCurrentId = audioPlayer.dataset.currentId;
-  if (serverCurrentId && playlist.length) {
-    const idx = playlist.findIndex(p => String(p.id) === String(serverCurrentId));
-    if (idx !== -1) {
-      currentIndex = idx;
-      const p = playlist[idx];
-      const playerImage = document.getElementById('player-image');
-      const playerTitle = document.getElementById('player-title');
-      const playerArtist = document.getElementById('player-artist');
-      if (playerImage && p.image) playerImage.src = p.image;
-      if (playerTitle) playerTitle.textContent = p.title || '';
-      if (playerArtist) playerArtist.textContent = p.artist || '';
-      // mark active element based on server-provided current id
+    // Load and play a song from playlist by index
+    function loadAndPlay(index) {
+      if (!playlist.length) return;
+      if (index < 0 || index >= playlist.length) return;
+      const item = playlist[index];
+      if (!item.audio) return;
+      currentIndex = index;
+      if (audioPlayer.src !== item.audio) audioPlayer.src = item.audio;
+      const playerImage = document.getElementById("player-image");
+      const playerTitle = document.getElementById("player-title");
+      const playerArtist = document.getElementById("player-artist");
+      if (playerImage && item.image) playerImage.src = item.image;
+      if (playerTitle) playerTitle.textContent = item.title || "";
+      if (playerArtist) playerArtist.textContent = item.artist || "";
+      audioPlayer.play().catch((e) => console.error("Error al reproducir:", e));
+      // Update UI active state
       updateActiveClass();
     }
-  } else if (playlist.length && !audioPlayer.src) {
-    // Preload metadata for first track
-    const p = playlist[0];
-    const playerImage = document.getElementById('player-image');
-    const playerTitle = document.getElementById('player-title');
-    const playerArtist = document.getElementById('player-artist');
-    if (playerImage && p.image) playerImage.src = p.image;
-    if (playerTitle) playerTitle.textContent = p.title || '';
-    if (playerArtist) playerArtist.textContent = p.artist || '';
-  }
-});
+
+    // Attach click handlers to song items
+    function attachSongItemHandlers() {
+      const nodes = document.querySelectorAll(".song-item");
+      nodes.forEach((n, idx) => {
+        n.addEventListener("click", () => {
+          buildPlaylistFromDOM();
+          loadAndPlay(idx);
+        });
+      });
+    }
+
+    function playPrev() {
+      if (!playlist.length) return;
+      const nextIndex =
+        currentIndex > 0 ? currentIndex - 1 : playlist.length - 1;
+      loadAndPlay(nextIndex);
+    }
+
+    function playNext() {
+      if (!playlist.length) return;
+      const nextIndex = (currentIndex + 1) % playlist.length;
+      loadAndPlay(nextIndex);
+    }
+
+    prevBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      playPrev();
+    });
+    nextBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      playNext();
+    });
+
+    audioPlayer.addEventListener("ended", () => {
+      playNext();
+    });
+
+    // Initialize playlist & handlers
+    buildPlaylistFromDOM();
+    attachSongItemHandlers();
+
+    // Try to sync with server-provided current song id when available
+    const serverCurrentId = audioPlayer.dataset.currentId;
+    if (serverCurrentId && playlist.length) {
+      const idx = playlist.findIndex(
+        (p) => String(p.id) === String(serverCurrentId)
+      );
+      if (idx !== -1) {
+        currentIndex = idx;
+        const p = playlist[idx];
+        const playerImage = document.getElementById("player-image");
+        const playerTitle = document.getElementById("player-title");
+        const playerArtist = document.getElementById("player-artist");
+        if (playerImage && p.image) playerImage.src = p.image;
+        if (playerTitle) playerTitle.textContent = p.title || "";
+        if (playerArtist) playerArtist.textContent = p.artist || "";
+        // mark active element based on server-provided current id
+        updateActiveClass();
+      }
+    } else if (playlist.length && !audioPlayer.src) {
+      // Preload metadata for first track
+      const p = playlist[0];
+      const playerImage = document.getElementById("player-image");
+      const playerTitle = document.getElementById("player-title");
+      const playerArtist = document.getElementById("player-artist");
+      if (playerImage && p.image) playerImage.src = p.image;
+      if (playerTitle) playerTitle.textContent = p.title || "";
+      if (playerArtist) playerArtist.textContent = p.artist || "";
+    }
+  });
 </script>

@@ -13,6 +13,8 @@ urlpatterns = [
     path('sedes/delete/<int:sede_id>/', views.admin_delete_sede, name='admin_delete_sede'),
     path('update_sede_status/', views.update_sede_status, name='update_sede_status'),
 
+    path('play_signal/', views.play_signal, name='play_signal'),
+    path('stop_signal/', views.stop_signal, name='stop_signal'),
+    path('sedes/status/', views.get_sedes_status, name='get_sedes_status'),
     path('logout/', views.admin_logout, name='admin_logout'),
-
 ]

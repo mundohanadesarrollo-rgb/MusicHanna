@@ -1,8 +1,5 @@
-{% extends 'base.html' %} 
-{% load static%} 
-{% block title %} Admin Players{%endblock title %} 
-
-{% block content %}
+{% extends 'base.html' %} {% load static%} {% block title %} Admin
+Players{%endblock title %} {% block content %}
 
 <div
   class="relative flex h-auto min-h-screen w-full flex-col bg-[rgb(106,4,15)] text-[#F8F9FA] group/design-root overflow-x-hidden"
@@ -21,17 +18,24 @@
             src="{% if current_song.imagen %}{{ current_song.imagen.url }}{% else %}{% static 'img/default_album_art.png' %}{% endif %}"
             alt="Portada del álbum de la canción actual"
           />
-          <h2 id="current-song-title"
+          <h2
+            id="current-song-title"
             class="tracking-light text-[32px] font-bold leading-tight text-[#F8F9FA]"
           >
             {{ current_song.titulo }}
           </h2>
-          <p id="current-song-artist" class="text-[#F8F9FA]/80 text-lg font-normal">{{ current_song.artista.nombre }}</p>
+          <p
+            id="current-song-artist"
+            class="text-[#F8F9FA]/80 text-lg font-normal"
+          >
+            {{ current_song.artista.nombre }}
+          </p>
           <div id="current-song-album" class="mt-4 text-[#F8F9FA]/60 text-sm">
             {% if current_song.album %}
             <span>{{ current_song.album.titulo }}</span>
-            {% if current_song.album.fecha_lanzamiento %}<span> • </span><span>{{ current_song.album.fecha_lanzamiento.year }}</span>{% endif %}
-            {% endif %}
+            {% if current_song.album.fecha_lanzamiento %}<span> • </span
+            ><span>{{ current_song.album.fecha_lanzamiento.year }}</span>{%
+            endif %} {% endif %}
           </div>
         </div>
 
@@ -47,22 +51,40 @@
             class="flex flex-col gap-3 px-4 py-4 overflow-auto max-h-[60vh] sm:max-h-[50vh]"
           >
             {% for song in playlist %}
-            <div class="playlist-item flex flex-col sm:flex-row sm:items-center gap-4 rounded-lg p-3 hover:bg-[#A00000]/10 transition-colors cursor-pointer" data-song-id="{{ song.id }}">
-                <div class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md shrink-0" style="background-image: url('{% if song.imagen %}{{ song.imagen.url }}{% else %}{% static 'img/default_album_art.png' %}{% endif %}')"></div>
-                <div class="grow min-w-0">
-                    <p class="text-[#F8F9FA] text-base font-medium leading-normal truncate">{{ song.titulo }}</p>
-                    <p class="text-[#F8F9FA]/70 text-sm">{{ song.artista.nombre }}</p>
-                </div>
-                <div class="shrink-0">
-                    <p class="text-[#F8F9FA]/70 text-sm font-medium">{{ song.duracion }}</p>
-                </div>
+            <div
+              class="playlist-item flex flex-col sm:flex-row sm:items-center gap-4 rounded-lg p-3 hover:bg-[#A00000]/10 transition-colors cursor-pointer"
+              data-song-id="{{ song.id }}"
+            >
+              <div
+                class="w-12 h-12 bg-center bg-no-repeat aspect-square bg-cover rounded-md shrink-0"
+                style="background-image: url('{% if song.imagen %}{{ song.imagen.url }}{% else %}{% static 'img/default_album_art.png' %}{% endif %}')"
+              ></div>
+              <div class="grow min-w-0">
+                <p
+                  class="text-[#F8F9FA] text-base font-medium leading-normal truncate"
+                >
+                  {{ song.titulo }}
+                </p>
+                <p class="text-[#F8F9FA]/70 text-sm">
+                  {{ song.artista.nombre }}
+                </p>
+              </div>
+              <div class="shrink-0">
+                <p class="text-[#F8F9FA]/70 text-sm font-medium">
+                  {{ song.duracion }}
+                </p>
+              </div>
             </div>
             {% endfor %}
           </div>
         </div>
         {% else %}
-        <div class="col-span-2 flex items-center justify-center text-center py-20">
-            <p class="text-xl text-[#F8F9FA]/70">No hay canciones para mostrar en el reproductor.</p>
+        <div
+          class="col-span-2 flex items-center justify-center text-center py-20"
+        >
+          <p class="text-xl text-[#F8F9FA]/70">
+            No hay canciones para mostrar en el reproductor.
+          </p>
         </div>
         {% endif %}
       </div>
@@ -70,10 +92,8 @@
   </div>
 </div>
 
-{% if current_song %}
-    {% include 'includes/player.html' %} 
-{% endif %}
-{% include 'includes/footer.html' %}
+{% if current_song %} {% include 'includes/player.html' %} {% endif %} {%
+include 'includes/footer.html' %}
 
 <style>
   footer[aria-label="Player"] {
@@ -81,144 +101,207 @@
   }
 </style>
 
-{%endblock %} 
-
-{%block scripts%} 
+{%endblock %} {%block scripts%}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const defaultImageUrl = "{% static 'img/default_album_art.png' %}";
-        const songsData = {{ songs_json|safe }};
-        const currentSongId = {{ current_song.id|default:"null" }};
-        const audioPlayer = document.getElementById('audio-player');
+  document.addEventListener('DOMContentLoaded', function() {
+      const defaultImageUrl = "{% static 'img/default_album_art.png' %}";
+      const songsData = {{ songs_json|safe }};
+      const currentSongId = {{ current_song.id|default:"null" }};
+      const audioPlayer = document.getElementById('audio-player');
 
-        // Encuentra el índice de la canción actual para evitar el parpadeo de la imagen.
-        let currentSongIndex = 0;
-        if (currentSongId !== null) {
-            const initialIndex = songsData.findIndex(song => song.id == currentSongId);
-            if (initialIndex !== -1) {
-                currentSongIndex = initialIndex;
-            }
-        }
-        
-        if (!audioPlayer || songsData.length === 0) {
-            console.log("Player o canciones no encontradas. Saliendo.");
-            return;
-        }
+      // Encuentra el índice de la canción actual para evitar el parpadeo de la imagen.
+      let currentSongIndex = 0;
+      if (currentSongId !== null) {
+          const initialIndex = songsData.findIndex(song => song.id == currentSongId);
+          if (initialIndex !== -1) {
+              currentSongIndex = initialIndex;
+          }
+      }
 
-        const playPauseBtn = document.getElementById('play-pause-btn');
-        const playIcon = document.getElementById('play-icon');
-        const pauseIcon = document.getElementById('pause-icon');
-        const nextBtn = document.getElementById('next-btn');
-        const prevBtn = document.getElementById('prev-btn');
-        const progressBarContainer = document.getElementById('progress-bar-container');
-        const progressBarFill = progressBarContainer.querySelector('#progress-bar-fill');
-        const currentTimeEl = document.getElementById('current-time');
-        const durationEl = document.getElementById('duration');
-        const volumeBar = document.getElementById('volume-bar');
+      if (!audioPlayer || songsData.length === 0) {
+          console.log("Player o canciones no encontradas. Saliendo.");
+          return;
+      }
 
-        // Elementos de la UI que se actualizan
-        const currentSongImage = document.getElementById('current-song-image');
-        const currentSongTitle = document.getElementById('current-song-title');
-        const currentSongArtist = document.getElementById('current-song-artist');
-        const currentSongAlbum = document.getElementById('current-song-album');
-        const playerImage = document.getElementById('player-image');
-        const playerTitle = document.getElementById('player-title');
-        const playerArtist = document.getElementById('player-artist');
+      const playPauseBtn = document.getElementById('play-pause-btn');
+      const playIcon = document.getElementById('play-icon');
+      const pauseIcon = document.getElementById('pause-icon');
+      const nextBtn = document.getElementById('next-btn');
+      const prevBtn = document.getElementById('prev-btn');
+      const progressBarContainer = document.getElementById('progress-bar-container');
+      const progressBarFill = progressBarContainer.querySelector('#progress-bar-fill');
+      const currentTimeEl = document.getElementById('current-time');
+      const durationEl = document.getElementById('duration');
+      const volumeBar = document.getElementById('volume-bar');
 
-        function loadSong(songIndex) {
-            const song = songsData[songIndex];
-            const imageUrl = song.imagen ? song.imagen : defaultImageUrl;
-          audioPlayer.src = song.audio;
-          try { audioPlayer.load(); } catch (e) { console.warn('audio.load() failed', e); }
-            
-            // Actualizar UI principal
-            currentSongImage.src = imageUrl;
-            currentSongTitle.textContent = song.titulo;
-            currentSongArtist.textContent = song.artista.nombre;
-            // (Opcional) Actualizar album info si es necesario
+      // Elementos de la UI que se actualizan
+      const currentSongImage = document.getElementById('current-song-image');
+      const currentSongTitle = document.getElementById('current-song-title');
+      const currentSongArtist = document.getElementById('current-song-artist');
+      const currentSongAlbum = document.getElementById('current-song-album');
+      const playerImage = document.getElementById('player-image');
+      const playerTitle = document.getElementById('player-title');
+      const playerArtist = document.getElementById('player-artist');
 
-            // Actualizar UI del reproductor inferior
-            playerImage.src = imageUrl;
-            playerTitle.textContent = song.titulo;
-            playerArtist.textContent = song.artista.nombre;
+      function loadSong(songIndex) {
+          const song = songsData[songIndex];
+          const imageUrl = song.imagen ? song.imagen : defaultImageUrl;
+        audioPlayer.src = song.audio;
+        try { audioPlayer.load(); } catch (e) { console.warn('audio.load() failed', e); }
 
-            currentSongIndex = songIndex;
-        }
+          // Actualizar UI principal
+          currentSongImage.src = imageUrl;
+          currentSongTitle.textContent = song.titulo;
+          currentSongArtist.textContent = song.artista.nombre;
+          // (Opcional) Actualizar album info si es necesario
 
-        function formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const secs = Math.floor(seconds % 60);
-            return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
-        }
+          // Actualizar UI del reproductor inferior
+          playerImage.src = imageUrl;
+          playerTitle.textContent = song.titulo;
+          playerArtist.textContent = song.artista.nombre;
 
-        // --- Event Listeners ---
-        // The main play/pause logic is now in player.html
-        // playPauseBtn.addEventListener('click', () => (audioPlayer.paused ? playSong() : pauseSong()));
+          currentSongIndex = songIndex;
+      }
 
-        nextBtn.addEventListener('click', () => {
-            currentSongIndex = (currentSongIndex + 1) % songsData.length;
-            loadSong(currentSongIndex);
-            audioPlayer.play().catch(e => console.error("Error playing next song:", e));
-        });
+      function formatTime(seconds) {
+          const minutes = Math.floor(seconds / 60);
+          const secs = Math.floor(seconds % 60);
+          return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+      }
 
-        prevBtn.addEventListener('click', () => {
-            currentSongIndex = (currentSongIndex - 1 + songsData.length) % songsData.length;
-            loadSong(currentSongIndex);
-            audioPlayer.play().catch(e => console.error("Error playing previous song:", e));
-        });
+      // --- Event Listeners ---
+      // The main play/pause logic is now in player.html
+      // playPauseBtn.addEventListener('click', () => (audioPlayer.paused ? playSong() : pauseSong()));
+
+      nextBtn.addEventListener('click', () => {
+          currentSongIndex = (currentSongIndex + 1) % songsData.length;
+          loadSong(currentSongIndex);
+          audioPlayer.play().catch(e => console.error("Error playing next song:", e));
+      });
+
+      prevBtn.addEventListener('click', () => {
+          currentSongIndex = (currentSongIndex - 1 + songsData.length) % songsData.length;
+          loadSong(currentSongIndex);
+          audioPlayer.play().catch(e => console.error("Error playing previous song:", e));
+      });
 
 
-        audioPlayer.addEventListener('timeupdate', () => {
-            const { currentTime, duration } = audioPlayer;
-            if (duration) {
-                const progressPercent = (currentTime / duration) * 100;
-                progressBarFill.style.width = `${progressPercent}%`;
-            }
-            currentTimeEl.textContent = formatTime(currentTime);
-            if (duration) durationEl.textContent = formatTime(duration);
-        });
+      audioPlayer.addEventListener('timeupdate', () => {
+          const { currentTime, duration } = audioPlayer;
+          if (duration) {
+              const progressPercent = (currentTime / duration) * 100;
+              progressBarFill.style.width = `${progressPercent}%`;
+          }
+          currentTimeEl.textContent = formatTime(currentTime);
+          if (duration) durationEl.textContent = formatTime(duration);
+      });
 
-        // --- Hacer la barra de progreso interactiva ---
-        progressBarContainer.addEventListener('click', (e) => {
-            const width = progressBarContainer.clientWidth;
-            const clickX = e.offsetX;
-            const duration = audioPlayer.duration;
-            audioPlayer.currentTime = (clickX / width) * duration;
-        });
+      // --- Hacer la barra de progreso interactiva ---
+      progressBarContainer.addEventListener('click', (e) => {
+          const width = progressBarContainer.clientWidth;
+          const clickX = e.offsetX;
+          const duration = audioPlayer.duration;
+          audioPlayer.currentTime = (clickX / width) * duration;
+      });
 
-        // --- Control de Volumen ---
-        volumeBar.addEventListener('input', (e) => {
-            audioPlayer.volume = e.target.value / 100;
-        });
+      // --- Control de Volumen ---
+      volumeBar.addEventListener('input', (e) => {
+          audioPlayer.volume = e.target.value / 100;
+      });
 
-        // --- Reproducción automática de la siguiente canción ---
-        audioPlayer.addEventListener('ended', () => {
-            nextBtn.click(); // Simula un clic en el botón "siguiente"
-        });
+      // --- Reproducción automática de la siguiente canción ---
+      audioPlayer.addEventListener('ended', () => {
+          nextBtn.click(); // Simula un clic en el botón "siguiente"
+      });
 
-        // --- Clic en la lista de reproducción ---
-        document.querySelectorAll('.playlist-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const songId = this.dataset.songId;
-                const songIndex = songsData.findIndex(song => song.id == songId);
+      // --- Clic en la lista de reproducción ---
+      document.querySelectorAll('.playlist-item').forEach(item => {
+          item.addEventListener('click', function() {
+              const songId = this.dataset.songId;
+              const songIndex = songsData.findIndex(song => song.id == songId);
 
-                if (songIndex !== -1) {
-                    loadSong(songIndex);
-                    audioPlayer.play().catch(e => console.error("Error playing selected song:", e));
-                }
-            });
-        });
-
-   
-        if (songsData.length > 0) {
-          const initialSong = songsData[currentSongIndex];
-          audioPlayer.src = initialSong.audio;
-          try { audioPlayer.load(); } catch (e) { console.warn('audio.load() failed', e); }
-          audioPlayer.addEventListener('loadedmetadata', () => {
-            durationEl.textContent = formatTime(audioPlayer.duration);
+              if (songIndex !== -1) {
+                  loadSong(songIndex);
+                  audioPlayer.play().catch(e => console.error("Error playing selected song:", e));
+              }
           });
-        }
+      });
 
-    });
+      // --- Sede status updates ---
+      const sedeId = {{ sede.id|default:"null" }};
+
+      // Force initial status to Inactive
+      if (sedeId !== null && audioPlayer.paused) {
+         setTimeout(() => {
+             if (audioPlayer.paused) {
+                  fetch('{% url "stop_signal" %}', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}' },
+                      body: JSON.stringify({ sede_id: sedeId }),
+                  }).catch(e => console.error("Error setting initial inactive status", e));
+             }
+         }, 800);
+      }
+
+      function updateSedeStatus(url, data) {
+          if (sedeId === null) return;
+          fetch(url, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRFToken': '{{ csrf_token }}',
+              },
+              body: JSON.stringify(data),
+          })
+          .then(response => response.json())
+          .then(json => {
+              console.log('Sede status update:', json);
+          })
+          .catch(err => console.error('Error updating sede status:', err));
+      }
+
+      // When playback starts, mark sede as activo
+      audioPlayer.addEventListener('play', () => {
+          if (sedeId !== null) {
+              const activeSong = songsData[currentSongIndex];
+              const songId = activeSong ? activeSong.id : null;
+              if (songId) {
+                  updateSedeStatus('{% url "play_signal" %}', { sede_id: sedeId, song_id: songId });
+              }
+          }
+      });
+
+      // When playback pauses or ends, mark sede as inactivo
+      function handleStop() {
+          if (sedeId !== null) {
+              updateSedeStatus('{% url "stop_signal" %}', { sede_id: sedeId });
+          }
+      }
+      audioPlayer.addEventListener('pause', handleStop);
+
+      // Ensure status is updated to inactive when the user closes the page
+      window.addEventListener('beforeunload', () => {
+          if (sedeId !== null && !audioPlayer.paused) {
+             const data = { sede_id: sedeId };
+             const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+             navigator.sendBeacon('{% url "stop_signal" %}', blob);
+          }
+      });
+      audioPlayer.addEventListener('ended', () => {
+          handleStop();
+          // next song will be loaded automatically by existing logic
+      });
+
+
+      if (songsData.length > 0) {
+        const initialSong = songsData[currentSongIndex];
+        audioPlayer.src = initialSong.audio;
+        try { audioPlayer.load(); } catch (e) { console.warn('audio.load() failed', e); }
+        audioPlayer.addEventListener('loadedmetadata', () => {
+          durationEl.textContent = formatTime(audioPlayer.duration);
+        });
+      }
+
+  });
 </script>
 {% endblock scripts %}
