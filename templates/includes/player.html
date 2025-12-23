@@ -155,7 +155,7 @@
         return;
       }
       const postData = { sede_id: sedeId, status: status };
-      console.log(`Player: Sending to ${statusApiUrl}:`, postData);
+
       fetch(statusApiUrl, {
         method: "POST",
         headers: {
@@ -165,8 +165,10 @@
         body: JSON.stringify(postData),
       })
         .then((r) => r.json())
-        .then((data) => console.log("Player: Server response body:", data))
-        .catch((e) => console.error("Player: Fetch error:", e));
+
+        .catch((e) =>
+          console.error("Error al actualizar el estado de la sede:", e)
+        );
     };
     if (sedeId && audioPlayer.paused) {
       setTimeout(() => {
