@@ -1,48 +1,74 @@
 {% extends "base.html" %} 
 {%load static %} 
-
 {% block title %} Dashboard {%endblock title %} 
-
-
-
 {%block content %}
-<div class="layout-container flex h-full grow flex-col ">
+<div class="layout-container flex h-full grow flex-col">
   <main
-    class="px-4 md:px-10 lg:px-20 flex flex-1 justify-center py-5 pb-32    bg-[rgb(106,4,15)]"
+    class="px-4 md:px-10 lg:px-20 flex flex-1 justify-center py-5 pb-32 bg-[rgb(106,4,15)]"
   >
-    <div
-      class="layout-content-container flex flex-col w-full max-w-7xl flex-1"
-    >
+    <div class="layout-content-container flex flex-col w-full max-w-7xl flex-1">
       <h1
         class="text-[#F8F9FA] tracking-light text-[32px] font-bold leading-tight px-4 text-left pb-3 pt-6"
       >
         Tablero Admin
       </h1>
-      
+
       {% include 'includes/search.html' %}
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
         <div class="flex flex-col gap-8">
-         {% include 'includes/gestion_sedes.html' %}
+          {% include 'includes/gestion_sedes.html' %} 
           {% include 'includes/recent_activity.html' %}
+          
         </div>
-       
-        {% include 'includes/pending_item.html' %}
 
+        {% include 'includes/pending_item.html' %} 
+        {% include 'includes/footer.html' %} 
+        {% endblock content %} 
+        
+        {%block scripts%}
+        <script>
+          // Polling para actualizar los estados de las sedes dinámicamente cada 3 segundos
+          setInterval(function () {
+            fetch('{% url "get_sedes_status" %}?t=' + new Date().getTime())
+              .then((response) => response.json())
+              .then((data) => {
+                if (data.sedes) {
+                  data.sedes.forEach((sede) => {
+                    const statusText = document.getElementById(
+                      "status-text-" + sede.id
+                    );
+                    const statusContainer = document.getElementById(
+                      "status-container-" + sede.id
+                    );
 
+                    if (statusText && statusContainer) {
+                      // Actualizar texto (Activo/Inactivo)
+                      statusText.textContent = sede.estado;
 
-  {% include 'includes/footer.html' %}
-
-    {% endblock content %}
-
-
-    {%block scripts%} 
- 
-    {% endblock scripts %} 
-
-
-    
-
-
-
-
+                      // Actualizar color/clase según el estado
+                      if (sede.estado === "Activo") {
+                        statusContainer.classList.remove("text-gray-400");
+                        statusContainer.classList.add("text-[#61CB61]");
+                        // Forzar estilo por si las clases fallan
+                        statusContainer.style.color = "#61CB61";
+                      } else {
+                        statusContainer.classList.remove("text-[#61CB61]");
+                        statusContainer.classList.add("text-gray-400");
+                        // Forzar estilo por si las clases fallan
+                        statusContainer.style.color = "#9ca3af";
+                      }
+                    }
+                  });
+                }
+              })
+              .catch((err) =>
+                console.error("Error fetching dynamic status:", err)
+              );
+          }, 3000); // Cada 3 segundos
+        </script>
+        {% endblock scripts %}
+      </div>
+    </div>
+  </main>
+</div>
