@@ -6,10 +6,22 @@
   if
   sede
   %}data-sede-id="{{ sede.id }}"
+  data-sid="{{ sede.id }}"
+  {%
+  elif
+  sede_id
+  %}data-sede-id="{{ sede_id }}"
+  data-sid="{{ sede_id }}"
   {%
   endif
   %}
+  data-user-id="{{ request.user.id }}"
+  data-status-url="{% url 'update_sede_status' %}"
 >
+  <script>
+    window.currentSedeId =
+      "{% if sede %}{{ sede.id }}{% elif sede_id %}{{ sede_id }}{% endif %}";
+  </script>
   <div
     class="flex items-center justify-between w-full h-full max-w-7xl mx-auto"
   >
@@ -27,7 +39,7 @@
       <img
         id="player-image"
         class="w-14 h-14 bg-center bg-no-repeat aspect-square bg-cover rounded-md shrink-0 object-cover"
-        alt="Album art for the currently playing track"
+        alt="Album art"
         src="{% if current_song.imagen %}{{ current_song.imagen.url }}{% else %}{% static 'img/default_album_art.png' %}{% endif %}"
       />
       <div>
@@ -42,7 +54,6 @@
         </p>
       </div>
     </div>
-
     <div class="flex flex-col items-center gap-2 w-1/2">
       <div class="flex items-center gap-4 text-[#F8F9FA]">
         <button id="prev-btn" class="hover:text-[#F8F9FA]/80 transition-colors">
@@ -81,7 +92,6 @@
         <span id="duration" class="text-xs text-[#F8F9FA]/70">0:00</span>
       </div>
     </div>
-
     <div class="flex items-center justify-end gap-2 w-1/4">
       <span class="material-symbols-outlined text-[#F8F9FA]/70">volume_up</span>
       <input
@@ -96,7 +106,6 @@
   </div>
 </footer>
 <style>
-  /* Visual indicator for the currently playing song card */
   .song-active {
     transform: scale(1.03);
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35),
@@ -106,10 +115,8 @@
     transition: transform 0.12s ease, box-shadow 0.12s ease;
   }
 </style>
-
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    console.log("Player script loaded."); // DEBUG
     const audioPlayer = document.getElementById("audio-player");
     const playPauseBtn = document.getElementById("play-pause-btn");
     const playIcon = document.getElementById("play-icon");
@@ -124,67 +131,48 @@
     const durationEl = document.getElementById("duration");
     const volumeBar = document.getElementById("volume-bar");
     const playerFooter = document.querySelector('footer[aria-label="Player"]');
-    const sedeId = playerFooter.dataset.sedeId;
-    console.log("Sede ID found:", sedeId); // DEBUG
-
-    // --- Sede Status Update ---
-    // FORCE INITIAL STATUS to Inactive to ensure clean slate
-    if (sedeId && audioPlayer.paused) {
-      setTimeout(() => {
-        // Check again if still paused before forcing inactive
-        if (audioPlayer.paused) {
-          fetch("/admin/update_sede_status/", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ sede_id: sedeId, status: "inactivo" }),
-          }).catch((e) =>
-            console.error("Error setting initial inactive status", e)
-          );
-        }
-      }, 800);
-    }
-
+    let playlist = [];
+    let currentIndex = -1;
+    let rawSedeId =
+      playerFooter.dataset.sedeId ||
+      playerFooter.dataset.sid ||
+      window.currentSedeId;
+    let sedeId = rawSedeId ? String(rawSedeId).trim() : null;
+    const userId = playerFooter.dataset.userId;
+    const statusApiUrl = playerFooter.dataset.statusUrl;
     const updateSedeStatus = (status) => {
-      if (!sedeId) {
-        console.warn(
-          "Player: No se encontró data-sede-id. No se puede actualizar el estado de la sede."
-        );
+      if (!sedeId)
+        sedeId =
+          playerFooter.dataset.sedeId ||
+          playerFooter.dataset.sid ||
+          window.currentSedeId;
+      if (!sedeId || !statusApiUrl) {
+        console.log("Player: Missing Sede ID or API URL", {
+          sedeId,
+          userId,
+          statusApiUrl,
+        });
         return;
       }
-
-      console.log(
-        `Attempting to update status to: ${status} for sede ID: ${sedeId}`
-      ); // DEBUG
-
-      fetch("/admin/update_sede_status/", {
+      const postData = { sede_id: sedeId, status: status };
+      console.log(`Player: Sending to ${statusApiUrl}:`, postData);
+      fetch(statusApiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "X-CSRFToken": "{{ csrf_token }}",
         },
-        body: JSON.stringify({
-          sede_id: sedeId,
-          status: status,
-        }),
+        body: JSON.stringify(postData),
       })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Response data:", data); // DEBUG
-          if (data.status === "success") {
-            console.log(`Sede ${sedeId} status updated to ${status}.`);
-          } else {
-            console.error(`Error updating sede status: ${data.message}`);
-          }
-        })
-        .catch((error) => {
-          console.error("Network error updating sede status:", error);
-        });
+        .then((r) => r.json())
+        .then((data) => console.log("Player: Server response body:", data))
+        .catch((e) => console.error("Player: Fetch error:", e));
     };
-
-    // Playlist state
-    let playlist = [];
-    let currentIndex = -1;
-
-    // --- Play/Pause ---
+    if (sedeId && audioPlayer.paused) {
+      setTimeout(() => {
+        if (audioPlayer.paused) updateSedeStatus("inactivo");
+      }, 800);
+    }
     playPauseBtn.addEventListener("click", () => {
       if (audioPlayer.paused) {
         audioPlayer
@@ -194,43 +182,40 @@
         audioPlayer.pause();
       }
     });
-
     audioPlayer.addEventListener("play", () => {
       playIcon.style.display = "none";
       pauseIcon.style.display = "inline";
       updateSedeStatus("activo");
     });
-
     audioPlayer.addEventListener("pause", () => {
       playIcon.style.display = "inline";
       pauseIcon.style.display = "none";
       updateSedeStatus("inactivo");
     });
-
-    // Ensure status is updated to inactive when the user closes the page
+    setInterval(() => {
+      if (!audioPlayer.paused && sedeId) {
+        updateSedeStatus("activo");
+      }
+    }, 30000);
     window.addEventListener("beforeunload", () => {
-      if (sedeId && !audioPlayer.paused) {
+      if (sedeId && !audioPlayer.paused && statusApiUrl) {
         const data = { sede_id: sedeId, status: "inactivo" };
         const blob = new Blob([JSON.stringify(data)], {
           type: "application/json",
         });
-        navigator.sendBeacon("/admin/update_sede_status/", blob);
+        navigator.sendBeacon(statusApiUrl, blob);
       }
     });
-
-    // --- Time formatting & Update ---
     function formatTime(seconds) {
       const minutes = Math.floor(seconds / 60);
       const secs = Math.floor(seconds % 60);
       return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
     }
-
     audioPlayer.addEventListener("loadedmetadata", () => {
       if (audioPlayer.duration && !isNaN(audioPlayer.duration)) {
         durationEl.textContent = formatTime(audioPlayer.duration);
       }
     });
-
     audioPlayer.addEventListener("timeupdate", () => {
       if (audioPlayer.duration) {
         const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
@@ -238,21 +223,16 @@
         currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
       }
     });
-
     progressBarContainer.addEventListener("click", (e) => {
       const width = progressBarContainer.clientWidth;
       const clickX = e.offsetX;
       const duration = audioPlayer.duration || 0;
       if (duration) audioPlayer.currentTime = (clickX / width) * duration;
     });
-
-    // --- Volume Control ---
-    audioPlayer.volume = volumeBar.value / 100; // Set initial volume
+    audioPlayer.volume = volumeBar.value / 100;
     volumeBar.addEventListener("input", (e) => {
       audioPlayer.volume = e.target.value / 100;
     });
-
-    // Build playlist from DOM order of .song-item elements
     function buildPlaylistFromDOM() {
       const nodes = document.querySelectorAll(".song-item");
       playlist = Array.from(nodes).map((n) => ({
@@ -263,8 +243,6 @@
         id: n.dataset.id || "",
       }));
     }
-
-    // Update active class on song items
     function updateActiveClass() {
       const nodes = document.querySelectorAll(".song-item");
       nodes.forEach((n, i) => {
@@ -275,11 +253,8 @@
         }
       });
     }
-
-    // Load and play a song from playlist by index
     function loadAndPlay(index) {
-      if (!playlist.length) return;
-      if (index < 0 || index >= playlist.length) return;
+      if (!playlist.length || index < 0 || index >= playlist.length) return;
       const item = playlist[index];
       if (!item.audio) return;
       currentIndex = index;
@@ -291,11 +266,8 @@
       if (playerTitle) playerTitle.textContent = item.title || "";
       if (playerArtist) playerArtist.textContent = item.artist || "";
       audioPlayer.play().catch((e) => console.error("Error al reproducir:", e));
-      // Update UI active state
       updateActiveClass();
     }
-
-    // Attach click handlers to song items
     function attachSongItemHandlers() {
       const nodes = document.querySelectorAll(".song-item");
       nodes.forEach((n, idx) => {
@@ -305,20 +277,17 @@
         });
       });
     }
-
     function playPrev() {
       if (!playlist.length) return;
       const nextIndex =
         currentIndex > 0 ? currentIndex - 1 : playlist.length - 1;
       loadAndPlay(nextIndex);
     }
-
     function playNext() {
       if (!playlist.length) return;
       const nextIndex = (currentIndex + 1) % playlist.length;
       loadAndPlay(nextIndex);
     }
-
     prevBtn.addEventListener("click", (e) => {
       e.preventDefault();
       playPrev();
@@ -327,16 +296,11 @@
       e.preventDefault();
       playNext();
     });
-
     audioPlayer.addEventListener("ended", () => {
       playNext();
     });
-
-    // Initialize playlist & handlers
     buildPlaylistFromDOM();
     attachSongItemHandlers();
-
-    // Try to sync with server-provided current song id when available
     const serverCurrentId = audioPlayer.dataset.currentId;
     if (serverCurrentId && playlist.length) {
       const idx = playlist.findIndex(
@@ -351,11 +315,9 @@
         if (playerImage && p.image) playerImage.src = p.image;
         if (playerTitle) playerTitle.textContent = p.title || "";
         if (playerArtist) playerArtist.textContent = p.artist || "";
-        // mark active element based on server-provided current id
         updateActiveClass();
       }
     } else if (playlist.length && !audioPlayer.src) {
-      // Preload metadata for first track
       const p = playlist[0];
       const playerImage = document.getElementById("player-image");
       const playerTitle = document.getElementById("player-title");

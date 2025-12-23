@@ -244,7 +244,11 @@ include 'includes/footer.html' %}
       }
 
       function updateSedeStatus(url, data) {
-          if (sedeId === null) return;
+          if (sedeId === null) {
+              console.log("Admin Player: No sedeId associated with this user.");
+              return;
+          }
+          console.log(`Admin Player: Updating status at ${url}`, data);
           fetch(url, {
               method: 'POST',
               headers: {
@@ -253,11 +257,14 @@ include 'includes/footer.html' %}
               },
               body: JSON.stringify(data),
           })
-          .then(response => response.json())
-          .then(json => {
-              console.log('Sede status update:', json);
+          .then(response => {
+              console.log(`Admin Player: Server responded with status ${response.status}`);
+              return response.json();
           })
-          .catch(err => console.error('Error updating sede status:', err));
+          .then(json => {
+              console.log('Admin Player: Server response body:', json);
+          })
+          .catch(err => console.error('Admin Player: Fetch error:', err));
       }
 
       // When playback starts, mark sede as activo
@@ -278,6 +285,18 @@ include 'includes/footer.html' %}
           }
       }
       audioPlayer.addEventListener('pause', handleStop);
+
+      // --- Heartbeat while playing ---
+      setInterval(() => {
+          if (!audioPlayer.paused && sedeId !== null) {
+              console.log("Admin Heartbeat: Sede is still active.");
+              const activeSong = songsData[currentSongIndex];
+              const songId = activeSong ? activeSong.id : null;
+              if (songId) {
+                  updateSedeStatus('{% url "play_signal" %}', { sede_id: sedeId, song_id: songId });
+              }
+          }
+      }, 30000); // Every 30 seconds
 
       // Ensure status is updated to inactive when the user closes the page
       window.addEventListener('beforeunload', () => {

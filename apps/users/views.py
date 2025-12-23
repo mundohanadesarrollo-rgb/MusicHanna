@@ -29,14 +29,22 @@ def user_dashboard(request):
             sede = getattr(user, 'sede', None)
 
         if sede:
-            # `sede` puede ser una instancia del modelo o un valor; obtener nombre seguro
-            sede_name = getattr(sede, 'nombre', None) or str(sede)
+            # Asegurar que sea la instancia del modelo y no un RelatedManager
+            if hasattr(sede, 'first'): # Por si acaso es un queryset
+                sede = sede.first()
             
-            # Resetear estado a 'inactivo' al entrar al dashboard
-            # El estado cambiará a 'activo' solo cuando el JS detecte 'play'
-            if hasattr(sede, 'estado') and sede.estado != 'inactivo':
-                sede.estado = 'inactivo'
-                sede.save(update_fields=['estado'])
+            if sede:
+                sede_name = getattr(sede, 'nombre', None) or str(sede)
+                print(f"DEBUG: Dashboard user {user.username} - Sede: {sede_name} (ID: {sede.id})")
+                
+                # Resetear estado a 'inactivo' al entrar al dashboard
+                if hasattr(sede, 'estado') and sede.estado != 'inactivo':
+                    sede.estado = 'inactivo'
+                    sede.save()
+            else:
+                print(f"DEBUG: Dashboard user {user.username} - NO SEDE AFTER RESOLVE")
+        else:
+            print(f"DEBUG: Dashboard user {user.username} - NO SEDE FOUND")
 
     # Obtener canciones reproducidas recientemente (únicas, en orden descendente por fecha)
     recent_songs = []
@@ -65,6 +73,7 @@ def user_dashboard(request):
 
     context = {
         'sede': sede,
+        'sede_id': sede.id if sede else None,
         'sede_name': sede_name,
         'recent_songs': recent_songs,
         'playlist_songs': playlist_songs,

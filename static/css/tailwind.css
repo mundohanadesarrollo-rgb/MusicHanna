@@ -511,6 +511,9 @@
   .items-center {
     align-items: center;
   }
+  .items-start {
+    align-items: flex-start;
+  }
   .items-stretch {
     align-items: stretch;
   }
@@ -680,6 +683,9 @@
   .border-\[\#A00000\] {
     border-color: #A00000;
   }
+  .border-\[\#F8F9FA\]\/20 {
+    border-color: color-mix(in oklab, #F8F9FA 20%, transparent);
+  }
   .border-gray-400 {
     border-color: var(--color-gray-400);
   }
@@ -730,6 +736,9 @@
   }
   .bg-\[\#A00000\] {
     background-color: #A00000;
+  }
+  .bg-\[\#D00000\] {
+    background-color: #D00000;
   }
   .bg-\[\#F8F9FA\] {
     background-color: #F8F9FA;
@@ -871,6 +880,9 @@
   }
   .py-2 {
     padding-block: calc(var(--spacing) * 2);
+  }
+  .py-2\.5 {
+    padding-block: calc(var(--spacing) * 2.5);
   }
   .py-3 {
     padding-block: calc(var(--spacing) * 3);
@@ -1303,6 +1315,13 @@
       }
     }
   }
+  .hover\:bg-\[\#FF0000\] {
+    &:hover {
+      @media (hover: hover) {
+        background-color: #FF0000;
+      }
+    }
+  }
   .hover\:bg-\[\#FFB347\] {
     &:hover {
       @media (hover: hover) {
@@ -1454,6 +1473,14 @@
     &:focus {
       --tw-outline-style: none;
       outline-style: none;
+    }
+  }
+  .active\:scale-95 {
+    &:active {
+      --tw-scale-x: 95%;
+      --tw-scale-y: 95%;
+      --tw-scale-z: 95%;
+      scale: var(--tw-scale-x) var(--tw-scale-y);
     }
   }
   .sm\:col-span-2 {

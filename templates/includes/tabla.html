@@ -1,4 +1,14 @@
-<div class="flex flex-col min-h-screen bg-[rgb(106,4,15)] text-[#F8F9FA]">
+  <style>
+    @keyframes breathing {
+      0% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+      50% { transform: scale(1.2); opacity: 0.8; box-shadow: 0 0 0 4px rgba(34, 197, 94, 0); }
+      100% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+    }
+    .pulse-green {
+      animation: breathing 2s infinite ease-in-out;
+    }
+  </style>
+  <div class="flex flex-col min-h-screen bg-[rgb(106,4,15)] text-[#F8F9FA]">
     <main class="grow p-4 sm:p-6 lg:p-8 pb-24 bg-[rgb(106,4,15)]">
       <header class="mb-8">
         <h1 class="text-3xl font-bold text-[#F8F9FA]">
@@ -72,7 +82,7 @@
                     id="sede-badge-{{ sede.id }}"
                     class="{{ sede.badge_class }}"
                   >
-                    <span id="sede-dot-{{ sede.id }}" class="{{ sede.dot_class }}"></span>
+                    <span id="sede-dot-{{ sede.id }}" class="{{ sede.dot_class }}{% if sede.is_active %} pulse-green{% endif %}"></span>
                     <span id="sede-text-{{ sede.id }}">{{ sede.estado }}</span>
                   </span>
                 </td>
@@ -391,6 +401,13 @@
                 // Apply classes
                 badge.className = sede.badge_class;
                 dot.className = sede.dot_class;
+
+                // Toggle pulse animation
+                if (sede.estado === 'Activo') {
+                    dot.classList.add('pulse-green');
+                } else {
+                    dot.classList.remove('pulse-green');
+                }
 
                 // FALLBACK: Apply direct styles for reliability if Tailwind classes are purged
                 if (sede.estado === 'Activo') {

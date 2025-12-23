@@ -1,16 +1,9 @@
+{% extends "base.html" %} 
+{% load static %} 
+{% block title %}Music Player Home{%endblock title %} 
+{% block custom_styles %} {%endblock custom_styles %}
 
-{% extends "base.html" %}
-{% load static %}
-
-
-{% block title %}Music Player
-Home{% endblock title %}
-
-
-{% block custom_styles %} {% endblock custom_styles %}
-
-
-{% block content %}
+{%block content %}
 <div
   class="relative flex h-auto min-h-screen w-full flex-col bg-[rgb(106,4,15)] group/design-root overflow-x-hidden"
 >
@@ -19,46 +12,70 @@ Home{% endblock title %}
       <div
         class="layout-content-container flex flex-col w-full max-w-7xl flex-1"
       >
-
-        <h1
-          class="text-[#F8F9FA] tracking-light text-[32px] font-bold leading-tight px-4 text-left pb-3 pt-6"
+        <div
+          class="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 pb-3 pt-6 gap-4"
         >
-          {% if sede_name %}
-            Bienvenido, {{ sede_name }}
-          {% else %}
-            Bienvenido
-          {% endif %}
-        </h1>
+          <h1
+            class="text-[#F8F9FA] tracking-light text-[32px] font-bold leading-tight text-left"
+          >
+            {% if sede_name %} Bienvenido, {{ sede_name }} {% else %} Bienvenido
+            {% endif %} {% if sede %}
+            <div
+              style="display: none"
+              id="debug-sede-id"
+              data-id="{{ sede.id }}"
+            ></div>
+            {% endif %}
+          </h1>
+          <a
+            href="{% url 'user_logout' %}"
+            class="flex items-center gap-2 px-6 py-2.5 text-sm font-bold bg-[#D00000] text-[#F8F9FA] rounded-full hover:bg-[#FF0000] hover:scale-105 transition-all shadow-xl border border-[#F8F9FA]/20 active:scale-95 uppercase tracking-wider"
+          >
+            <span class="material-symbols-outlined text-lg">logout</span>
+            Cerrar Sesión
+          </a>
+        </div>
 
-      
         {% include 'includes/search.html' %}
 
         <!-- Sección 'Reproducidas Recientemente' eliminada por petición -->
 
-        {# Sección de canciones: render canciones desde la base de datos para que el player las reconozca #}
         <div class="mt-6 px-4">
-          <h2 class="text-[#F8F9FA] text-[22px] font-bold leading-tight px-0 pb-3 pt-2">Canciones</h2>
+          <h2
+            class="text-[#F8F9FA] text-[22px] font-bold leading-tight px-0 pb-3 pt-2"
+          >
+            Canciones
+          </h2>
           <div class="flex overflow-x-auto p-2 gap-4">
             <div id="songs-list" class="flex items-stretch gap-4">
-              {% if playlist_songs %}
-                {% for song in playlist_songs %}
-                  <div
-                    class="song-item flex flex-col gap-3 rounded-lg min-w-40 bg-[#A00000] p-3 transition-transform hover:scale-105 cursor-pointer"
-                    data-audio-url="{% if song.archivo_audio %}{{ song.archivo_audio.url }}{% endif %}"
-                    data-image-url="{% if song.imagen %}{{ song.imagen.url }}{% else %}{% static 'img/default_album_art.png' %}{% endif %}"
-                    data-title="{{ song.titulo|escape }}"
-                    data-artist="{{ song.artista.nombre|escape }}"
-                    data-id="{{ song.id }}"
+              {% if playlist_songs %} {% for song in playlist_songs %}
+              <div
+                class="song-item flex flex-col gap-3 rounded-lg min-w-40 bg-[#A00000] p-3 transition-transform hover:scale-105 cursor-pointer"
+                data-audio-url="{% if song.archivo_audio %}{{ song.archivo_audio.url }}{% endif %}"
+                data-image-url="{% if song.imagen %}{{ song.imagen.url }}{% else %}{% static 'img/default_album_art.png' %}{% endif %}"
+                data-title="{{ song.titulo|escape }}"
+                data-artist="{{ song.artista.nombre|escape }}"
+                data-id="{{ song.id }}"
+              >
+                <div
+                  class="w-28 h-28 bg-center bg-no-repeat bg-cover rounded-md"
+                  style="background-image: url('{% if song.imagen %}{{ song.imagen.url }}{% else %}{% static 'img/default_album_art.png' %}{% endif %}');"
+                ></div>
+                <div>
+                  <p
+                    class="text-[#F8F9FA] text-sm font-medium leading-tight truncate"
                   >
-                    <div class="w-28 h-28 bg-center bg-no-repeat bg-cover rounded-md" style="background-image: url('{% if song.imagen %}{{ song.imagen.url }}{% else %}{% static 'img/default_album_art.png' %}{% endif %}');"></div>
-                    <div>
-                      <p class="text-[#F8F9FA] text-sm font-medium leading-tight truncate">{{ song.titulo }}</p>
-                      <p class="text-[#F8F9FA]/70 text-xs">{{ song.artista.nombre }}</p>
-                    </div>
-                  </div>
-                {% endfor %}
-              {% else %}
-                <div class="text-[#F8F9FA]/80 p-2">No hay canciones disponibles.</div>
+                    {{ song.titulo }}
+                  </p>
+                  <p class="text-[#F8F9FA]/70 text-xs">
+                    {{ song.artista.nombre }}
+                  </p>
+                </div>
+              </div>
+              {% endfor %} {% else %}
+              <div class="text-[#F8F9FA]/80 p-2">
+                No hay canciones disponibles.
+              </div>
               {% endif %}
             </div>
           </div>
@@ -67,8 +84,6 @@ Home{% endblock title %}
     </main>
   </div>
 
-
-  {% include 'includes/player.html' %}
-
-{% endblock content %}
+  {% include 'includes/player.html' with sede=sede sede_id=sede_id %} 
+  {%endblock content %}
 </div>
