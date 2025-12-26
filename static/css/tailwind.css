@@ -1024,6 +1024,9 @@
   .text-\[\#F8F9FA\]\/80 {
     color: color-mix(in oklab, #F8F9FA 80%, transparent);
   }
+  .text-\[\#F48C06\] {
+    color: #F48C06;
+  }
   .text-\[\#b99d9d\] {
     color: #b99d9d;
   }

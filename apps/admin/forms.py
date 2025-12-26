@@ -25,7 +25,7 @@ class SedeForm(forms.ModelForm):
 
     class Meta:
         model = Sede
-        fields = ['nombre', 'estado', 'direccion', 'ciudad', 'usuario']
+        fields = ['nombre', 'direccion', 'ciudad', 'usuario']
         labels = {
             'usuario': 'Usuario asignado',
         }
@@ -35,25 +35,12 @@ class SedeForm(forms.ModelForm):
 
     def clean(self):
         cleaned = super().clean()
-        username = cleaned.get('new_username')
         pwd = cleaned.get('new_password')
         pwd2 = cleaned.get('new_password_confirm')
 
-        if username:
-            # if creating a user, password is required and must match
-            if not pwd:
-                self.add_error('new_password', 'La contraseña es requerida cuando se crea un usuario.')
-            if pwd and pwd2 and pwd != pwd2:
-                self.add_error('new_password_confirm', 'Las contraseñas no coinciden.')
-        # If not creating a new user, try to resolve `usuario_display` to a User instance
-        usuario_display = cleaned.get('usuario_display')
-        # Avoid resolving usuario when new user will be created
-        if not username and usuario_display:
-            try:
-                user = User.objects.get(username=usuario_display)
-                cleaned['usuario'] = user
-            except User.DoesNotExist:
-                self.add_error('usuario_display', 'Usuario no encontrado.')
+        # Generic password matching check
+        if pwd and pwd2 and pwd != pwd2:
+            self.add_error('new_password_confirm', 'Las contraseñas no coinciden.')
 
         return cleaned
 

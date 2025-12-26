@@ -100,6 +100,9 @@ def admin_sedes(request):
 
         usuario_username = s.usuario.username if getattr(s, 'usuario', None) else ''
         usuario_id = s.usuario.id if getattr(s, 'usuario', None) else None
+        
+        # Determine nivel (admin if is_staff)
+        nivel = 'admin' if (s.usuario and s.usuario.is_staff) else 'usuario'
 
         sedes.append({
             'id': s.id,
@@ -108,6 +111,7 @@ def admin_sedes(request):
             'is_active': is_active,
             'usuario': usuario_username,
             'usuario_id': usuario_id,
+            'nivel': nivel,
             'estado_raw': s.estado,
             'badge_class': badge_class,
             'dot_class': dot_class,
@@ -143,59 +147,95 @@ def admin_edit_sede(request, sede_id=None):
     if request.method == 'POST':
         form = SedeForm(request.POST, instance=sede)
         if form.is_valid():
-            instance = form.save(commit=False)
-            new_username = form.cleaned_data.get('new_username')
-            new_password = form.cleaned_data.get('new_password')
-            usuario_display = form.cleaned_data.get('usuario_display')
-            usuario_id = request.POST.get('usuario') 
-
-            if new_username:
-                if User.objects.filter(username=new_username).exists():
-                    form.add_error('new_username', 'El nombre de usuario ya existe.')
-                else:
-                    user = User.objects.create_user(username=new_username, password=new_password)
-                    user.is_staff = False
-                    user.is_superuser = False
-                    user.save()
-                    instance.usuario = user
-            elif not usuario_id and usuario_display and sede and sede.usuario:
-                original_username = sede.usuario.username
-                if usuario_display != original_username:
-                    if User.objects.filter(username=usuario_display).exclude(pk=sede.usuario.pk).exists():
-                        form.add_error('usuario_display', f'El nombre de usuario "{usuario_display}" ya existe.')
-                    else:
-                        sede.usuario.username = usuario_display
-                        sede.usuario.save(update_fields=['username'])
-                        instance.usuario = sede.usuario
-                else:
-                    instance.usuario = sede.usuario
-            else:
-                usuario = form.cleaned_data.get('usuario')
-                if usuario:
-                    instance.usuario = usuario
-                else:
-                    if sede and not usuario_display:
-                        instance.usuario = None
-
-            if form.errors:
-                 if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                    errors = {k: [str(e) for e in v] for k, v in form.errors.items()}
-                    return JsonResponse({'success': False, 'errors': errors}, status=400)
-
-            instance.save()
-            assigned_username = instance.usuario.username if getattr(instance, 'usuario', None) else None
-            
-            if assigned_username:
-                messages.success(request, f'Sede guardada correctamente. Usuario asignado: {assigned_username}')
-            else:
-                messages.success(request, 'Sede guardada correctamente. (Sin usuario asignado)')
+            # Guardamos el usuario original antes de que el form lo limpie al hacer commit=False
+            old_user = sede.usuario if (sede and hasattr(sede, 'usuario')) else None
 
             try:
-                assigned_user = instance.usuario
-                if assigned_user:
-                    UserProfile.objects.update_or_create(user=assigned_user, defaults={'sede': instance})
-            except Exception:
-                pass
+                # El form.save(commit=False) actualiza la instancia 'sede' (o 'instance')
+                # con los datos del POST. Si el ID de usuario venía vacío desde el JS, 
+                # la relación se pone en None aquí.
+                instance = form.save(commit=False)
+                
+                # Extraemos los datos del formulario
+                usuario_display = form.cleaned_data.get('usuario_display')
+                new_password = form.cleaned_data.get('new_password')
+                new_username = form.cleaned_data.get('new_username')
+                
+                # Determinamos con qué usuario estamos trabajando
+                # Prioridad 1: El que viene en el campo 'usuario' del form (si se seleccionó uno)
+                # Prioridad 2: El usuario que ya tenía la sede (old_user) para tratarlo como EDICIÓN
+                target_user = form.cleaned_data.get('usuario') or old_user
+
+                nivel = request.POST.get('nivel', 'usuario')
+
+                if usuario_display:
+                    # 1. ¿Existe ya un usuario con ese nombre?
+                    existing_named_user = User.objects.filter(username=usuario_display).first()
+                    
+                    if existing_named_user:
+                        # CASO A: El usuario ya existe. Lo asignamos.
+                        target_user = existing_named_user
+                        # Solo actualizamos contraseña si se proporcionó una nueva
+                        if new_password:
+                            target_user.set_password(new_password)
+                            target_user.save()
+                    
+                    elif target_user:
+                        # CASO B: Estamos editando una sede con usuario, pero cambiamos el nombre.
+                        # Renombramos el usuario actual.
+                        target_user.username = usuario_display
+                        if new_password:
+                            target_user.set_password(new_password)
+                        target_user.save()
+                    
+                    else:
+                        # CASO C: Es un nombre nuevo y la sede no tiene usuario (o es nueva).
+                        # Obligatorio pedir contraseña para CREAR.
+                        if new_password:
+                            target_user = User.objects.create_user(username=usuario_display, password=new_password)
+                        else:
+                            form.add_error('new_password', 'Para crear un usuario nuevo con este nombre se requiere una contraseña.')
+                
+                elif new_username:
+                    # Legacy support for new_username if still sent
+                    if User.objects.filter(username=new_username).exists():
+                        form.add_error('new_username', 'El nombre de usuario ya existe.')
+                    else:
+                        target_user = User.objects.create_user(username=new_username, password=new_password)
+                else:
+                    # No username provided -> Unlink
+                    target_user = None
+
+                # Update target user role if target_user exists
+                if target_user:
+                    is_admin = (nivel == 'admin')
+                    if target_user.is_staff != is_admin:
+                        target_user.is_staff = is_admin
+                        # Also update is_superuser for full admin
+                        target_user.is_superuser = is_admin
+                        target_user.save()
+
+                if form.errors:
+                     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                        errors = {k: [str(e) for e in v] for k, v in form.errors.items()}
+                        return JsonResponse({'success': False, 'errors': errors}, status=400)
+
+                instance.usuario = target_user
+                instance.save()
+
+                # Update or create user profile to link it to the sede
+                if target_user:
+                    UserProfile.objects.update_or_create(user=target_user, defaults={'sede': instance})
+
+            except Exception as e:
+                if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                    return JsonResponse({'success': False, 'errors': {'__all__': [str(e)]}}, status=500)
+                messages.error(request, f'Error al guardar: {e}')
+                return redirect('admin_sedes')
+
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'success': True})
+            return redirect('admin_sedes')
 
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                 return JsonResponse({'success': True})

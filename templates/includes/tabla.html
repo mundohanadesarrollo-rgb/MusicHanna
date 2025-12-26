@@ -100,7 +100,7 @@
                           data-action-url="{% url 'admin_edit_sede' sede_id=sede.id %}"
                           data-id="{{ sede.id }}"
                           data-nombre="{{ sede.nombre|escape }}"
-                          data-estado="{{ sede.estado_raw }}"
+
                           data-direccion="{{ sede.direccion|default_if_none:''|escape }}"
                           data-ciudad="{{ sede.ciudad|default_if_none:''|escape }}"
                           data-usuario-id="{{ sede.usuario_id }}"
@@ -110,17 +110,15 @@
                       >
                         <span class="material-symbols-outlined ">edit</span>
                       </button>
-                    <form method="post" action="{% url 'admin_delete_sede' sede_id=sede.id %}" style="display:inline">
-                      {% csrf_token %}
-                      <button
-                        type="submit"
-                        aria-label="Eliminar"
-                        class="p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/80 hover:text-[#F8F9FA]"
-                        onclick="return confirm('¿Eliminar esta sede?');"
-                      >
-                        <span class="material-symbols-outlined ">delete</span>
-                      </button>
-                    </form>
+                    <button
+                      type="button"
+                      aria-label="Eliminar"
+                      class="open-delete-modal p-2 rounded-md hover:bg-[#F8F9FA]/10 transition-colors text-[#F8F9FA]/80 hover:text-[#F8F9FA]"
+                      data-action-url="{% url 'admin_delete_sede' sede_id=sede.id %}"
+                      data-nombre="{{ sede.nombre|escape }}"
+                    >
+                      <span class="material-symbols-outlined ">delete</span>
+                    </button>
                   </div>
                 </td>
               </tr>
@@ -140,6 +138,7 @@
       </div>
       <form id="sede-modal-form" method="post" class="space-y-6">
         {% csrf_token %}
+        <div id="error-__all__" class="text-red-400 text-sm mb-4 italic text-center"></div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label for="sede-nombre" class="block text-sm font-medium text-[#F8F9FA]">Nombre</label>
@@ -147,14 +146,7 @@
             <p id="error-nombre" class="text-red-400 text-sm mt-1 italic"></p>
           </div>
 
-          <div>
-            <label for="sede-estado" class="block text-sm font-medium text-[#F8F9FA]">Estado</label>
-            <select id="sede-estado" name="estado" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019] focus:outline-none focus:ring-2 focus:ring-[#F48C06]">
-              <option value="activo">Activo</option>
-              <option value="inactivo">Inactivo</option>
-            </select>
-            <p id="error-estado" class="text-red-400 text-sm mt-1 italic"></p>
-          </div>
+
 
           <div>
             <label for="sede-direccion" class="block text-sm font-medium text-[#F8F9FA]">Dirección</label>
@@ -177,30 +169,31 @@
             <p id="error-nivel" class="text-red-400 text-sm mt-1 italic"></p>
           </div>
           
-          <!-- Bloque para asignar un usuario existente -->
-          
-
-
-          <!-- Bloque para crear un nuevo usuario, visible solo al añadir una nueva sede -->
-          <div id="create-user-block" class="col-span-1 sm:col-span-2 hidden">
-            <p class="text-sm text-gray-300">Crear un nuevo usuario para esta sede:</p>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-2">
-              <div>
-                <label for="new_username" class="block text-sm font-medium mb-1">Nuevo nombre de usuario</label>
-                <input id="new_username" name="new_username" placeholder="usuario.nuevo" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019]" />
-                <p id="error-new_username" class="text-red-400 text-sm mt-1 italic"></p>
+          <!-- Sección de Usuario (siempre visible para editar o crear) -->
+          <div class="col-span-1 sm:col-span-2 border-t border-[#801019] pt-4 mt-2">
+            <h3 id="user-section-title" class="text-lg font-medium text-[#F8F9FA] mb-4">Información del Usuario</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="col-span-1 sm:col-span-2">
+                <label for="sede-usuario-name" class="block text-sm font-medium text-[#F8F9FA]">Nombre de Usuario</label>
+                <input id="sede-usuario-name" name="usuario_display" placeholder="Nombre para iniciar sesión" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019] focus:outline-none focus:ring-2 focus:ring-[#F48C06]" />
+                <input type="hidden" id="sede-usuario-id" name="usuario" />
+                <p id="error-usuario" class="text-red-400 text-sm mt-1 italic"></p>
+                <p id="error-usuario_display" class="text-red-400 text-sm mt-1 italic"></p>
               </div>
+              
               <div>
-                <label for="new_password" class="block text-sm font-medium mb-1">Contraseña</p>
-                <input id="new_password" name="new_password" type="password" placeholder="••••••••" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019]" />
+                <label for="new_password" class="block text-sm font-medium text-[#F8F9FA]">Nueva Contraseña</label>
+                <input id="new_password" name="new_password" type="password" placeholder="••••••••" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019] focus:outline-none focus:ring-2 focus:ring-[#F48C06]" />
                 <p id="error-new_password" class="text-red-400 text-sm mt-1 italic"></p>
               </div>
+              
               <div>
-                <label for="new_password_confirm" class="block text-sm font-medium mb-1">Confirmar contraseña</p>
-                <input id="new_password_confirm" name="new_password_confirm" type="password" placeholder="••••••••" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019]" />
+                <label for="new_password_confirm" class="block text-sm font-medium text-[#F8F9FA]">Confirmar Contraseña</label>
+                <input id="new_password_confirm" name="new_password_confirm" type="password" placeholder="••••••••" class="w-full mt-1 p-2 rounded-md bg-[#A00000] text-[#F8F9FA] border border-[#801019] focus:outline-none focus:ring-2 focus:ring-[#F48C06]" />
                 <p id="error-new_password_confirm" class="text-red-400 text-sm mt-1 italic"></p>
               </div>
             </div>
+            <p id="user-hint" class="text-xs text-[#F8F9FA]/60 mt-2 italic">Para editar un usuario existente, simplemente cambia su nombre o contraseña. Para asignar uno nuevo, escribe el nuevo nombre.</p>
           </div>
         </div>
 
@@ -212,13 +205,34 @@
     </div>
   </div>
 
+  <!-- Delete Sede Modal -->
+  <div id="delete-modal" class="hidden fixed inset-0 z-50 bg-transparent backdrop-blur-sm">
+    <div class="rounded-lg w-full max-w-md p-6 bg-[#1F1B1B] shadow-lg border border-[#801019]">
+      <div class="relative mb-4">
+        <h2 class="text-2xl font-semibold text-[#F8F9FA]">¿Eliminar Sede?</h2>
+        <button id="delete-modal-close" class="absolute right-0 top-0 text-[#F8F9FA] px-2 py-1 hover:opacity-80">✕</button>
+      </div>
+      <div class="mb-6">
+        <p class="text-[#F8F9FA]/80">¿Estás seguro de que deseas eliminar la sede <span id="delete-sede-nombre" class="font-bold text-[#F48C06]"></span>? Esta acción no se puede deshacer y también eliminará al usuario asociado.</p>
+      </div>
+      <form id="delete-modal-form" method="post" class="flex items-center justify-end gap-3">
+        {% csrf_token %}
+        <button type="button" id="delete-modal-cancel" class="px-4 py-2 bg-[#6B1014] text-[#F8F9FA] rounded-md hover:opacity-90">Cancelar</button>
+        <button type="submit" class="px-4 py-2 bg-[#A00000] text-[#F8F9FA] rounded-md font-medium hover:bg-[#B1121C] border border-[#801019] flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm">delete</span>
+          Eliminar definitivamente
+        </button>
+      </form>
+    </div>
+  </div>
+
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const modal = document.getElementById('sede-modal');
       const modalTitle = document.getElementById('sede-modal-title');
       const form = document.getElementById('sede-modal-form');
       const inputNombre = document.getElementById('sede-nombre');
-      const inputEstado = document.getElementById('sede-estado');
+
       const inputDireccion = document.getElementById('sede-direccion');
       const inputCiudad = document.getElementById('sede-ciudad');
       const selectNivel = document.getElementById('sede-nivel');
@@ -245,50 +259,50 @@
 
       function openModal(data) {
         modal.classList.remove('hidden');
-        const createBlock = document.getElementById('create-user-block');
+        const userSectionTitle = document.getElementById('user-section-title');
+        const userHint = document.getElementById('user-hint');
 
         modal.classList.add('flex', 'items-center', 'justify-center');
-          if (data) {
+        
+        // Reset password fields
+        document.getElementById('new_password').value = '';
+        document.getElementById('new_password_confirm').value = '';
+
+        if (data) {
           modalTitle.textContent = 'Editar Sede';
+          userSectionTitle.textContent = 'Editar Usuario';
+          userHint.textContent = 'Para actualizar el usuario, cambia su nombre o escribe una nueva contraseña. Déjala en blanco para mantener la actual.';
+          
           inputNombre.value = data.nombre || '';
-          inputEstado.value = data.estado_raw || 'activo';
+
           inputDireccion.value = data.direccion || '';
           inputCiudad.value = data.ciudad || '';
-          // set nivel select if provided (data.nivel) or try to infer
+          
           if (selectNivel) {
-            if (data.nivel) {
-              selectNivel.value = data.nivel;
-            } else if (data.usuario && (data.usuario === 'admin' || data.usuario === 'usuario')) {
-              // if backend passed a role string in `data-usuario`, use it
-              selectNivel.value = data.usuario;
-            } else {
-              // default to regular user
-              selectNivel.value = 'usuario';
-            }
+            selectNivel.value = data.nivel || 'usuario';
           }
 
-          // set usuario display + hidden id if provided and store originals
           if (inputUsuarioName) {
             inputUsuarioName.value = data.usuario || '';
             inputUsuarioName.dataset.original = data.usuario || '';
           }
           if (inputUsuarioId) {
-            // El valor del campo oculto 'usuario' es el ID
             inputUsuarioId.value = data.usuario_id || '';
             inputUsuarioId.dataset.original = data.usuario_id || '';
           }
 
-          // Al editar, siempre ocultamos el bloque de creación de nuevo usuario.
-          if (createBlock) createBlock.classList.add('hidden'); 
-
           form.action = data.actionUrl;
         } else {
           modalTitle.textContent = 'Crear Sede';
+          userSectionTitle.textContent = 'Información para el Nuevo Usuario';
+          userHint.textContent = 'Ingresa el nombre de usuario y contraseña para la nueva sede.';
+          
           inputNombre.value = '';
-          inputEstado.value = 'activo';
+
           inputDireccion.value = '';
           inputCiudad.value = '';
           if (selectNivel) selectNivel.value = 'usuario';
+          
           if (inputUsuarioName) {
             inputUsuarioName.value = '';
             inputUsuarioName.dataset.original = '';
@@ -297,9 +311,6 @@
             inputUsuarioId.value = '';
             inputUsuarioId.dataset.original = '';
           }
-          
-          // Mostrar el bloque de creación de usuario al añadir una nueva sede
-          if (createBlock) createBlock.classList.remove('hidden');
 
           form.action = document.getElementById('add-sede-btn').dataset.actionAdd;
         }
@@ -316,7 +327,7 @@
             actionUrl: btn.getAttribute('data-action-url'),
             id: btn.getAttribute('data-id'),
             nombre: btn.getAttribute('data-nombre'),
-            estado_raw: btn.getAttribute('data-estado'),
+
             direccion: btn.getAttribute('data-direccion'),
             ciudad: btn.getAttribute('data-ciudad'),
             usuario_id: btn.getAttribute('data-usuario-id'),
@@ -324,7 +335,7 @@
             nivel: btn.getAttribute('data-nivel'),
           };
           // Normalize keys used by openModal
-          data.estado_raw = data.estado_raw || 'activo';
+
           openModal(data);
         });
       });
@@ -340,7 +351,7 @@
       form.addEventListener('submit', function (e) {
         e.preventDefault();
         // clear previous errors
-        ['nombre','estado','direccion','ciudad','nivel','usuario','new_username','new_password','new_password_confirm'].forEach(function (k) {
+        ['nombre','direccion','ciudad','nivel','usuario','usuario_display','new_password','new_password_confirm','__all__'].forEach(function (k) {
           const el = document.getElementById('error-' + k);
           if (el) el.textContent = '';
         });
@@ -376,9 +387,41 @@
 
       document.getElementById('sede-modal-close').addEventListener('click', closeModal);
       document.getElementById('sede-modal-cancel').addEventListener('click', closeModal);
-      // Close modal when clicking outside the dialog
+
+      // --- Delete Modal Logic ---
+      const deleteModal = document.getElementById('delete-modal');
+      const deleteForm = document.getElementById('delete-modal-form');
+      const deleteSedeNombre = document.getElementById('delete-sede-nombre');
+
+      function openDeleteModal(url, nombre) {
+        deleteModal.classList.remove('hidden');
+        deleteModal.classList.add('flex', 'items-center', 'justify-center');
+        deleteForm.action = url;
+        deleteSedeNombre.textContent = nombre;
+      }
+
+      function closeDeleteModal() {
+        deleteModal.classList.add('hidden');
+        deleteModal.classList.remove('flex', 'items-center', 'justify-center');
+      }
+
+      document.querySelectorAll('.open-delete-modal').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          const url = btn.getAttribute('data-action-url');
+          const nombre = btn.getAttribute('data-nombre');
+          openDeleteModal(url, nombre);
+        });
+      });
+
+      document.getElementById('delete-modal-close').addEventListener('click', closeDeleteModal);
+      document.getElementById('delete-modal-cancel').addEventListener('click', closeDeleteModal);
+
+      // Close modals when clicking outside
       modal.addEventListener('click', function (e) {
         if (e.target === modal) closeModal();
+      });
+      deleteModal.addEventListener('click', function (e) {
+        if (e.target === deleteModal) closeDeleteModal();
       });
     });
   </script>
